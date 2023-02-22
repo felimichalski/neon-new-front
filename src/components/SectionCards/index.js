@@ -16,17 +16,17 @@ const mockInfo = [
   {
     background: bg1,
     title: 'Creá un diseño propio',
-    text: 'Text'
+    text: 'Text 1'
   },
   {
     background: bg2,
     title: 'Nuestros destacados',
-    text: 'Text'
+    text: 'Text 2'
   },
   {
     background: bg3,
     title: 'Alquilá tu cartel',
-    text: 'Text'
+    text: 'Text 3'
   }
 ]
 
