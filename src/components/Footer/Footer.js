@@ -2,7 +2,7 @@ import { Box, createStyles, Divider, Grid, Image, List, Text, Title, ThemeIcon, 
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom'
-import { IconPhone, IconMapPin, IconMail, IconChevronRight } from '@tabler/icons';
+import { Phone, GeoAlt, Envelope, ChevronRight } from '@styled-icons/bootstrap'
 
 import logo from '../../assets/logo.png'
 
@@ -114,7 +114,7 @@ function Footer() {
                     </Title>
                     <TextInput
                     placeholder="Tu mail"
-                    rightSection={<Button className={classes.newsletterButton} radius="none"><IconChevronRight /></Button>}
+                    rightSection={<Button className={classes.newsletterButton} radius="none"><ChevronRight color="black" size={16}/></Button>}
                     className={classes.newsletterInput}
                     radius='3px'
                     rightSectionWidth='auto'
@@ -137,22 +137,22 @@ function Footer() {
                 <Grid.Col span={3} className={classes.column} style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
                     <List listStyleType='none' center spacing='sm'>
                         <List.Item icon={
-                        <ThemeIcon color="gray" size={24} radius="xl">
-                            <IconPhone size={16} />
+                        <ThemeIcon color="green" size={24} radius="xl">
+                            <Phone size={16} />
                         </ThemeIcon>
                         } className={classes.infoItem}>
                             +54 11 2345-6789
                         </List.Item>
                         <List.Item icon={
-                        <ThemeIcon color="gray" size={24} radius="xl">
-                            <IconMapPin size={16} />
+                        <ThemeIcon color="blue" size={24} radius="xl">
+                            <GeoAlt size={16} />
                         </ThemeIcon>
                         } className={classes.infoItem}>
                             Buenos Aires, Argentina
                         </List.Item>
                         <List.Item icon={
-                        <ThemeIcon color="gray" size={24} radius="xl">
-                            <IconMail size={16} />
+                        <ThemeIcon color="red" size={24} radius="xl">
+                            <Envelope size={16} />
                         </ThemeIcon>
                         } className={classes.infoItem}>
                             text@text.com
