@@ -1,16 +1,14 @@
-import { Anchor, Box, Container, createStyles, Divider, Group, Image, Tabs, Text, UnstyledButton } from '@mantine/core'
+import { Anchor, Box, Container, createStyles, Divider, Group, Image, Menu, Overlay, Tabs, Text, UnstyledButton } from '@mantine/core'
 import { Link } from 'react-router-dom'
 
-// import { SearchAlt } from '@styled-icons/boxicons-regular'
-import { Person } from '@styled-icons/fluentui-system-regular'
-import { Search } from '@styled-icons/fluentui-system-regular'
-import { Cart } from '@styled-icons/fluentui-system-regular'
-import { LineHorizontal3 } from '@styled-icons/fluentui-system-regular'
+import { Person, Search, Cart, LineHorizontal3 } from '@styled-icons/fluentui-system-regular'
+import { ChevronDown, ChevronUp } from '@styled-icons/entypo'
 
 import logo from '../../assets/logo.png'
 import removeAccents from '../../utils/removeAccents'
+import { useState } from 'react'
 
-const useStyles = createStyles((theme, _params, getRef) => ({
+const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => ({
     navbar: {
         width: '100%',
         display: 'flex',
@@ -27,6 +25,7 @@ const useStyles = createStyles((theme, _params, getRef) => ({
         backgroundColor: theme.black,
         padding: '4px 0',
         color: theme.white,
+        zIndex: 10000
     },
 
     offerText: {
@@ -42,6 +41,7 @@ const useStyles = createStyles((theme, _params, getRef) => ({
         padding: '0 45px',
         display: 'flex',
         justifyContent: 'space-between',
+        zIndex: 10000
     },
 
     divider: {
@@ -72,8 +72,8 @@ const useStyles = createStyles((theme, _params, getRef) => ({
         height: '100%',
         padding: '0 15px',
         borderRadius: 'none',
-        borderTop: '3px solid rgba(229 229 229 / 0) !important',
-        borderBottom: '3px solid rgba(229 229 229 / 0) !important',
+        borderTop: '3px solid transparent !important',
+        borderBottom: '3px solid transparent !important',
         margin: '1px 0',
 
         '&[data-active]': {
@@ -84,6 +84,16 @@ const useStyles = createStyles((theme, _params, getRef) => ({
             backgroundColor: 'transparent',
             borderBottom: '3px solid black !important',
         },
+    },
+
+    tabNoBorder: {
+        '&:hover': {
+            borderBottom: '3px solid transparent !important',
+        }
+    },
+
+    tabLabel: {
+        display: 'flex',
     },
 
     tabLink: {
@@ -118,18 +128,46 @@ const useStyles = createStyles((theme, _params, getRef) => ({
         [theme.fn.smallerThan('md')]: {
             display: 'flex',
         },
-        
+
         [theme.fn.smallerThan('sm')]: {
             display: 'none',
         }
     },
-    
+
     sidebarButton: {
         display: 'none',
-        
+
         [theme.fn.smallerThan('sm')]: {
             display: 'flex',
         }
+    },
+
+    categoryList: {
+        borderRadius: '0',
+        border: 'none',
+        marginTop: '-1px',
+        minWidth: '100%',
+        backgroundColor: 'white',
+        height: '20rem',
+        pointerEvents,
+    },
+
+    categoryOverlay: {
+        height: '100vh',
+        width: '100%',
+        position: 'absolute',
+        backgroundColor: theme.black,
+        opacity: categoryListOpen ? .7 : 0,
+        pointerEvents: 'none',
+        top: 0,
+        left: 0,
+        zIndex: -1,
+        transition: 'all .2s ease-in-out',
+    },
+
+    test: {
+        transform: categoryListOpen ? 'rotate(-180deg)' : 'rotate(0deg)',
+        transition: 'all .2s ease'
     }
 }))
 
@@ -150,15 +188,45 @@ const tabs = [{
 }];
 
 const Navbar = () => {
-    const { classes } = useStyles()
+
+    const [categoryListOpen, setCategoryListOpen] = useState(false)
+    const [pointerEvents, setPointerEvents] = useState('auto')
+
+    const { classes } = useStyles({ categoryListOpen, pointerEvents })
 
     const items = tabs?.map((tab, key) => (
         <Box key={key}>
-            <Link to={tab.link} className={classes.tabLink}>
-                <Tabs.Tab value={removeAccents(tab.name.toLowerCase())} className={classes.tab}>
-                    <Text style={{ display: 'flex', alignItems: 'center' }}>{tab.name}</Text>
-                </Tabs.Tab>
-            </Link>
+            {tab.name === 'Categorías' ?
+                <Menu
+                    trigger='hover'
+                    offset={0}
+                    classNames={classes.category}
+                    onOpen={() => setCategoryListOpen(true)}
+                    onClose={() => {
+                        setPointerEvents('none')
+                        setTimeout(() => {
+                            setPointerEvents('auto')
+                        }, 200)
+                        setCategoryListOpen(false)
+                    }}
+                    transition='scale-y'
+                    transitionDuration={200}
+                >
+                    <Menu.Target>
+                        <Tabs.Tab value={removeAccents(tab.name.toLowerCase())} className={[classes.tab, classes.tabNoBorder]}>
+                            <Text style={{ display: 'flex', alignItems: 'center' }}>{tab.name}</Text>{categoryListOpen ? <ChevronDown size={16} className={classes.test}/> : <ChevronDown size={16} className={classes.test}/>}
+                        </Tabs.Tab>
+                    </Menu.Target>
+                    <Menu.Dropdown className={classes.categoryList}>
+                    </Menu.Dropdown>
+                </Menu>
+                :
+                <Link to={tab.link} className={classes.tabLink}>
+                    <Tabs.Tab value={removeAccents(tab.name.toLowerCase())} className={classes.tab}>
+                        <Text>{tab.name}</Text>
+                    </Tabs.Tab>
+                </Link>
+            }
         </Box>
     ));
 
@@ -175,7 +243,8 @@ const Navbar = () => {
                     <Divider mx={20} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <Tabs classNames={{
                         root: classes.tabs,
-                        tabsList: classes.tabsList
+                        tabsList: classes.tabsList,
+                        tabLabel: classes.tabLabel
                     }}
                         onTabChange={null}
                     >
@@ -222,6 +291,7 @@ const Navbar = () => {
                     </UnstyledButton>
                 </Group>
             </Box>
+            <div className={classes.categoryOverlay} />
         </Container>
     )
 }
