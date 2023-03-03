@@ -58,13 +58,8 @@ const Home = () => {
         <CustomDivider />
         <FeaturedProducts />
         <CustomDivider />
-        <SectionCards data={mock2}/>
-        <CustomDivider />
-        <div style={{
-          height: '60vh',
-          backgroundColor: 'black'
-        }}/>
-        <CustomDivider />
+        {/* <SectionCards data={mock2}/>
+        <CustomDivider /> */}
     </Box>
   )
 }
