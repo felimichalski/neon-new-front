@@ -1,12 +1,14 @@
-import { Anchor, Box, Container, createStyles, Divider, Group, Image, Menu, Overlay, Tabs, Text, UnstyledButton } from '@mantine/core'
-import { Link } from 'react-router-dom'
+import { Anchor, Box, Container, createStyles, Divider, Group, Image, Menu, Tabs, Text, UnstyledButton } from '@mantine/core'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Person, Search, Cart, LineHorizontal3 } from '@styled-icons/fluentui-system-regular'
-import { ChevronDown, ChevronUp } from '@styled-icons/entypo'
+import { ChevronDown } from '@styled-icons/entypo'
 
 import logo from '../../assets/logo.png'
 import removeAccents from '../../utils/removeAccents'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { Carousel } from '@mantine/carousel'
+import Autoplay from 'embla-carousel-autoplay'
 
 const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => ({
     navbar: {
@@ -16,7 +18,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         margin: 0,
         padding: 0,
         borderBottom: '1px solid rgb(229 229 229 / 1)',
-        position: 'fixed',
+        position: 'sticky',
         top: 0,
         zIndex: 10000
     },
@@ -25,7 +27,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         backgroundColor: theme.black,
         padding: '4px 0',
         color: theme.white,
-        zIndex: 10000
+        zIndex: 10000,
     },
 
     offerText: {
@@ -165,7 +167,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         transition: 'all .2s ease-in-out',
     },
 
-    test: {
+    categoryChevron: {
         transform: categoryListOpen ? 'rotate(-180deg)' : 'rotate(0deg)',
         transition: 'all .2s ease'
     }
@@ -192,6 +194,8 @@ const Navbar = () => {
     const [categoryListOpen, setCategoryListOpen] = useState(false)
     const [pointerEvents, setPointerEvents] = useState('auto')
 
+    const navigate = useNavigate()
+    const autoplay = useRef(Autoplay({ delay: 5000 }));
     const { classes } = useStyles({ categoryListOpen, pointerEvents })
 
     const items = tabs?.map((tab, key) => (
@@ -214,7 +218,7 @@ const Navbar = () => {
                 >
                     <Menu.Target>
                         <Tabs.Tab value={removeAccents(tab.name.toLowerCase())} className={[classes.tab, classes.tabNoBorder]}>
-                            <Text style={{ display: 'flex', alignItems: 'center' }}>{tab.name}</Text>{categoryListOpen ? <ChevronDown size={16} className={classes.test}/> : <ChevronDown size={16} className={classes.test}/>}
+                            <Text style={{ display: 'flex', alignItems: 'center' }}>{tab.name}</Text><ChevronDown size={16} className={classes.categoryChevron} />
                         </Tabs.Tab>
                     </Menu.Target>
                     <Menu.Dropdown className={classes.categoryList}>
@@ -232,9 +236,23 @@ const Navbar = () => {
 
     return (
         <Container fluid className={classes.navbar}>
-            <Box className={classes.offer}>
-                <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
-            </Box>
+            <Carousel
+                className={classes.offer}
+                loop
+                withControls={false}
+                withIndicators={false}
+                plugins={[autoplay.current]}
+            >
+                <Carousel.Slide>
+                    <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
+                </Carousel.Slide>
+                <Carousel.Slide>
+                    <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
+                </Carousel.Slide>
+                <Carousel.Slide>
+                    <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
+                </Carousel.Slide>
+            </Carousel>
             <Box className={classes.main}>
                 <Group>
                     <Anchor component={Link} to="/" style={{ padding: '10px 0' }}>
@@ -257,11 +275,11 @@ const Navbar = () => {
                         <Search size={20} />
                     </UnstyledButton>
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
-                    <UnstyledButton className={classes.iconContainer}>
+                    <UnstyledButton  className={classes.iconContainer}>
                         <Person size={20} />
                     </UnstyledButton>
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
-                    <UnstyledButton className={classes.iconContainer}>
+                    <UnstyledButton onClick={() => navigate('/cart')} className={classes.iconContainer}>
                         <Cart size={20} />
                     </UnstyledButton>
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
@@ -276,7 +294,7 @@ const Navbar = () => {
                         <Person size={20} />
                     </UnstyledButton>
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
-                    <UnstyledButton className={classes.iconContainer}>
+                    <UnstyledButton onClick={() => navigate('/cart')} className={classes.iconContainer}>
                         <Cart size={20} />
                     </UnstyledButton>
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
@@ -287,7 +305,7 @@ const Navbar = () => {
                 </Group>
                 <Group className={classes.sidebarButton}>
                     <UnstyledButton className={classes.iconContainer}>
-                        <LineHorizontal3 size={20} />
+                            <LineHorizontal3 size={20} />
                     </UnstyledButton>
                 </Group>
             </Box>

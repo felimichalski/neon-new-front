@@ -7,7 +7,6 @@ export const socialFetch = createAsyncThunk(
             const response = await fetch(`${process.env.REACT_APP_API_URL}/social`, {
                 mode: 'cors'
             })
-            console.log(response)
             const data = await response.json();
             return data
         } catch (error) {

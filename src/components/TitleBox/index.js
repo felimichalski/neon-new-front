@@ -1,7 +1,5 @@
-import { useRef } from 'react';
 import { Carousel } from '@mantine/carousel';
 import { BackgroundImage, createStyles, Title } from '@mantine/core'
-import Autoplay from 'embla-carousel-autoplay';
 
 import background1 from '../../assets/1.webp'
 import background2 from '../../assets/bgHome.webp'
@@ -9,7 +7,7 @@ import background3 from '../../assets/bgHome2.jpeg'
 
 const useStyles = createStyles((theme) => ({
     root: {
-        height: '90vh',
+        height: '70vh',
         width: '100%',
         position: 'relative',
         cursor: 'grab',
@@ -34,7 +32,6 @@ const useStyles = createStyles((theme) => ({
 
 const TitleBox = () => {
     const { classes } = useStyles();
-    const autoplay = useRef(Autoplay({ delay: 5000 }));
 
     return (
         <Carousel
@@ -42,9 +39,6 @@ const TitleBox = () => {
             loop
             withControls={false}
             withIndicators={true}
-            plugins={[autoplay.current]}
-            onMouseEnter={autoplay.current.stop}
-            onMouseLeave={autoplay.current.reset}
             styles={{
                 indicator: {
                     borderRadius: '50%',

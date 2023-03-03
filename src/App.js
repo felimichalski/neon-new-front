@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import MainLayout from './layouts/MainLayout';
 import CustomFonts from './fonts/CustomFonts';
 import Home from './pages/Home';
+import Cart from './pages/Cart';
 
 const App = () => {
 
@@ -18,8 +19,8 @@ const App = () => {
     theme={{
       colorScheme: 'light',
       focusRing: 'never',
-      fontFamily: ['Gotham', 'Proxima Nova', 'Lexend'],
-      fontFamilyMonospace: ['Gotham', 'Proxima Nova', 'Lexend'],
+      fontFamily: ['Gotham', 'Proxima Nova', 'Lexend', 'ITC Avant Garde Gothic', 'ITC Avant Garde Gothic Cn'],
+      fontFamilyMonospace: ['Gotham', 'Proxima Nova', 'Lexend', 'ITC Avant Garde Gothic', 'ITC Avant Garde Gothic Cn'],
       headings: {
         fontFamily: ['Gotham', 'Proxima Nova', 'Lexend']
       },
@@ -33,10 +34,11 @@ const App = () => {
     }}
     >
       <CustomFonts />
-      <ToastContainer pauseOnHover={false} theme='dark' autoClose={2000}/>
+      <ToastContainer pauseOnHover={false} theme='light' autoClose={2000} position='bottom-right'/>
       <Routes location={location} key={location.pathname}>
         <Route path='/' element={<MainLayout />}>
           <Route index element={<Home />}/>
+          <Route path='cart' element={<Cart />}/>
         </Route>
       </Routes>
     </MantineProvider>

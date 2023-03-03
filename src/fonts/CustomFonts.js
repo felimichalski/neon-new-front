@@ -22,6 +22,18 @@ import nova from './Proxima Nova/Proxima Nova Font.otf'
 
 import lexend from './Lexend/Lexend-VariableFont_wght.ttf'
 
+import itcXlt from './ITC Avant Garde Gothic/ITCAvantGardeStd-XLt.ttf'
+import itcBk from './ITC Avant Garde Gothic/ITCAvantGardeStd-Bk.ttf'
+import itcMd from './ITC Avant Garde Gothic/ITCAvantGardeStd-Md.ttf'
+import itcDemi from './ITC Avant Garde Gothic/ITCAvantGardeStd-Demi.ttf'
+import itcBold from './ITC Avant Garde Gothic/ITCAvantGardeStd-Bold.ttf'
+
+import itcXltCn from './ITC Avant Garde Gothic/ITCAvantGardeStd-XLtCn.ttf'
+import itcBkCn from './ITC Avant Garde Gothic/ITCAvantGardeStd-BkCn.ttf'
+import itcMdCn from './ITC Avant Garde Gothic/ITCAvantGardeStd-MdCn.ttf'
+import itcDemiCn from './ITC Avant Garde Gothic/ITCAvantGardeStd-DemiCn.ttf'
+import itcBoldCn from './ITC Avant Garde Gothic/ITCAvantGardeStd-BoldCn.ttf'
+
 const CustomFonts = () => {
   return (
     <Global
@@ -173,7 +185,77 @@ const CustomFonts = () => {
             fontFamily: 'Lexend',
             src: `url('${lexend}') format("truetype")`,
           },
-        }
+        },
+        {
+          '@font-face': {
+            fontFamily: 'ITC Avant Garde Gothic',
+            src: `url(${itcXlt}) format('truetype')`,
+            fontWeight: 200,
+          },
+        },
+        {
+          '@font-face': {
+            fontFamily: 'ITC Avant Garde Gothic',
+            src: `url(${itcBk}) format('truetype')`,
+            fontWeight: 300,
+          },
+        },
+        {
+          '@font-face': {
+            fontFamily: 'ITC Avant Garde Gothic',
+            src: `url(${itcMd}) format('truetype')`,
+            fontWeight: 400,
+          },
+        },
+        {
+          '@font-face': {
+            fontFamily: 'ITC Avant Garde Gothic',
+            src: `url(${itcDemi}) format('truetype')`,
+            fontWeight: 500,
+          },
+        },
+        {
+          '@font-face': {
+            fontFamily: 'ITC Avant Garde Gothic',
+            src: `url(${itcBold}) format('truetype')`,
+            fontWeight: 600,
+          },
+        },
+        {
+          '@font-face': {
+            fontFamily: 'ITC Avant Garde Gothic Cn',
+            src: `url(${itcXltCn}) format('truetype')`,
+            fontWeight: 200,
+          },
+        },
+        {
+          '@font-face': {
+            fontFamily: 'ITC Avant Garde Gothic Cn',
+            src: `url(${itcBkCn}) format('truetype')`,
+            fontWeight: 300,
+          },
+        },
+        {
+          '@font-face': {
+            fontFamily: 'ITC Avant Garde Gothic Cn',
+            src: `url(${itcMdCn}) format('truetype')`,
+            fontWeight: 400,
+          },
+        },
+        {
+          '@font-face': {
+            fontFamily: 'ITC Avant Garde Gothic Cn',
+            src: `url(${itcDemiCn}) format('truetype')`,
+            fontWeight: 500,
+          },
+        },
+        {
+          '@font-face': {
+            fontFamily: 'ITC Avant Garde Gothic Cn',
+            src: `url(${itcBoldCn}) format('truetype')`,
+            fontWeight: 600,
+          },
+        },
       ]}
     />
   );

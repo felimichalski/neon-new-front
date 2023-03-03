@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import featuredReducer from '../features/slices/featuredSlice'
-import { featuredFetch } from '../features/actions/featuredActions'
 import cartReducer from '../features/slices/cartSlice'
 import authReducer from '../features/slices/authSlice'
 import socialReducer from '../features/slices/socialSlice'
@@ -17,6 +16,5 @@ export const store = configureStore({
     }
 });
 
-store.dispatch(featuredFetch());
 store.dispatch(socialFetch());
 store.dispatch(getUserDetails());
