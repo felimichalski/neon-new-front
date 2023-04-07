@@ -1,7 +1,10 @@
+import { useSelector, useDispatch } from 'react-redux'
+import { logOut } from '../../features/slices/authSlice'
+
 import { Anchor, Box, Container, createStyles, Divider, Group, Image, Menu, Tabs, Text, UnstyledButton } from '@mantine/core'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { Person, Search, Cart, LineHorizontal3 } from '@styled-icons/fluentui-system-regular'
+import { Person, Search, Cart, LineHorizontal3, ArrowEnter, SignOut, Pen, Star } from '@styled-icons/fluentui-system-regular'
 import { ChevronDown } from '@styled-icons/entypo'
 
 import logo from '../../assets/logo.png'
@@ -9,6 +12,8 @@ import removeAccents from '../../utils/removeAccents'
 import { useRef, useState } from 'react'
 import { Carousel } from '@mantine/carousel'
 import Autoplay from 'embla-carousel-autoplay'
+import { useEffect } from 'react'
+import { AuthModal } from '../AuthModal'
 
 const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => ({
     navbar: {
@@ -193,11 +198,80 @@ const Navbar = () => {
 
     const [categoryListOpen, setCategoryListOpen] = useState(false)
     const [pointerEvents, setPointerEvents] = useState('auto')
+    const [loggedIn, setLoggedIn] = useState(undefined)
+    const [authModalOpened, setAuthModalOpened] = useState(false);
+    const [userMenuOpened, setUserMenuOpened] = useState(false);
 
     const navigate = useNavigate()
     const autoplay = useRef(Autoplay({ delay: 5000 }));
-    const { classes } = useStyles({ categoryListOpen, pointerEvents })
+    const { classes, cx } = useStyles({ categoryListOpen, pointerEvents })
 
+    const data = useSelector((state) => state.auth);
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if(data.userToken) {
+            setLoggedIn(true)
+        } else {
+            setLoggedIn(false)
+        }
+    }, [data])
+
+    const logOutAndGoToHome = () => {
+        dispatch(logOut());
+        navigate('/')
+    }
+
+    const userButton = loggedIn ?
+        <Menu
+        width={260}
+        offset={0}
+        position="bottom-end"
+        transition='pop-top-right'
+        onClose={() => setUserMenuOpened(false)}
+        onOpen={() => setUserMenuOpened(true)}
+        withinPortal
+        >
+            <Menu.Target>
+                <UnstyledButton className={cx(classes.iconContainer, { [classes.userActive]: userMenuOpened })}>
+                    <Person size={20} />
+                </UnstyledButton>
+            </Menu.Target>
+            <Menu.Dropdown>
+                <Menu.Item
+                    style={{
+                        fontFamily: 'ITC Avant Garde Gothic',
+                        fontSize: 16,
+                        color: 'black'
+                    }}
+                    icon={<Person size={16}/>}
+                    disabled
+                >
+                    {data.userInfo.firstName} {data.userInfo.lastName}
+                </Menu.Item>
+                <Menu.Divider />
+                <Menu.Item
+                    icon={<Star size={16} />}
+                >
+                    Productos favoritos
+                </Menu.Item>
+                <Menu.Item
+                    icon={<Pen size={16} />}
+                >
+                    Editar perfil
+                </Menu.Item>
+                <Menu.Item
+                onClick={logOutAndGoToHome}
+                icon={<SignOut size={16} />}
+                style={{ color: 'red' }}
+                >Cerrar sesión</Menu.Item>
+            </Menu.Dropdown>
+        </Menu>
+        :
+        <UnstyledButton className={classes.iconContainer} onClick={() => setAuthModalOpened(true)}>
+            <ArrowEnter size={20}/>
+        </UnstyledButton >
+    
     const items = tabs?.map((tab, key) => (
         <Box key={key}>
             {tab.name === 'Categorías' ?
@@ -275,9 +349,7 @@ const Navbar = () => {
                         <Search size={20} />
                     </UnstyledButton>
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
-                    <UnstyledButton  className={classes.iconContainer}>
-                        <Person size={20} />
-                    </UnstyledButton>
+                    {userButton}
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <UnstyledButton onClick={() => navigate('/cart')} className={classes.iconContainer}>
                         <Cart size={20} />
@@ -290,9 +362,7 @@ const Navbar = () => {
                         <Search size={20} />
                     </UnstyledButton>
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
-                    <UnstyledButton className={classes.iconContainer}>
-                        <Person size={20} />
-                    </UnstyledButton>
+                    {userButton}
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <UnstyledButton onClick={() => navigate('/cart')} className={classes.iconContainer}>
                         <Cart size={20} />
@@ -310,6 +380,7 @@ const Navbar = () => {
                 </Group>
             </Box>
             <div className={classes.categoryOverlay} />
+            <AuthModal opened={authModalOpened} setOpened={setAuthModalOpened}/>
         </Container>
     )
 }

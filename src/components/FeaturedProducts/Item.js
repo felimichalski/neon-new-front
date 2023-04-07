@@ -81,11 +81,11 @@ const Item = ({ data }) => {
                 <Image src={data.image} className={classes.image}/>
             </Card.Section>
             <Card.Section radius={0} className={[classes.section, classes.textSection]}>
-                <Title className={classes.title}>{data.name}</Title>
+                <Title className={classes.title}>{data.title}</Title>
                 <Text className={classes.category}>{data.category.name}</Text>
             </Card.Section>
             <Card.Section radius={0} className={[classes.section, classes.priceSection]}>
-                <Text>${data.price}</Text>
+                <Text>${data.unit_price}</Text>
                 <Button className={classes.button} onClick={() => dispatch(addToCart(data))}><AddShoppingCart size={20} /></Button>
             </Card.Section>
         </Card>

@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import featuredReducer from '../features/slices/featuredSlice'
-import cartReducer from '../features/slices/cartSlice'
+import cartReducer, { getTotals } from '../features/slices/cartSlice'
 import authReducer from '../features/slices/authSlice'
 import socialReducer from '../features/slices/socialSlice'
 import { socialFetch } from '../features/actions/socialActions'
@@ -18,3 +18,4 @@ export const store = configureStore({
 
 store.dispatch(socialFetch());
 store.dispatch(getUserDetails());
+store.dispatch(getTotals());

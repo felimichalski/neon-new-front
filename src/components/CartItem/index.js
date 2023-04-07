@@ -1,4 +1,4 @@
-import { ActionIcon, Box, createStyles, Grid, Image, Text, Title } from "@mantine/core";
+import { ActionIcon, createStyles, Grid, Image, Text, Title } from "@mantine/core";
 import { useDispatch } from "react-redux";
 import { addToCart, decreaseCart, removeFromCart } from "../../features/slices/cartSlice";
 import { Minus, Plus, Trash2 as Trash } from '@styled-icons/evaicons-solid'
@@ -28,7 +28,7 @@ const useStyles = createStyles((theme) => ({
     justifyContent: 'center',
   },
 
-  name: {
+  title: {
     fontSize: 12,
     width: 'max-content'
   },
@@ -59,7 +59,7 @@ const CartItem = ({ data }) => {
         <Image src={data.image} className={classes.image}/>
       </Grid.Col>
       <Grid.Col className={[classes.column, classes.text]} span={2} offset={1}>
-        <Title className={classes.name}>{data.name}</Title>
+        <Title className={classes.title}>{data.title}</Title>
         <Text className={classes.category}>{data.category.name}</Text>
       </Grid.Col>
       <Grid.Col className={[classes.column, classes.quantity]} span={3} offset={1}>
@@ -68,7 +68,7 @@ const CartItem = ({ data }) => {
         </ActionIcon>
 
         <Text mx={10}>
-          {data.cartQuantity}
+          {data.quantity}
         </Text>
 
         <ActionIcon size={30} variant="subtle" onClick={() => dispatch(addToCart(data))} className={classes.actionIcon}>
@@ -76,7 +76,7 @@ const CartItem = ({ data }) => {
         </ActionIcon>
       </Grid.Col>
       <Grid.Col span={1} offset={1}>
-        <Text>${data.price}</Text>
+        <Text>${data.unit_price}</Text>
       </Grid.Col>
       <Grid.Col span={1} offset={1}>
         <ActionIcon size={30} variant="subtle" onClick={() => dispatch(removeFromCart(data))} className={classes.actionIcon}>
