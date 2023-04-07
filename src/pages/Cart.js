@@ -1,5 +1,5 @@
 import { Box, Button, Container, createStyles, Divider, Grid, List, Text, Title } from '@mantine/core'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 
@@ -8,7 +8,7 @@ import CartItem from '../components/CartItem';
 import { motion } from 'framer-motion';
 import { useDocumentTitle } from '@mantine/hooks';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme, { top }) => ({
     root: {
         width: '100%',
         display: 'flex',
@@ -20,7 +20,6 @@ const useStyles = createStyles((theme) => ({
         minHeight: '80vh',
         width: '90%',
         borderRadius: 7,
-        boxShadow: '0px 5px 15px 0px rgba(0, 0, 0, 0.5)',
     },
 
     column: {
@@ -46,14 +45,24 @@ const useStyles = createStyles((theme) => ({
     },
 
     productsList: {
-        borderTopLeftRadius: 7,
-        borderBottomLeftRadius: 7,
+        borderRadius: 7,
+        boxShadow: '0px 5px 15px 0px rgba(0, 0, 0, 0.5)',
     },
 
     payContainer: {
-        backgroundColor: theme.colors.gray[1],
-        borderTopRightRadius: 7,
-        borderBottomRightRadius: 7,
+        backgroundColor: theme.colors.gray[2],
+        borderRadius: 7,
+        position: 'sticky',
+        top,
+        height: 'fit-content',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '0 10px',
+    },
+
+    payButton: {
+        width: '100%'
     }
 }));
 
@@ -61,10 +70,10 @@ const Cart = () => {
 
     useDocumentTitle('Neon infinito - Carrito')
 
-    // const payContainerRef = useRef();
-    // const [top, setTop] = useState(0)
+    const payContainerRef = useRef();
+    const [top, setTop] = useState(0)
 
-    const { classes } = useStyles();
+    const { classes } = useStyles({ top });
     const [items, setItems] = useState([]);
     const navigate = useNavigate();
 
@@ -77,9 +86,9 @@ const Cart = () => {
         }
     }, [data]);
 
-    // useEffect(() => {
-    //     if (payContainerRef.current.offsetTop) setTop(payContainerRef.current.offsetTop)
-    // }, [payContainerRef])
+    useEffect(() => {
+        if (payContainerRef.current.offsetTop) setTop(payContainerRef.current.offsetTop)
+    }, [payContainerRef])
 
     return (
         <motion.div
@@ -88,8 +97,8 @@ const Cart = () => {
         exit={{opacity: 0}}
         >
             <Container fluid className={classes.root}>
-                <Grid m={30} className={classes.grid}>
-                    <Grid.Col span={8} className={[classes.productsList, classes.column]}>
+                <Grid m={30} className={classes.grid} >
+                    <Grid.Col span={7} className={[classes.productsList, classes.column]}>
                         <Box className={classes.titleBar}>
                             <Title className={classes.title}>Mi Carrito</Title>
                             <Text className={classes.quantity}>{data.cartTotalQuantity} productos</Text>
@@ -113,10 +122,16 @@ const Cart = () => {
                             <Divider my='xs' />
                         </List>
                     </Grid.Col>
-                    <Grid.Col span={4} className={[classes.payContainer, classes.column]}>
-                        <Title>TOTAL: ${data.cartTotalAmount}</Title>
-                        <Button onClick={() => navigate('/catalog')}>Seguir comprando</Button>
-                        <Button onClick={() => userToken && navigate('/checkout')}>Finalizar compra</Button>
+                    <Grid.Col span={4} offset={1} className={[classes.payContainer, classes.column]} ref={payContainerRef}>
+                        <Title mb={40}>TOTAL: ${data.cartTotalAmount}</Title>
+                        <Button onClick={() => navigate('/catalog')} className={classes.payButton} color='gray' mb={10}>Seguir comprando</Button>
+                        <Button onClick={() => {
+                            if(userToken) {
+                                navigate('/checkout')
+                            } else {
+                                alert('Necesitás iniciar sesión')
+                            }
+                        }} className={classes.payButton}>Finalizar compra</Button>
                     </Grid.Col>
                 </Grid>
             </Container>
