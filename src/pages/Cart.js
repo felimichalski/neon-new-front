@@ -97,7 +97,7 @@ const Cart = () => {
         exit={{opacity: 0}}
         >
             <Container fluid className={classes.root}>
-                <Grid m={30} className={classes.grid} >
+                <Grid m={30} className={classes.grid} ref={payContainerRef}>
                     <Grid.Col span={7} className={[classes.productsList, classes.column]}>
                         <Box className={classes.titleBar}>
                             <Title className={classes.title}>Mi Carrito</Title>
@@ -122,7 +122,7 @@ const Cart = () => {
                             <Divider my='xs' />
                         </List>
                     </Grid.Col>
-                    <Grid.Col span={4} offset={1} className={[classes.payContainer, classes.column]} ref={payContainerRef}>
+                    <Grid.Col span={4} offset={1} className={[classes.payContainer, classes.column]}>
                         <Title mb={40}>TOTAL: ${data.cartTotalAmount}</Title>
                         <Button onClick={() => navigate('/catalog')} className={classes.payButton} color='gray' mb={10}>Seguir comprando</Button>
                         <Button onClick={() => {
