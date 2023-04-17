@@ -125,13 +125,7 @@ const Cart = () => {
                     <Grid.Col span={4} offset={1} className={[classes.payContainer, classes.column]}>
                         <Title mb={40}>TOTAL: ${data.cartTotalAmount}</Title>
                         <Button onClick={() => navigate('/catalog')} className={classes.payButton} color='gray' mb={10}>Seguir comprando</Button>
-                        <Button onClick={() => {
-                            if(userToken) {
-                                navigate('/checkout')
-                            } else {
-                                alert('Necesitás iniciar sesión')
-                            }
-                        }} className={classes.payButton}>Finalizar compra</Button>
+                        <Button onClick={() => navigate('/checkout')} className={classes.payButton}>Finalizar compra</Button>
                     </Grid.Col>
                 </Grid>
             </Container>

@@ -4,6 +4,8 @@ import { BackgroundImage, createStyles, Title } from '@mantine/core'
 import background1 from '../../assets/1.webp'
 import background2 from '../../assets/bgHome.webp'
 import background3 from '../../assets/bgHome2.jpeg'
+import { useRef } from 'react';
+import Autoplay from 'embla-carousel-autoplay';
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -32,6 +34,7 @@ const useStyles = createStyles((theme) => ({
 
 const TitleBox = () => {
     const { classes } = useStyles();
+    const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }))
 
     return (
         <Carousel
@@ -53,6 +56,7 @@ const TitleBox = () => {
                     }
                 },
             }}
+            plugins={[autoplay.current]}
         >
             <Carousel.Slide>
                 <BackgroundImage className={classes.root} src={background1}>

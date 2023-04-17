@@ -14,6 +14,7 @@ import { Carousel } from '@mantine/carousel'
 import Autoplay from 'embla-carousel-autoplay'
 import { useEffect } from 'react'
 import { AuthModal } from '../AuthModal'
+import CategoryList from '../CategoryList'
 
 const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => ({
     navbar: {
@@ -154,9 +155,8 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         border: 'none',
         marginTop: '-1px',
         minWidth: '100%',
-        backgroundColor: 'white',
-        height: '20rem',
         pointerEvents,
+        padding: 0
     },
 
     categoryOverlay: {
@@ -203,7 +203,7 @@ const Navbar = () => {
     const [userMenuOpened, setUserMenuOpened] = useState(false);
 
     const navigate = useNavigate()
-    const autoplay = useRef(Autoplay({ delay: 5000 }));
+    const autoplay = useRef(Autoplay({ delay: 7000 }));
     const { classes, cx } = useStyles({ categoryListOpen, pointerEvents })
 
     const data = useSelector((state) => state.auth);
@@ -296,6 +296,7 @@ const Navbar = () => {
                         </Tabs.Tab>
                     </Menu.Target>
                     <Menu.Dropdown className={classes.categoryList}>
+                        <CategoryList/>
                     </Menu.Dropdown>
                 </Menu>
                 :

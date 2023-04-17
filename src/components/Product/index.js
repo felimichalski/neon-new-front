@@ -3,9 +3,8 @@ import { AddShoppingCart } from '@styled-icons/material'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../../features/slices/cartSlice'
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme, { hoverEffects }) => ({
     root: {
-        width: '90%',
         margin: '0 auto',
         display: 'flex',
         flexDirection: 'column',
@@ -13,11 +12,12 @@ const useStyles = createStyles((theme) => ({
         backgroundColor: 'white',
         borderRadius: 7,
         transition: 'all .1s linear',
+        boxShadow: !hoverEffects && '0 8px 42px rgb(0 0 0 / 20%)', 
 
         [`&:hover`]: {
-            transform: 'scale(1.02)',
-            boxShadow: '0 8px 42px rgb(0 0 0 / 20%)' 
-        }
+                transform: hoverEffects && 'scale(1.02)',
+                boxShadow: hoverEffects && '0 8px 42px rgb(0 0 0 / 20%)' 
+            }
     },
 
     section: {
@@ -69,9 +69,9 @@ const useStyles = createStyles((theme) => ({
     }
 }));
 
-const Item = ({ data }) => {
+const Product = ({ data, hoverEffects }) => {
 
-    const { classes } = useStyles({ categoryColor: data.category.color });
+    const { classes } = useStyles({ categoryColor: data.category.color, hoverEffects });
 
     const dispatch = useDispatch();
 
@@ -92,4 +92,4 @@ const Item = ({ data }) => {
     )
 }
 
-export default Item
+export default Product

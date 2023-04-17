@@ -10,6 +10,7 @@ import Checkout from './pages/Checkout';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer/Footer';
+import Category from './pages/Category';
 
 const App = () => {
 
@@ -44,6 +45,11 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path='cart' element={<Cart />} />
           <Route path='checkout' element={<Checkout />} />
+          <Route path='categories'>
+            <Route index element={<Category />} />
+            <Route path=':id' element={<Category />} />
+            <Route path='type/:id' element={<Category />} />
+          </Route>
         </Route>
       </Routes>
       <Footer />

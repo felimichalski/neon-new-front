@@ -5,10 +5,8 @@ import { useForm } from '@mantine/form';
 import {
     TextInput,
     PasswordInput,
-    Text,
     Group,
     Button,
-    Divider,
     Checkbox,
     Anchor,
     Stack,
@@ -19,6 +17,15 @@ import { registerUser, userLogin } from '../../features/actions/authActions';
 // import { GoogleButton, TwitterButton } from '../SocialButtons/SocialButtons';
 
 import { toast } from "react-toastify";
+import validatePassword from '../../utils/validatePassword';
+
+const initialValues = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    terms: false,
+}
 
 export function AuthModal({ opened, setOpened }) {
     const [type, toggle] = useToggle(['Iniciar sesión', 'Registrarse']);
@@ -27,22 +34,16 @@ export function AuthModal({ opened, setOpened }) {
     const userData = useSelector(state => state.auth);
 
     const form = useForm({
-        initialValues: {
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-            terms: false,
-        },
-
+        initialValues,        
         validate: {
-            email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
-            password: (val) => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
+            email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Mail inválido'),
+            password: (val) => (type === 'Registrarse' ? (validatePassword(val) ? null : 'La contraseña debe contener más de 6 caracteres y al menos una letra mayúscula, una letra minúscula y un número') : null)
         },
     });
 
     const signup = async () => {
-        if (!userData.userToken && form.values.terms) {
+        const { hasErrors } = form.validate()
+        if (!userData.userToken && form.values.terms && !hasErrors) {
             const response = await dispatch(registerUser({
                 email: form.values.email,
                 password: form.values.password,
@@ -54,18 +55,25 @@ export function AuthModal({ opened, setOpened }) {
                     position: "bottom-left",
                   });
                 setOpened(false);
+                form.setValues(initialValues)
             }
         }
     }
 
     const login = async () => {
-        if (!userData.userToken) {
+        const { hasErrors } = form.validate()
+        if (!userData.userToken && !hasErrors) {
             const response = await dispatch(userLogin({
                 email: form.values.email,
                 password: form.values.password
             }));
             if (response.meta.requestStatus === 'fulfilled') {
                 setOpened(false);
+                form.setValues(initialValues)
+            } else if (response.meta.requestStatus === 'rejected') {
+                form.setErrors({
+                    email: 'Usuario o contraseña incorrectos'
+                })
             }
         }
     }
@@ -75,7 +83,11 @@ export function AuthModal({ opened, setOpened }) {
             radius="md"
             p="xl"
             opened={opened}
-            onClose={() => setOpened(false)}
+            onClose={() => {
+                setOpened(false)
+                form.clearErrors()
+                form.setValues(initialValues)
+            }}
             centered
             zIndex={10000000}
             transitionDuration={200}
@@ -133,7 +145,7 @@ export function AuthModal({ opened, setOpened }) {
                         placeholder="ejemplo@ejemplo.com"
                         value={form.values.email}
                         onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
-                        error={form.errors.email && 'Invalid email'}
+                        error={form.errors.email}
                         radius="md"
                     />
 
@@ -143,7 +155,7 @@ export function AuthModal({ opened, setOpened }) {
                         placeholder="••••••••••"
                         value={form.values.password}
                         onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
-                        error={form.errors.password && 'Password should include at least 6 characters'}
+                        error={form.errors.password}
                         radius="md"
                     />
 

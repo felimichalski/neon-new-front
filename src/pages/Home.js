@@ -51,14 +51,14 @@ const mock1 = [
 const Home = () => {
   
   useDocumentTitle('Neon infinito - Inicio')
-
+  
   return (
     <motion.div
       initial={{opacity: 0}}
       animate={{opacity: 1}}
       exit={{opacity: 0}}
     >
-      <Box fluid style={{ backgroundColor: 'white'}}>
+      <Box style={{ backgroundColor: 'white'}}>
           <TitleBox />
           <CustomDivider />
           <SectionCards data={mock1}/>

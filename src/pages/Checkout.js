@@ -1,83 +1,147 @@
-import { Container, LoadingOverlay } from '@mantine/core'
+import { Button, Container, Group, Stack, TextInput, Title, createStyles } from '@mantine/core'
 
-import { initMercadoPago, Payment } from '@mercadopago/sdk-react'
-import { customization } from '../utils/paymentConf';
-
-import { useSelector } from 'react-redux'
-import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { useDocumentTitle } from '@mantine/hooks';
+import { useForm } from '@mantine/form';
+
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/material.css'
+import { PaymentModal } from '../components/PaymentModal';
+
+const initialValues = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    address: '',
+}
+
+const useStyles = createStyles((_, { error }) => ({
+    phoneInput: {
+        borderColor: error && 'red !important'
+    },
+
+    phoneContainer: {
+        color: error && 'red'
+    }
+}))
 
 const Checkout = () => {
 
     useDocumentTitle('Neon infinito - Checkout')
-    const ref = useRef();
-    const [initialization, setInitialization] = useState(undefined)
-    const {auth, cart} = useSelector(state => state);
-    const navigate = useNavigate()
-    const [isDataReady, setIsDataReady] = useState(false);
+    const [paymentModalOpen, setPaymentModalOpen] = useState(false)
 
-    useEffect(() => {
-        initMercadoPago(process.env.REACT_APP_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
-    }, []);
+    const form = useForm({
+        initialValues,
+        validate: {
+            firstName: (val) => val.length > 0 ? null : 'Debe ingresar su nombre',
+            lastName: (val) => val.length > 0 ? null : 'Debe ingresar su apellido',
+            email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Mail inválido'),
+            address: (val) => val.length > 0 ? null : 'Debe ingresar su dirección',
+            phone: (val) => val.length > 0 ? null : 'Debe ingresar su número de teléfono',
+        },
+    });
+    
+    const {classes} = useStyles({ error: form.errors.phone});
 
-    useEffect(() => {
-        const fetchPaymentInfo = async () => {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/payments`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth.userToken}`,
-                },
-                body: JSON.stringify({
-                    items: cart.cartItems
-                })
-            })
-
-            if (response.status !== 201) {
-                return navigate('/cart')
-            }
-
-            const { id } = await response.json()
-
-            setInitialization({
-                amount: cart.cartTotalAmount,
-                preferenceId: id
-            })
-            setIsDataReady(true);
+    const validateData = () => {
+        const { hasErrors } = form.validate()
+        if(!hasErrors) {
+            setPaymentModalOpen(true)
         }
-
-        if (auth.status === 'success' && cart.status === 'success') {
-            fetchPaymentInfo();
-        }
-    }, [auth, cart, navigate]);
-
-    useEffect(() => {
-        console.log('cambio')
-    })
+    }
 
     return (
-        <Container style={{
-            minHeight: '80vh',
-            position: 'relative'
+        <Container my={30} fluid style={{
+            width: '80vw',
+            maxWidth: '35rem'
         }}>
-            <LoadingOverlay visible={true} ref={ref} style={{
-                height: '100%',
+            <form onSubmit={form.onSubmit(() => { })}>
+                <Stack>
+                    <Title weight={500} mb={30} style={{
+                        fontSize: 30,
+                        fontFamily: 'ITC Avant Garde Gothic'
+                    }}>
+                        Información requerida
+                    </Title>
+                    <Group style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}>
+                        <TextInput
+                            required
+                            label="Nombre"
+                            placeholder="Tu nombre"
+                            value={form.values.firstName}
+                            onChange={(event) => form.setFieldValue('firstName', event.currentTarget.value)}
+                            radius="md"
+                            error={form.errors.firstName}
+                            style={{
+                                width: '45%'
+                            }}
+                        />
+                        <TextInput
+                            required
+                            label="Apellido"
+                            placeholder="Tu apellido"
+                            value={form.values.lastName}
+                            onChange={(event) => form.setFieldValue('lastName', event.currentTarget.value)}
+                            radius="md"
+                            error={form.errors.lastName}
+                            style={{
+                                width: '45%'
+                            }}
+                        />
+                    </Group>
 
-            }}/>
-            {isDataReady && 
-            <Payment
-                initialization={initialization}
-                customization={customization}
-                onReady={() => {
-                    ref.current.remove()
-                }}
-                style={{
-                    width: '80vw',
-                    maxWidth: '40rem',        
-                }}
-            />
-            }
+                    <TextInput
+                        required
+                        label="Mail"
+                        placeholder="ejemplo@ejemplo.com"
+                        value={form.values.email}
+                        onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
+                        error={form.errors.email}
+                        radius="md"
+                    />
+
+                    <TextInput
+                        required
+                        label="Dirección"
+                        placeholder="Tu dirección"
+                        value={form.values.address}
+                        onChange={(event) => form.setFieldValue('address', event.currentTarget.value)}
+                        radius="md"
+                        error={form.errors.address}
+                    />
+
+                    <PhoneInput
+                        country='ar'
+                        inputStyle={{
+                            width: '100%',
+                        }}
+                        specialLabel='Número de teléfono'
+                        onChange={(value) => form.setFieldValue('phone', value)}
+                        radius="md"
+                        value={form.values.phone}
+                        inputClass={classes.phoneInput}
+                        containerClass={classes.phoneContainer}
+                    />
+                    {form.errors.phone && 
+                    <span style={{
+                        webkitTapHighlightColor: 'transparent',
+                        webkitTextDecoration: 'none',
+                        textDecoration: 'none',
+                        wordBreak: 'break-word',
+                        color: '#fa5252',
+                        fontSize: 12,
+                        lineHeight: 1.2,
+                        display: 'block'
+                    }}>{form.errors.phone}</span>
+                    }
+                    <Button onClick={validateData}>Elegir método de pago</Button>
+                </Stack>
+            </form>
+            <PaymentModal opened={paymentModalOpen} setOpened={setPaymentModalOpen} info={form.values}/>
         </Container>
     )
 }
