@@ -201,6 +201,11 @@ const Navbar = () => {
     const [loggedIn, setLoggedIn] = useState(undefined)
     const [authModalOpened, setAuthModalOpened] = useState(false);
     const [userMenuOpened, setUserMenuOpened] = useState(false);
+    const [categories, setCategories] = useState({
+        type1: [],
+        type2: [],
+        type3: [],
+    });
 
     const navigate = useNavigate()
     const autoplay = useRef(Autoplay({ delay: 7000 }));
@@ -209,6 +214,35 @@ const Navbar = () => {
     const data = useSelector((state) => state.auth);
     const dispatch = useDispatch()
 
+
+    const fetchCategories = async (type, columns) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/type/${type}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const data = await response.json();
+
+            const categoriesPerGroup = Math.ceil(data.length / columns);
+            const groupedCategories = [];
+
+            for (let i = 0; i < columns; i++) {
+                const startIndex = i * categoriesPerGroup;
+                const endIndex = (i + 1) * categoriesPerGroup;
+                groupedCategories.push(data.slice(startIndex, endIndex));
+            }
+
+            setCategories((prevState) => ({
+                ...prevState,
+                [`type${type}`]: groupedCategories,
+            }));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
         if(data.userToken) {
             setLoggedIn(true)
@@ -216,6 +250,12 @@ const Navbar = () => {
             setLoggedIn(false)
         }
     }, [data])
+
+    useEffect(() => {
+        fetchCategories(1, 3);
+        fetchCategories(2, 1);
+        fetchCategories(3, 2);
+    }, []);
 
     const logOutAndGoToHome = () => {
         dispatch(logOut());
@@ -296,7 +336,7 @@ const Navbar = () => {
                         </Tabs.Tab>
                     </Menu.Target>
                     <Menu.Dropdown className={classes.categoryList}>
-                        <CategoryList/>
+                        <CategoryList categories={categories}/>
                     </Menu.Dropdown>
                 </Menu>
                 :

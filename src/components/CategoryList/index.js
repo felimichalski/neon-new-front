@@ -52,48 +52,8 @@ const useStyles = createStyles((theme) => ({
     }
 }));
 
-const CategoryList = () => {
+const CategoryList = ({ categories }) => {
     const { classes } = useStyles();
-
-    const [categories, setCategories] = useState({
-        type1: [],
-        type2: [],
-        type3: [],
-    });
-
-    const fetchCategories = async (type, columns) => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/type/${type}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const data = await response.json();
-
-            const categoriesPerGroup = Math.ceil(data.length / columns);
-            const groupedCategories = [];
-
-            for (let i = 0; i < columns; i++) {
-                const startIndex = i * categoriesPerGroup;
-                const endIndex = (i + 1) * categoriesPerGroup;
-                groupedCategories.push(data.slice(startIndex, endIndex));
-            }
-
-            setCategories((prevState) => ({
-                ...prevState,
-                [`type${type}`]: groupedCategories,
-            }));
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        fetchCategories(1, 3);
-        fetchCategories(2, 1);
-        fetchCategories(3, 2);
-    }, []);
 
     return (
         <Container fluid display='flex' m={0} p={0}>
@@ -108,7 +68,7 @@ const CategoryList = () => {
                     {categories.type1.map((categoryGroup, index) => (
                         <div key={index} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                             {categoryGroup.map((category, index) => (
-                                <Link to={`categories/${category.id}`} className={classes.link}>
+                                <Link to={`categories/${category.id}`} className={classes.link} key={index}>
                                     <Menu.Item icon={<ChevronRight size={16} />} key={index} className={classes.item}>
                                         {category.name}
                                     </Menu.Item>
@@ -127,7 +87,7 @@ const CategoryList = () => {
                     {categories.type3.map((categoryGroup, index) => (
                         <div key={index} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
                             {categoryGroup.map((category, index) => (
-                                <Link to={`categories/${category.id}`} className={classes.link}>
+                                <Link to={`categories/${category.id}`} className={classes.link} key={index}>
                                     <Menu.Item icon={<ChevronRight size={16} />} key={index} className={classes.item}>
                                         {category.name}
                                     </Menu.Item>
