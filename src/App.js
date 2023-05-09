@@ -7,6 +7,8 @@ import CustomFonts from './fonts/CustomFonts';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import Admin from "./pages/Admin";
+import ProtectedRoute from './components/middleware/ProtectedRoute';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer/Footer';
@@ -41,9 +43,16 @@ const App = () => {
       <ToastContainer pauseOnHover={false} theme='light' autoClose={2000} position='bottom-right' />
       <Navbar />
       <Routes location={location} key={location.pathname}>
+      <Route element={<ProtectedRoute />}>
+          {/* <Route path="/create_product" element={<CreateProduct />} /> */}
+          <Route path="/admin" element={<Admin />} />
+          {/* <Route path="/update/:productId" element={<Update />} /> */}
+
+        </Route>
         <Route path='/'>
           <Route index element={<Home />} />
           <Route path='cart' element={<Cart />} />
+          <Route path='admin' element={<Admin />} />
           <Route path='checkout' element={<Checkout />} />
           <Route path='categories'>
             <Route index element={<Category />} />
