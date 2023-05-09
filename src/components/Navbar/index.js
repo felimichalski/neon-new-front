@@ -4,6 +4,7 @@ import { logOut } from '../../features/slices/authSlice'
 import { Anchor, Box, Container, createStyles, Divider, Group, Image, Menu, Tabs, Text, UnstyledButton } from '@mantine/core'
 import { Link, useNavigate } from 'react-router-dom'
 
+import {Admin} from "@styled-icons/remix-line/Admin"
 import { Person, Search, Cart, LineHorizontal3, ArrowEnter, SignOut, Pen, Star } from '@styled-icons/fluentui-system-regular'
 import { ChevronDown } from '@styled-icons/entypo'
 
@@ -385,6 +386,10 @@ const Navbar = () => {
                     </Tabs>
                 </Group>
                 <Group style={{ gap: 0 }} className={classes.collapsableMD}>
+                    <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
+                    <UnstyledButton onClick={() => navigate('/admin')} className={classes.iconContainer}>
+                        <Admin size={20} />
+                    </UnstyledButton>
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <UnstyledButton className={classes.iconContainer}>
                         <Search size={20} />
