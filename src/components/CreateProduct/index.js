@@ -47,8 +47,10 @@ const CreateProduct = ()=>{
             unit_price:0
         },
         validate: {
-            unit_price: (value) => (value ? null : 'Invalid email'),
-            age: (value) => (value < 18 ? 'You must be at least 18 to register' : null),
+            unit_price: (value) => (value === 0? 'El producto debe tener precio' : null),
+            title: (value) => (value === "" ? 'El producto debe tener título' : null),
+            category: (value) => (value.length === 0 ? 'El producto debe tener categoría' : null),
+            description: (value) => (value === "" ? 'El producto debe tener descripción' : null),
           }
     })
     console.log(form.values)
@@ -102,7 +104,7 @@ const CreateProduct = ()=>{
                                 <option value={true}>Sí</option>
                                 <option value={false}>No</option>
                             </InputBase>
-                            <Button type="submit">Subir</Button>
+                            <Button sx={{margin:"0.5rem 0"}} type="submit">Subir</Button>
                         </form>
                     </Flex>    
             </Container>
