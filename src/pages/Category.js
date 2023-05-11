@@ -1,4 +1,4 @@
-import { Box, Breadcrumbs, Container, Divider, Grid, Select, Title, createStyles } from "@mantine/core"
+import { Pagination, Box, Breadcrumbs, Container, Divider, Grid, Select, Title, createStyles, TextInput } from "@mantine/core"
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
@@ -21,6 +21,19 @@ const useStyles = createStyles((theme) => ({
     filter: {
         display: 'flex',
         justifyContent: 'flex-end'
+    },
+    inputBox: {
+        width:"100%",
+        display:"flex",
+        alignItems:"flex-end",
+        justifyContent:"flex-end",
+        margin:"0.5rem"
+    },
+    paginationBox:{
+        width:"100%",
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"flex-end"
     }
 }))
 
@@ -29,12 +42,12 @@ const Category = () => {
     const [category, setCategory] = useState(undefined)
     const [products, setProducts] = useState([])
     const [selectValue, setSelectValue] = useState('date')
+    const [page, setPage] = useState(1);
     let { id } = useParams();
     id = parseInt(id);
     const { classes } = useStyles();
     const location = useLocation();
     const isType = location.pathname.includes('type')
-
     const loadProducts = useCallback(async () => {
         let endpoint;
         isType ? endpoint = `${process.env.REACT_APP_API_URL}/products/type/${id}` : endpoint = `${process.env.REACT_APP_API_URL}/products/category/${id}`;
@@ -92,7 +105,7 @@ const Category = () => {
             <Grid m={1} columns={24}>
                 <Grid.Col span={6}></Grid.Col>
                 <Grid.Col span={17} offset={1}>
-                    <Box className={classes.tableHeader}>
+                    <Box  className={classes.tableHeader}>
                         <Title>
                             {category ? 
                                 isType ?
@@ -127,14 +140,22 @@ const Category = () => {
                     <Divider my='md' />
                 </Grid.Col>
             </Grid>
+            <Box className={classes.inputBox}>
+                <TextInput sx={{  width:"70%", marginRight:"1rem"}}
+                    placeholder="Buscá tu diseño en esta categoría..."
+                />
+            </Box>
             <Grid m={1} columns={24}>
                 <Grid.Col span={6}>
                     <CategoriesSection />
                 </Grid.Col>
                 <Grid.Col span={17} offset={1}>
-                    <ProductsSection products={products} />
+                    <ProductsSection products={products} page={page} />
                 </Grid.Col>
             </Grid>
+            <Box className={classes.paginationBox}>
+                <Pagination sx={{width:"41%",}} total={products.length?Math.ceil(products.length/6):1} value={page} onChange={setPage}/>
+            </Box>
         </Container>
     )
 }
