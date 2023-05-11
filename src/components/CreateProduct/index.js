@@ -9,7 +9,7 @@ const useStyles = createStyles(theme => ({
         alignItems: "center",
         justifyContent: "space-around",
         width: "80%",
-        height: "70%",
+        height: "28rem",
         margin: "auto",
         background: "none",
         boxShadow: "box-shadow: 2px -1px 23px 6px rgba(168,168,168,0.75);-webkit-box-shadow: 2px -1px 23px 6px rgba(168,168,168,0.75);-moz-box-shadow: 2px -1px 23px 6px rgba(168,168,168,0.75);",
@@ -18,13 +18,14 @@ const useStyles = createStyles(theme => ({
     imageBox:{
         display:"flex",
         alignItems:"center",
-        width:"50%",
-        height:"80%",
+        width:"30%",
+        height:"50%",
         background: "none"
     },
     form:{
         display:"flex",
-        alignItems:""
+        flexDirection:"column",
+        justifyContent:"center"
     },
     inputs:{
         marginTop:"0.5rem",
@@ -39,24 +40,27 @@ const CreateProduct = ()=>{
     const form = useForm({
         initialValues:{
             image: "",
-            category:"",
+            category:[],
             description:"",
             isFeatured: true,
             title:"",
             unit_price:0
-        }
-        
+        },
+        validate: {
+            unit_price: (value) => (value ? null : 'Invalid email'),
+            age: (value) => (value < 18 ? 'You must be at least 18 to register' : null),
+          }
     })
     console.log(form.values)
 
     return(
-            <Container fluid sx={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", marginTop:"3rem"}}>
+            <Container fluid sx={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", marginTop:"2rem"}}>
                     <Title order={1} size="h1">Crear Producto</Title>
                     <Flex className={classes.flexContainer}>
                         <Box className={classes.imageBox}>
                             <Image alt="ref image" src={"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png"}/>
                         </Box>
-                        <form onSubmit={form.onSubmit(values => dispatch(postProduct(values)))}>
+                        <form className={classes.form} onSubmit={form.onSubmit(values => dispatch(postProduct(values)))}>
                             <TextInput className={classes.inputs}
                                 onChange={(e)=>form.setFieldValue("title", e.currentTarget.value)}
                                 placeholder="Nombre del producto"
@@ -92,7 +96,7 @@ const CreateProduct = ()=>{
                                 onChange={(e)=>form.setFieldValue("isFeatured", e.currentTarget.value)}
                                 component="select"
                                 data={['si', 'no']}
-                                label="¿El producto se mostrará?"
+                                label="¿El producto es destacado?"
                                 {...form.getInputProps("isFeatured")}
                             >
                                 <option value={true}>Sí</option>
