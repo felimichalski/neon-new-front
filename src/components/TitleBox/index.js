@@ -1,5 +1,8 @@
 import { Carousel } from '@mantine/carousel';
-import { BackgroundImage, createStyles, Title } from '@mantine/core'
+import { BackgroundImage, createStyles, Title, Box } from '@mantine/core'
+import { getPublics } from '../../features/actions/publicActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect} from 'react';
 
 import background1 from '../../assets/1.webp'
 import background2 from '../../assets/bgHome.webp'
@@ -33,10 +36,19 @@ const useStyles = createStyles((theme) => ({
 }))
 
 const TitleBox = () => {
+    useEffect(() => {
+      dispatch(getPublics())
+    }, [])
+    
+    const publics = useSelector(state => state.public.items)
+    const dispatch = useDispatch()
     const { classes } = useStyles();
     const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }))
+    console.log(publics)
 
     return (
+        <Box sx={{position:"relative"}}>
+        <Title sx={{color:"white",position:"absolute",top:"50%",left:"50%", margin:"auto", zIndex:"1000",transform: "translate(-50%, -50%)"}}>Tus neones favoritos</Title>
         <Carousel
             slideSize='100%'
             loop
@@ -58,25 +70,27 @@ const TitleBox = () => {
             }}
             plugins={[autoplay.current]}
         >
+            
             <Carousel.Slide>
                 <BackgroundImage className={classes.root} src={background1}>
                     <div className={classes.overlay} />
-                    <Title className={classes.title}>Title 1</Title>
+                    {/* <Title className={classes.title}>Title 1</Title> */}
                 </BackgroundImage>
             </Carousel.Slide>
             <Carousel.Slide>
                 <BackgroundImage className={classes.root} src={background2}>
                     <div className={classes.overlay} />
-                    <Title className={classes.title}>Title 2</Title>
+                    {/* <Title className={classes.title}>Title 2</Title> */}
                 </BackgroundImage>
             </Carousel.Slide>
             <Carousel.Slide>
                 <BackgroundImage className={classes.root} src={background3}>
                     <div className={classes.overlay} />
-                    <Title className={classes.title}>Title 3</Title>
+                    {/* <Title className={classes.title}>Title 3</Title> */}
                 </BackgroundImage>
             </Carousel.Slide>
         </Carousel>
+        </Box>
     )
 }
 
