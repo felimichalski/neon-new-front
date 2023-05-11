@@ -213,6 +213,7 @@ const Navbar = () => {
     const { classes, cx } = useStyles({ categoryListOpen, pointerEvents })
 
     const data = useSelector((state) => state.auth);
+    const logedUser = useSelector(state=> state.auth.userInfo)
     const dispatch = useDispatch()
 
 
@@ -386,14 +387,24 @@ const Navbar = () => {
                     </Tabs>
                 </Group>
                 <Group style={{ gap: 0 }} className={classes.collapsableMD}>
-                    <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
-                    <UnstyledButton onClick={() => navigate('/admin')} className={classes.iconContainer}>
-                        <Admin size={20} />
-                    </UnstyledButton>
+                    
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <UnstyledButton className={classes.iconContainer}>
                         <Search size={20} />
                     </UnstyledButton>
+
+                    {logedUser?.admin?
+                    <Divider sx={{marginRight:"-1.5rem"}} px={10} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />:""
+                    }
+                    {
+                    logedUser?.admin?
+                <UnstyledButton onClick={() => navigate('/admin')} className={classes.iconContainer}>
+                    <Admin size={20} />
+                </UnstyledButton>
+                :
+                ""    
+                }
+
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     {userButton}
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
