@@ -1,8 +1,7 @@
 import { Box, Button, Container, createStyles, Divider, Grid, List, MantineProvider, Text, Title, Flex } from '@mantine/core'
 import { useHover } from '@mantine/hooks';
-import { motion } from 'framer-motion';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme, { hoverEffects }) => ({
     container: {
         width: '100%',
         height:"10vh",
@@ -21,51 +20,32 @@ const useStyles = createStyles((theme) => ({
         height: "100%",
         margin: "auto"
     },
-    /* option1:{
-        background:"red",
+    option:{
+        fontSize:"1.3rem",
+        background:"none",
         color: "grey",
-        width: "10%",
-        height: "100%"
-
+        width: "20rem",
+        height: "100%",
+        transition:"transform .1s linear",
+        [`&:hover`]: {
+            transform: !hoverEffects && "scale(1.1)",
+            background: !hoverEffects && "none"
+        }
     },
-    selectedOption1:{
-        background:"none !important",
-        color: "black",
-        width: "10%",
-        height: "100%"
-
-    },
-    option2:{
-        background:"red",
-        color: "grey",
-        width: "10%",
-        height: "100%"
-
-    },
-    selectedOption2:{
-        background:"none !important",
-        color: "black",
-        width: "10%",
-        height: "100%"
-
-    }, */
 })) 
 
-const AdminBar = () => {
-    const {classes} = useStyles();
-    const {hovered, ref} = useHover();
+const AdminBar = ({hoverEffects}) => {
+    const {classes} = useStyles({hoverEffects});
         
     return(
                 <Container fluid className={classes.container}>
                     <Flex className={classes.flexContainer}>
-                        <Button ref={ref} className={hovered?classes.selectedOptions:classes.options}>
+                        <Button className={classes.option}>
                             Cargar Productos
                         </Button>
-                        <Button ref={ref} className={hovered?classes.selectedOption2:classes.option2}>
+                        <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
+                        <Button className={classes.option}>
                             Borrar Productos
-                        </Button>
-                        <Button ref={ref} className={hovered?classes.selectedOptions:classes.options}>
-                            Administrar Usuarios
                         </Button>
                     </Flex>
                 </Container>
