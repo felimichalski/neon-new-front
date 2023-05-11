@@ -12,7 +12,6 @@ function ProtectedRoute() {
   /* let hola = authInfo.then((res)=>{ testValue = res.payload;console.log("res.payload",res.payload)}).catch(e=>console.log(e)) */
   
   const logedUser = useSelector(state => state.auth.userInfo)
-  console.log(logedUser)
 
 
   return logedUser?.admin ? <Outlet /> : <Navigate to={"/"} />;
