@@ -188,11 +188,11 @@ const tabs = [{
 }, {
     name: 'Categorías',
 }, {
-    name: 'Personalizados',
-    link: '/custom',
-}, {
     name: 'Contactanos',
     link: '/contact',
+}, {
+    name: 'Sobre nosotros',
+    link: '/About',
 }];
 
 const Navbar = () => {
@@ -332,14 +332,17 @@ const Navbar = () => {
                     transition='scale-y'
                     transitionDuration={200}
                 >
+                    
                     <Menu.Target>
                         <Tabs.Tab value={removeAccents(tab.name.toLowerCase())} className={[classes.tab, classes.tabNoBorder]}>
                             <Text style={{ display: 'flex', alignItems: 'center' }}>{tab.name}</Text><ChevronDown size={16} className={classes.categoryChevron} />
                         </Tabs.Tab>
                     </Menu.Target>
+                    
                     <Menu.Dropdown className={classes.categoryList}>
                         <CategoryList categories={categories}/>
                     </Menu.Dropdown>
+                    
                 </Menu>
                 :
                 <Link to={tab.link} className={classes.tabLink}>
