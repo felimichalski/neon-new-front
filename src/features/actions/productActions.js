@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 export const postProduct = createAsyncThunk(
     "product/post",
@@ -10,11 +11,15 @@ export const postProduct = createAsyncThunk(
                 "Content-Type": "application/json",
               },
               body: JSON.stringify(body),
+              
             });
       
             if(response.status !== 201) {
               return rejectWithValue(response.statusText);
             }
+            toast.success("Producto creado", {
+              position: "bottom-left",
+            });
         } catch (error) {
             console.error(error)
         }
