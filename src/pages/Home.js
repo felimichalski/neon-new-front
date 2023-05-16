@@ -11,6 +11,7 @@ import bg4 from '../assets/section-cards/bg4.jpg'
 import CustomDivider from "../components/CustomDivider"
 
 import { motion } from 'framer-motion'
+import { useState } from "react"
 
 const mock1 = [
   {
@@ -49,7 +50,7 @@ const mock1 = [
 // ]
 
 const Home = () => {
-  
+  const [updateText, setUpdateText] = useState("")
   useDocumentTitle('Neon infinito - Inicio')
   
   return (
@@ -59,9 +60,9 @@ const Home = () => {
       exit={{opacity: 0}}
     >
       <Box style={{ backgroundColor: 'white'}}>
-          <TitleBox />
+          <TitleBox updateText={updateText} setUpdateText={setUpdateText}/>
           <CustomDivider />
-          <SectionCards data={mock1}/>
+          <SectionCards data={mock1} updateText={updateText} setUpdateText={setUpdateText}/>
           <CustomDivider />
           <FeaturedProducts />
           <CustomDivider />
