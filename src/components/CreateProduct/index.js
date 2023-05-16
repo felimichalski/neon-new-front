@@ -53,7 +53,6 @@ const CreateProduct = ()=>{
             description: (value) => (value === "" ? 'El producto debe tener descripción' : null),
           }
     })
-    console.log(form.values)
 
     return(
             <Container fluid sx={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", marginTop:"2rem"}}>
