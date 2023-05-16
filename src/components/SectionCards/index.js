@@ -8,7 +8,7 @@ const useStyles = createStyles((theme) => ({
   }
 }))
 
-const SectionCards = ({ data }) => {
+const SectionCards = ({ data, updateText, setUpdateText }) => {
 
   const { classes } = useStyles();
 
@@ -17,7 +17,7 @@ const SectionCards = ({ data }) => {
       <Grid mx={1} gutter='md'>
         {data.map(({background, title, text, bgText, textColor, buttonText, type}, key) => (
           <Grid.Col span={6} key={key}>
-            <SectionCard background={background} title={title} text={text} bgText={bgText} textColor={textColor} buttonText={buttonText} type={type} />
+            <SectionCard id={key} updateText={updateText} setUpdateText={setUpdateText} background={background} title={title} text={text} bgText={bgText} textColor={textColor} buttonText={buttonText} type={type} />
           </Grid.Col>
         ))}
       </Grid>
