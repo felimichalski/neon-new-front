@@ -10,6 +10,7 @@ import { socialFetch } from '../features/actions/socialActions'
 import { getUserDetails } from '../features/actions/authActions'
 import { postProduct } from '../features/actions/productActions'
 import { getPublics } from '../features/actions/publicActions'
+import { updatePublic } from "../features/actions/publicActions"
 
 export const store = configureStore({
     reducer: {
@@ -27,3 +28,4 @@ store.dispatch(getUserDetails());
 store.dispatch(getTotals());
 store.dispatch(postProduct());
 store.dispatch(getPublics());
+store.dispatch(updatePublic())
