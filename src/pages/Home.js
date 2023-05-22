@@ -3,6 +3,7 @@ import { useDocumentTitle } from "@mantine/hooks"
 import FeaturedProducts from "../components/FeaturedProducts"
 import SectionCards from "../components/SectionCards"
 import TitleBox from "../components/TitleBox"
+import IconsHome from "../components/IconsHome"
 
 // import bg1 from '../assets/section-cards/bg1.jpg'
 import bg2 from '../assets/section-cards/bg2.jpg'
@@ -63,6 +64,8 @@ const Home = () => {
           <TitleBox updateText={updateText} setUpdateText={setUpdateText}/>
           <CustomDivider />
           <SectionCards data={mock1} updateText={updateText} setUpdateText={setUpdateText}/>
+          <CustomDivider />
+          <IconsHome/>
           <CustomDivider />
           <FeaturedProducts />
           <CustomDivider />
