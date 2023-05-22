@@ -9,6 +9,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Admin from "./pages/Admin";
 import ProtectedRoute from './components/middleware/ProtectedRoute';
+import ProductDetail from './components/ProductDetail';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer/Footer';
@@ -47,7 +48,6 @@ const App = () => {
           {/* <Route path="/create_product" element={<CreateProduct />} /> */}
           <Route path="/admin" element={<Admin />} />
           {/* <Route path="/update/:productId" element={<Update />} /> */}
-
         </Route>
         <Route path='/'>
           <Route index element={<Home />} />
@@ -59,6 +59,7 @@ const App = () => {
             <Route path=':id' element={<Category />} />
             <Route path='type/:id' element={<Category />} />
           </Route>
+          <Route path="product/:id" element={<ProductDetail/>}/>
         </Route>
       </Routes>
       <Footer />
