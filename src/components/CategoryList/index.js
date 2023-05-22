@@ -11,17 +11,17 @@ const useStyles = createStyles((theme) => ({
         color: 'white',
 
         '&:nth-of-type(1)': {
-            width: '40%',
+            width: '50%',
             backgroundColor: '#5c84ac'
         },
 
         '&:nth-of-type(2)': {
-            width: '30%',
+            width: '50%',
             backgroundColor: '#0d4c9b'
         },
 
         '&:nth-of-type(3)': {
-            width: '30%',
+            width: '50%',
             backgroundColor: '#15244c'
         }
     },
@@ -81,7 +81,7 @@ const CategoryList = ({ categories }) => {
             <Box className={classes.column}>
                 <Title style={{ width: '100%' }} mb={15}>Artístico</Title>
             </Box>
-            <Box className={classes.column}>
+            {/* <Box className={classes.column}>
                 <Title style={{ width: '100%' }} mb={15}>Algo distinto</Title>
                 <Box display='flex'>
                     {categories.type3.map((categoryGroup, index) => (
@@ -96,7 +96,7 @@ const CategoryList = ({ categories }) => {
                         </div>
                     ))}
                 </Box>
-            </Box>
+            </Box> */}
         </Container>
     );
 };
