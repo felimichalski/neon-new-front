@@ -1,6 +1,8 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
 import { ToastContainer } from "react-toastify";
+import { useState } from 'react';
+import { Box, createStyles } from "@mantine/core"
 
 import "react-toastify/dist/ReactToastify.css";
 import CustomFonts from './fonts/CustomFonts';
@@ -10,14 +12,29 @@ import Checkout from './pages/Checkout';
 import Admin from "./pages/Admin";
 import ProtectedRoute from './components/middleware/ProtectedRoute';
 import ProductDetail from './components/ProductDetail';
+import SideBar from './components/SideBar';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer/Footer';
 import Category from './pages/Category';
 
-const App = () => {
+const useStyles = createStyles((theme) => ({
+  container:{
+    position:"relative",
+  },
+  openSideBar:{
+    position:"absolute",
+    
+  },
+  closeSideBar:{
+    display:"none"
+  }
+}))
 
+const App = () => {
+  const { classes } = useStyles()
   const location = useLocation();
+  const [openMenu, setOpenMenu] = useState(false)
 
   return (
     <MantineProvider
@@ -42,7 +59,10 @@ const App = () => {
     >
       <CustomFonts />
       <ToastContainer pauseOnHover={false} theme='light' autoClose={2000} position='bottom-right' />
-      <Navbar />
+      <Navbar openMenu={openMenu} setOpenMenu={setOpenMenu}/>
+      <Box className={openMenu?classes.openSideBar:classes.closeSideBar} >
+          <SideBar openMenu={openMenu} setOpenMenu={setOpenMenu}/>
+      </Box>
       <Routes location={location} key={location.pathname}>
       <Route element={<ProtectedRoute />}>
           {/* <Route path="/create_product" element={<CreateProduct />} /> */}
