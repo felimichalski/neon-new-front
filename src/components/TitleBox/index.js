@@ -23,7 +23,10 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         cursor: 'grab',
         display: 'flex !important',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        [`@media (max-width: 600px)`]: {
+            height:"15rem",
+          },
     },
 
     overlay: {
@@ -36,7 +39,10 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
 
     title: {
         zIndex: 2,
-        color: theme.white
+        color: theme.white,
+        [`@media (max-width: 600px)`]: {
+            fontSize:"1.5rem"
+          },
     },
     titleBox: {
         display:"flex",
@@ -48,7 +54,11 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         left:"50%", 
         margin:"auto", 
         zIndex:"1000",
-        transform: "translate(-50%, -50%)"
+        transform: "translate(-50%, -50%)",
+        [`@media (max-width: 600px)`]: {
+            textAlign:"center",
+            
+          },
     },
     editButton: {
         background:"none",
@@ -107,11 +117,11 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
     }
 
     return (
-        <Box sx={{position:"relative"}}>
+        <Box sx={{position:"relative",}}>
             <Box className={classes.titleBox}>
 
                 {updateText!=="HomeTitle"?
-                <Title>{firstPublic}</Title>:
+                <Title className={classes.title}>{firstPublic}</Title>:
                 <form className={classes.form} onSubmit={form.onSubmit(values => dispatch(updatePublic(values)))}>
                     <TextInput
                     placeholder={firstPublic}
@@ -147,7 +157,6 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
                     margin: '0 5px',
                     border: '3px solid white',
                     opacity: 1,
-
                     '&[data-active]': {
                     backgroundColor: 'black',
                     }
