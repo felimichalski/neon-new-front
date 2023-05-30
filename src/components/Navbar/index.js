@@ -27,7 +27,8 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         borderBottom: '1px solid rgb(229 229 229 / 1)',
         position: 'sticky',
         top: 0,
-        zIndex: 10000
+        zIndex: 10000,
+        
     },
 
     offer: {
@@ -59,9 +60,9 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
 
     tabs: {
         height: '100%',
-        [theme.fn.smallerThan('md')]: {
-            display: 'none',
-        }
+        [`@media (max-width: 949px)`]: {
+            display:"none"
+          },
     },
 
     tabsList: {
@@ -93,6 +94,13 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
             backgroundColor: 'transparent',
             borderBottom: '3px solid black !important',
         },
+        [`@media (max-width: 1025px)`]: {
+            fontSize:"10px"
+          },
+          [`@media (max-width: 967px)`]: {
+            fontSize:"8px"
+          },
+          
     },
 
     tabNoBorder: {
@@ -135,20 +143,20 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         display: 'none',
 
         [theme.fn.smallerThan('md')]: {
-            display: 'flex',
+            display: 'none',
         },
 
-        [theme.fn.smallerThan('sm')]: {
-            display: 'none',
-        }
+        [`@media (max-width: 600px)`]: {
+            display:"none",
+          },
     },
 
     sidebarButton: {
         display: 'none',
 
-        [theme.fn.smallerThan('sm')]: {
-            display: 'flex',
-        }
+        [`@media (max-width: 949px)`]: {
+            display:"flex",
+          },
     },
 
     categoryList: {
@@ -176,7 +184,8 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
     categoryChevron: {
         transform: categoryListOpen ? 'rotate(-180deg)' : 'rotate(0deg)',
         transition: 'all .2s ease'
-    }
+    },
+    
 }))
 
 const tabs = [{
@@ -195,8 +204,7 @@ const tabs = [{
     link: '/About',
 }];
 
-const Navbar = () => {
-
+const Navbar = ({openMenu, setOpenMenu}) => {
     const [categoryListOpen, setCategoryListOpen] = useState(false)
     const [pointerEvents, setPointerEvents] = useState('auto')
     const [loggedIn, setLoggedIn] = useState(undefined)
@@ -207,6 +215,9 @@ const Navbar = () => {
         type2: [],
         type3: [],
     });
+    
+    
+
 
     const navigate = useNavigate()
     const autoplay = useRef(Autoplay({ delay: 7000 }));
@@ -356,7 +367,7 @@ const Navbar = () => {
 
     return (
         <Container fluid className={classes.navbar}>
-            <Carousel
+            {/* <Carousel
                 className={classes.offer}
                 loop
                 withControls={false}
@@ -372,7 +383,7 @@ const Navbar = () => {
                 <Carousel.Slide>
                     <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
                 </Carousel.Slide>
-            </Carousel>
+            </Carousel> */}
             <Box className={classes.main}>
                 <Group>
                     <Anchor component={Link} to="/" style={{ padding: '10px 0' }}>
@@ -434,8 +445,8 @@ const Navbar = () => {
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                 </Group>
                 <Group className={classes.sidebarButton}>
-                    <UnstyledButton className={classes.iconContainer}>
-                            <LineHorizontal3 size={20} />
+                    <UnstyledButton onClick={()=>{openMenu?setOpenMenu(false):setOpenMenu(true)}}>
+                     <LineHorizontal3 size={20} />
                     </UnstyledButton>
                 </Group>
             </Box>

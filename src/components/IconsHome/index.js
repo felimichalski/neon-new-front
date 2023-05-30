@@ -7,7 +7,10 @@ import { Payment } from "@styled-icons/fluentui-system-regular/Payment"
 const useStyles = createStyles((theme) => ({
 flexContainer:{
     alignItems:"center",
-    justifyContent:"space-evenly"
+    justifyContent:"center",
+    [`@media (max-width: 600px)`]: {
+        transform:"scale(0.7)",
+      },
 },
 iconContainer:{
     display:"flex",
@@ -18,6 +21,11 @@ iconContainer:{
    /*  background:"grey", */
     fontFamily:'ITC Avant Garde Gothic',
     textAlign:"center",
+    [`@media (max-width: 600px)`]: {
+        width:"30%",
+        margin:"0 2rem"
+        
+      },
 }
 }))
 

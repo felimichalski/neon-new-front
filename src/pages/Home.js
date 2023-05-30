@@ -1,9 +1,11 @@
-import { Box } from "@mantine/core"
+import { Box, createStyles } from "@mantine/core"
 import { useDocumentTitle } from "@mantine/hooks"
 import FeaturedProducts from "../components/FeaturedProducts"
 import SectionCards from "../components/SectionCards"
 import TitleBox from "../components/TitleBox"
 import IconsHome from "../components/IconsHome"
+
+
 
 // import bg1 from '../assets/section-cards/bg1.jpg'
 import bg2 from '../assets/section-cards/bg2.jpg'
@@ -33,7 +35,10 @@ const mock1 = [
     buttonText: 'Texto 1',
     type: 'card'
   },
+  
 ]
+
+
 
 // const mock2 = [
 //   {
@@ -50,7 +55,9 @@ const mock1 = [
 //   }
 // ]
 
-const Home = () => {
+/* <script async src="//www.instagram.com/embed.js"></script> */
+
+const Home = ({openMenu, setOpenMenu}) => {
   const [updateText, setUpdateText] = useState("")
   useDocumentTitle('Neon infinito - Inicio')
   
@@ -60,11 +67,13 @@ const Home = () => {
       animate={{opacity: 1}}
       exit={{opacity: 0}}
     >
-      <Box style={{ backgroundColor: 'white'}}>
+      <Box style={{ backgroundColor: 'white', position:"relative"}}>
+          
           <TitleBox updateText={updateText} setUpdateText={setUpdateText}/>
           <CustomDivider />
           <SectionCards data={mock1} updateText={updateText} setUpdateText={setUpdateText}/>
           <CustomDivider />
+          
           <IconsHome/>
           <CustomDivider />
           <FeaturedProducts />

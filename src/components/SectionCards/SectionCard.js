@@ -13,8 +13,20 @@ const useStyles = createStyles((theme, {hoverEffects}, { bgText, textColor }) =>
     aspectRatio: '3 / 2', 
     padding: '3rem 2rem',
     position: 'relative',
+    [`@media (max-width: 600px)`]: {
+      display:"none",
+    },
   },
-
+  responsiveContainer:{
+    display:"flex",
+    flexDirection:"column",
+    padding:"1rem",
+    background:"black",
+    height:"100%",
+    [`@media (min-width: 600px)`]: {
+      display:"none",
+    },
+  },
   overlay: {
     zIndex: 1,
     backgroundColor: 'rgba(0, 0, 0, .4)',
@@ -143,7 +155,23 @@ const SectionCard = ({ id, updateText, setUpdateText, background, title, text, b
     }
 } */
   return (
-    <Card mx={0} p={0} radius={5} style={{ backgroundColor: 'transparent' }}>
+    <Card sx={{height:"100%"}} mx={0} p={0} radius={5} style={{ backgroundColor: 'transparent' }}>
+      <Box className={classes.responsiveContainer}>
+        <>
+              <div className={classes.overlay}/>
+              <Box className={classes.info}>
+                <div className={classes.titleContainer}>
+                  <Title mb={0} className={classes.title}>{title}</Title>
+                </div>
+                <div>
+                  <Text className={classes.text}>{text}</Text>
+                </div>
+                <div>
+                  <UnstyledButton className={classes.button}>{buttonText}</UnstyledButton>
+                </div>
+              </Box>
+            </>
+      </Box>
       <BackgroundImage src={background} className={classes.root}>
         {title && text &&
         <>
