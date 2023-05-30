@@ -1,7 +1,8 @@
-import { Button, Card, createStyles, Image, Text, Title } from "@mantine/core"
+import { Button, Card, createStyles, Image, Text, Title, UnstyledButton } from "@mantine/core"
 import { AddShoppingCart } from '@styled-icons/material'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../../features/slices/cartSlice'
+import { Link, useNavigate } from 'react-router-dom'
 
 const useStyles = createStyles((theme, { hoverEffects }) => ({
     root: {
@@ -66,6 +67,9 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         '&:hover': {
             backgroundColor: theme.colors.gray[8]
         }
+    },
+    link: {
+        textDecoration:"none"
     }
 }));
 
@@ -74,8 +78,9 @@ const Product = ({ data, hoverEffects }) => {
     const { classes } = useStyles({ categoryColor: data.category.color, hoverEffects });
 
     const dispatch = useDispatch();
-
     return (
+        <Link className={classes.link} to={`/product/${data.id}`}>
+
         <Card radius={0} className={classes.root}>
             <Card.Section className={[classes.section, classes.imageSection]}>
                 <Image src={data.image} className={classes.image}/>
@@ -89,6 +94,8 @@ const Product = ({ data, hoverEffects }) => {
                 <Button className={classes.button} onClick={() => dispatch(addToCart(data))}><AddShoppingCart size={20} /></Button>
             </Card.Section>
         </Card>
+        
+        </Link>
     )
 }
 

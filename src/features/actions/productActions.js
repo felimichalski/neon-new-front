@@ -25,3 +25,18 @@ export const postProduct = createAsyncThunk(
         }
     }
 )
+
+export const getProduct = createAsyncThunk(
+  "product/getProduct",
+  async (id) => {
+      try {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/product/${id}`,{
+              mode: 'cors'
+          })
+          const data = await response.json();
+          return data
+      } catch (error) {
+          console.error(error)
+      }
+  }
+)
