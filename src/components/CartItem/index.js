@@ -8,7 +8,10 @@ const useStyles = createStyles((theme) => ({
     width: '100%',
     display: 'flex',
     alignItems: 'center',
-    height: '7vw'
+    height: '7vw',
+    [`@media (max-width: 600px)`]: {
+      height:"12vw",
+    },
   },
 
   column: {
@@ -19,13 +22,17 @@ const useStyles = createStyles((theme) => ({
   image: {
     height: '100%',
     aspectRatio: '1 / 1',
-    width: 'auto !important'
+    width: 'auto !important',
+    
   },
 
   text: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    [`@media (max-width: 600px)`]: {
+      paddingLeft:"1rem",
+    },
   },
 
   title: {

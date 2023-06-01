@@ -18,7 +18,7 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         [`&:hover`]: {
                 transform: hoverEffects && 'scale(1.02)',
                 boxShadow: hoverEffects && '0 8px 42px rgb(0 0 0 / 20%)' 
-            }
+            },
     },
 
     section: {
@@ -58,6 +58,8 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         fontFamily: 'ITC Avant Garde Gothic',
         fontWeight: 400,
         marginBottom: '.5rem',
+        textDecoration:"none",
+        color:"black"
     },
 
     button: {
@@ -79,23 +81,29 @@ const Product = ({ data, hoverEffects }) => {
 
     const dispatch = useDispatch();
     return (
-        <Link className={classes.link} to={`/product/${data.id}`}>
+        
 
         <Card radius={0} className={classes.root}>
+                
             <Card.Section className={[classes.section, classes.imageSection]}>
+            <Link className={classes.link} to={`/product/${data.id}`}>
                 <Image src={data.image} className={classes.image}/>
+                </Link>
             </Card.Section>
             <Card.Section radius={0} className={[classes.section, classes.textSection]}>
+            <Link className={classes.link} to={`/product/${data.id}`}>
                 <Title className={classes.title}>{data.title}</Title>
+                </Link>
                 <Text className={classes.category}>{data.category.name}</Text>
             </Card.Section>
+            
             <Card.Section radius={0} className={[classes.section, classes.priceSection]}>
                 <Text>${data.unit_price}</Text>
                 <Button className={classes.button} onClick={() => dispatch(addToCart(data))}><AddShoppingCart size={20} /></Button>
             </Card.Section>
         </Card>
         
-        </Link>
+      
     )
 }
 

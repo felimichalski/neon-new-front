@@ -20,8 +20,46 @@ const useStyles = createStyles((theme, { top }) => ({
         minHeight: '80vh',
         width: '90%',
         borderRadius: 7,
+        [`@media (max-width: 600px)`]: {
+            display:"none",
+          },
     },
-
+    flex:{
+        height:"100vh",
+        width:"100%",
+        display:"flex",
+        flexDirection:"column",
+        alignItems:"center",
+        justifyContent:"space-around",
+        [`@media (min-width: 600px)`]: {
+            display:"none",
+          },
+    },
+    flexCart:{
+        width:"90%",
+        height:"27rem",
+        /* border:"1px solid grey" */
+        
+    },
+    flexButtons:{
+        marginTop:"2rem",
+        display:"flex",
+        flexDirection:"column",
+        alignItems:"center",
+        justifyContent:"center",
+        background:"#EEEEEE",
+        width:"80%",
+        padding:"1rem",
+        borderRadius:"1rem"
+    },
+    flexList:{
+        height:"100%",
+        overflowY:"scroll",
+        overflowX:"hidden",
+        padding:"0 1rem",
+        backgroundColor:"#F9F9F9",
+        /* border:"1px solid " */
+    },
     column: {
         padding: '1rem',
     },
@@ -97,6 +135,38 @@ const Cart = () => {
         exit={{opacity: 0}}
         >
             <Container fluid className={classes.root}>
+                {/* RESPONSIVE */}
+                <Box className={classes.flex}>
+                    <Box className={classes.flexCart}>
+                    <Box className={classes.titleBar}>
+                            <Title className={classes.title}>Mi Carrito</Title>
+                            <Text className={classes.quantity}>{data.cartTotalQuantity} productos</Text>
+                        </Box>
+                        <List className={classes.flexList} listStyleType='none' styles={{
+                            itemWrapper: {
+                                width: '100%',
+                            }
+                        }}>
+                            {items && items.map((item, key) => (
+                                <span key={key}>
+                                    <Divider my='xs' />
+                                    <List.Item style={{
+                                        display: 'flex',
+                                        alignItems: 'center'
+                                    }}>
+                                        <CartItem data={item} />
+                                    </List.Item>
+                                </span>
+                            ))}
+                            <Divider my='xs' />
+                        </List>
+                    </Box>
+                    <Box className={classes.flexButtons}>
+                    <Title mb={40}>TOTAL: ${data.cartTotalAmount}</Title>
+                        <Button onClick={() => navigate('/catalog')} className={classes.payButton} color='gray' mb={10}>Seguir comprando</Button>
+                        <Button onClick={() => navigate('/checkout')} className={classes.payButton}>Finalizar compra</Button>
+                    </Box>
+                </Box>
                 <Grid m={30} className={classes.grid} ref={payContainerRef}>
                     <Grid.Col span={7} className={[classes.productsList, classes.column]}>
                         <Box className={classes.titleBar}>

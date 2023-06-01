@@ -26,6 +26,4 @@ export const store = configureStore({
 store.dispatch(socialFetch());
 store.dispatch(getUserDetails());
 store.dispatch(getTotals());
-store.dispatch(postProduct());
 store.dispatch(getPublics());
-store.dispatch(updatePublic())

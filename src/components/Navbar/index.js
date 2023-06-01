@@ -216,7 +216,6 @@ const Navbar = ({openMenu, setOpenMenu}) => {
         type3: [],
     });
     
-    
 
 
     const navigate = useNavigate()

@@ -11,6 +11,7 @@ const useStyles = createStyles((theme) => ({
         flexDirection: 'column',
         padding: 0,
         width: '90%',
+
     },
 
     titleBar: {
@@ -38,7 +39,7 @@ const useStyles = createStyles((theme) => ({
         // display: 'flex',
         // justifyContent: 'center',
         padding: '3rem 1rem',
-    }
+    },
 }));
 
 const FeaturedProducts = () => {
@@ -68,20 +69,25 @@ const FeaturedProducts = () => {
             </Box>
             <Box className={classes.cardContainer}>
                 <Carousel
+
                     align='start'
                     loop='true'
                     slideSize={`${100 / 5}%`}
                     slidesToScroll={1}
-                    draggable={false}
+                    dragFree
                     styles={{
                         viewport: {
                             padding: '0 8px'
                         }
                     }}
+                    breakpoints={[
+                        { maxWidth: 'md', slideSize: '50%' },
+                        { maxWidth: 'sm', slideSize: '60%', slideGap: 0,  },
+                      ]}
                 >
                     {products && products.map((product, key) => (
                         <Carousel.Slide key={key} className={classes.cardSlide}>
-                            <Product data={product} hoverEffects={true}/>
+                            <Product className={classes.productTest} data={product} hoverEffects={true}/>
                         </Carousel.Slide>
                     ))}
                 </Carousel>
