@@ -69,7 +69,6 @@ const SideBar = ({openMenu, setOpenMenu})=>{
         fetchCategories(2, 1);
         fetchCategories(3, 2);
     }, []);
-console.log("categorias desde sidebar",categories)
     return(
         <Sidebar className={classes.sideBar} rtl={false} width="100vw" backgroundColor="white">
             <Menu>

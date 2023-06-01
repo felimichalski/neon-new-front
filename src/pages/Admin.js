@@ -17,7 +17,7 @@ const Admin = () => {
         animate={{opacity: 1}}
         exit={{opacity: 0}}
         >
-            <Container fluid sx={{height:"100vh", width:"100%"}}>
+            <Container fluid sx={{width:"100%"}}>
                 <AdminBar/>
                 {selected === "create"?<CreateProduct/>:""}
                    
