@@ -11,7 +11,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Admin from "./pages/Admin";
 import ProtectedRoute from './components/middleware/ProtectedRoute';
-import ProductDetail from './components/ProductDetail';
+import ProductDetail from './pages/ProductDetail';
 import SideBar from './components/SideBar';
 
 import Navbar from './components/Navbar';

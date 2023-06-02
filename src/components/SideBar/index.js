@@ -74,7 +74,7 @@ const SideBar = ({openMenu, setOpenMenu})=>{
             <Menu>
                 <SubMenu label={"Categorías"} className={classes.menuItem}>
                     <SubMenu label={"Neones de diseño"} className={classes.subMenuItem}>
-                        {categories.type1.map(arr=>arr.map((cat, index)=><MenuItem component={<Link onClick={()=>setOpenMenu(false)} to={`categories/${cat.id}`} key={index}></Link>} className={classes.subMenuCategoryItem}>{cat.name}</MenuItem>))}
+                        {categories.type1.map(arr=>arr.map((cat, index)=><MenuItem key={index} component={<Link onClick={()=>setOpenMenu(false)} to={`categories/${cat.id}`} key={index}></Link>} className={classes.subMenuCategoryItem}>{cat.name}</MenuItem>))}
                     </SubMenu>
                     <SubMenu label={"Colecciones"} className={classes.subMenuItem}>
 

@@ -10,8 +10,8 @@ const useStyles = createStyles((theme,) => ({
       display:"flex",
       alignItems:"center",
       justifyContent:"center",
-      height:"45rem",
-      background: "white",
+  /*     height:"45rem", */
+      background: "#DDDDDD",
    },
    card: {
       display:"flex",
@@ -24,10 +24,11 @@ const useStyles = createStyles((theme,) => ({
    },
    imgContainer: {
       display:"flex",
-      alignItems:"center",
+      alignItems:"flex-start",
       justifyContent:"center",
       width:"50%",
-      background:"white",
+      height:"60rem",
+      background:"#AAAAAA",
       margin:"0",
       /* boxShadow:"0 0 1rem 0.01rem #FE6561" */
    },
@@ -38,7 +39,7 @@ const useStyles = createStyles((theme,) => ({
       width:"40%",
       alignItems:"center",
       justifyContent:"space-around",
-      height:"100%",
+      height:"60rem",
       background:"white",
       margin:"0",
    },
@@ -83,7 +84,18 @@ const useStyles = createStyles((theme,) => ({
    background:"white",
    height:"1.8rem",
    width:"1.8rem",
-   border:"1px solid #DDDDDD"
+   border:"1px solid #DDDDDD",
+   borderRadius:"5px"
+  },
+  buttonActive:{
+   display:"flex",
+   alignItems:"center",
+   justifyContent:"center",
+   background:"white",
+   height:"1.8rem",
+   width:"1.8rem",
+   border:"1px solid #228BE6",
+   borderRadius:"5px"
   },
   colorButton:{
    height:"1rem",
@@ -122,10 +134,11 @@ const useStyles = createStyles((theme,) => ({
   }
 }))
 
-const ProductDetail = ()=>{
+const PDContainer = ()=>{
    const { classes, cx } = useStyles();
    const {id} = useParams()
    const [product, setProduct] = useState()
+   const [colorPicked, setColorPicked] = useState("")
    const dispatch = useDispatch()
    
    const colors = ['BlancoFrio', "BlancoCalido", 'Rojo', "Amarillo", "Naranja", 'Rosa', "Verde", "Azul", "Celeste", "Violeta"]
@@ -181,8 +194,8 @@ const ProductDetail = ()=>{
                         data={JSON.parse(product.size)}
                      />
                      <Box className={classes.colors}>
-                        {colors.map(col=> <Box className={classes.colorBox}>
-                                          <UnstyledButton className={classes.colorButtonContainer}>
+                        {colors.map((col,index)=> <Box key={index} className={classes.colorBox}>
+                                          <UnstyledButton onClick={()=>setColorPicked(col)} className={colorPicked===col?classes.buttonActive:classes.colorButtonContainer}>
                                              <Box className={cx(classes[col], classes.colorButton)}></Box>
                                           </UnstyledButton>
                                           <Title weight={400} color="#AAAAAA" size="0.7rem" sx={{marginLeft:"0.4rem"}}>{col}</Title>
@@ -211,4 +224,4 @@ const ProductDetail = ()=>{
    }
  
 }
-export default ProductDetail
+export default PDContainer
