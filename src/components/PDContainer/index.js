@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, } from "react"
 import { useParams } from "react-router-dom"
-import { Box, Title, createStyles, Card, Image, Text, Divider, Button, Select, UnstyledButton } from "@mantine/core"
+import { Box, Title, createStyles, Card, Image, Text, Divider, Button, Select, UnstyledButton, InputBase } from "@mantine/core"
 import { useDispatch } from "react-redux"
 import { addToCart } from '../../features/slices/cartSlice'
 import { AddShoppingCart } from '@styled-icons/material'
@@ -139,10 +139,12 @@ const PDContainer = ()=>{
    const {id} = useParams()
    const [product, setProduct] = useState()
    const [colorPicked, setColorPicked] = useState("")
+   const [sizePicked, setSizePicked] = useState("")
    const dispatch = useDispatch()
    
    const colors = ['BlancoFrio', "BlancoCalido", 'Rojo', "Amarillo", "Naranja", 'Rosa', "Verde", "Azul", "Celeste", "Violeta"]
 
+   
 
    const loadProduct = useCallback(async () => {
    if (id) {
@@ -163,7 +165,20 @@ const PDContainer = ()=>{
    useEffect(() => {
       loadProduct();
    }, [id, loadProduct])
-   console.log(product)
+   const sizesArray= product?JSON.parse(product.size):""
+   const cartProduct = {
+      category: product?product.category:"",
+      color: colorPicked,
+      description:product?product.description:"",
+      id:product?product.id:"",
+      image: product?product.image:"",
+      isFeatured:product?product.isFeatured:false,
+      size:sizePicked,
+      title:product?product.title:"",
+      unit_price:product?product.unit_price:0,
+   }
+  /*  console.log(product) */
+   console.log(cartProduct)
    // COMPONENTE 
    if(product){
       return(
@@ -188,11 +203,19 @@ const PDContainer = ()=>{
                      </Text>
                   </Box>
                   <Box /* sx={{height:"45%"}} */ className={classes.inputContainer}>
-                     <Select sx={{width:"100%"}}
-                        label="Tamaño:"
-                        placeholder="Elige uno"
-                        data={JSON.parse(product.size)}
-                     />
+
+
+                        <InputBase sx={{width:"100%"}}
+                                onChange={(e)=>setSizePicked(e.currentTarget.value)}
+                                component="select"
+                                data={JSON.parse(product.size)}
+                                placeholder="Elige uno"
+                                label="Tamaño:"
+                            >
+                                {sizesArray.map((size, index)=><option /* onClick={()=>setSizePicked(size)} */ value={size} key={index}>{size}</option>)}
+
+                            </InputBase>
+
                      <Box className={classes.colors}>
                         {colors.map((col,index)=> <Box key={index} className={classes.colorBox}>
                                           <UnstyledButton onClick={()=>setColorPicked(col)} className={colorPicked===col?classes.buttonActive:classes.colorButtonContainer}>
@@ -208,7 +231,7 @@ const PDContainer = ()=>{
                      <Title size="h2" sx={{marginBottom:"1rem"}}>
                         {product.unit_price} ARS$
                      </Title>
-                     <Button className={classes.button} onClick={() => dispatch(addToCart(product))}>Añadir al carrito<AddShoppingCart size={20} /> </Button>
+                     <Button className={classes.button} onClick={() => dispatch(addToCart(cartProduct))}>Añadir al carrito<AddShoppingCart size={20} /> </Button>
                   </Box>
                   
                </Box>
