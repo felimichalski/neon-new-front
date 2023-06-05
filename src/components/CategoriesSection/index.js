@@ -38,8 +38,8 @@ const CategoriesSection = () => {
                 mb={20}
                 >
                     {categories.firstType.map((category) => (
-                        <List.Item my={5}>
-                            <Link style={{textDecoration: 'none', color: 'gray'}} to={`/categories/${category.id}`}>{category.name}</Link>
+                        <List.Item key={category.id} my={5}>
+                            <Link key={category.id} style={{textDecoration: 'none', color: 'gray'}} to={`/categories/${category.id}`}>{category.name}</Link>
                         </List.Item>
                     ))}
                 </List>
@@ -52,8 +52,8 @@ const CategoriesSection = () => {
                 mb={20}
                 >
                     {categories.secondType.map((category) => (
-                        <List.Item my={5}>
-                            <Link style={{textDecoration: 'none', color: 'gray'}} to={`/categories/${category.id}`}>{category.name}</Link>
+                        <List.Item key={category.id} my={5}>
+                            <Link key={category.id} style={{textDecoration: 'none', color: 'gray'}} to={`/categories/${category.id}`}>{category.name}</Link>
                         </List.Item>
                     ))}
                 </List>
@@ -66,8 +66,8 @@ const CategoriesSection = () => {
                 mb={20}
                 >
                     {categories.thirdType.map((category) => (
-                        <List.Item my={5}>
-                            <Link style={{textDecoration: 'none', color: 'gray'}} to={`/categories/${category.id}`}>{category.name}</Link>
+                        <List.Item key={category.id} my={5}>
+                            <Link key={category.id} style={{textDecoration: 'none', color: 'gray'}} to={`/categories/${category.id}`}>{category.name}</Link>
                         </List.Item>
                     ))}
                 </List>
