@@ -10,7 +10,7 @@ const ProductsSection = ({ products, page }) => {
     return (
         <Box style={{display: 'flex', flexWrap: 'wrap'}}>
             {productsContainer.map((product, key) => (
-                <Box style={{
+                <Box key={key} style={{
                     width: '33%',
                     padding: '1rem'
                 }}>
