@@ -119,6 +119,16 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         display: 'flex',
         height: '100%'
     },
+    tabContainer:{
+        /* border:"5px solid black", */
+        [`@media (max-width: 600px)`]: {
+            /* border:"5px solid aqua", */
+            width:"100%",
+            display:"flex",
+            justifyContent:"center",
+            alignItems:"center"
+          },
+    },
 
     iconContainer: {
         padding: `${theme.spacing.sm}px ${theme.spacing.sm * 2}px`,
@@ -383,12 +393,17 @@ const Navbar = ({openMenu, setOpenMenu}) => {
                     <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
                 </Carousel.Slide>
             </Carousel> */}
-            <Box className={classes.main}>
-                <Group>
-                    <Anchor component={Link} to="/" style={{ padding: '10px 0' }}>
+            <Box className={classes.main} >
+                <Group className={classes.tabContainer}>
+                    <Anchor sx={{[`@media (max-width: 600px)`]: {
+            position:"relative",
+            left:"1rem"
+          }}} component={Link} to="/" style={{ padding: '10px 0' }}>
                         <Image src={logo} height={40} />
                     </Anchor>
-                    <Divider mx={20} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
+                    <Divider sx={{[`@media (max-width: 600px)`]: {
+            display:"none",
+          },}} mx={20} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <Tabs classNames={{
                         root: classes.tabs,
                         tabsList: classes.tabsList,
