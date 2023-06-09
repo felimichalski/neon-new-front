@@ -21,6 +21,9 @@ const useStyles = createStyles((theme,) => ({
       width:"100%",
       height:"100%",
       padding:0,
+      [`@media (max-width: 600px)`]: {
+         flexDirection:"column",
+       },
    },
    imgContainer: {
       display:"flex",
@@ -30,7 +33,10 @@ const useStyles = createStyles((theme,) => ({
       height:"60rem",
       background:"#AAAAAA",
       margin:"0",
-      /* boxShadow:"0 0 1rem 0.01rem #FE6561" */
+      [`@media (max-width: 600px)`]: {
+         width:"100%",
+         height:"auto"
+       },
    },
    infoContainer: {
       padding:"1rem 1.5rem",
@@ -42,9 +48,16 @@ const useStyles = createStyles((theme,) => ({
       height:"60rem",
       background:"white",
       margin:"0",
+      [`@media (max-width: 600px)`]: {
+         width:"100%",
+         height:"auto"
+       },
    },
    title: {
       marginTop:"0.5rem",
+      [`@media (max-width: 600px)`]: {
+         fontSize:"3rem"
+       },
    },
    button: {
       width:"100%",
@@ -63,7 +76,16 @@ const useStyles = createStyles((theme,) => ({
    flexDirection:"column",
    justifyContent:"flex-start",
    alignItems:"center",
-   backgorund:"black"
+   backgorund:"black",
+   [`@media (max-width: 600px)`]: {
+      padding:"3rem 0"
+    },
+  },
+  uniqueColor:{
+   display:"flex",
+   alignItems:"center",
+   justifyContent:"center",
+   margin:"5rem"
   },
   colors:{
    marginTop:"2.5rem",
@@ -71,7 +93,11 @@ const useStyles = createStyles((theme,) => ({
    gridTemplateColumns:"auto auto auto auto auto",
    height:"10rem",
    width:"100%",
-
+   [`@media (max-width: 600px)`]: {
+      gridTemplateColumns:"auto auto",
+      alignItems:"center",
+      fontSize:"3rem"
+    },
   },
   colorBox:{
    display:"flex",
@@ -138,33 +164,46 @@ const PDContainer = ()=>{
    const { classes, cx } = useStyles();
    const {id} = useParams()
    const [product, setProduct] = useState()
-   const [colorPicked, setColorPicked] = useState("")
-   const [sizePicked, setSizePicked] = useState("")
-   const dispatch = useDispatch()
-   
-   const colors = ['BlancoFrio', "BlancoCalido", 'Rojo', "Amarillo", "Naranja", 'Rosa', "Verde", "Azul", "Celeste", "Violeta"]
-
-   
-
    const loadProduct = useCallback(async () => {
-   if (id) {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          mode: 'cors',
-      });
-
-      const data = await response.json()
-      setProduct(data)
-  } else {
-      setProduct(null)
-  }
-}, [id])
-
+      if (id) {
+         const response = await fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
+             headers: {
+                 'Content-Type': 'application/json'
+             },
+             mode: 'cors',
+         });
+   
+         const data = await response.json()
+         setProduct(data)
+     } else {
+         setProduct(null)
+     }
+   }, [id])
    useEffect(() => {
       loadProduct();
    }, [id, loadProduct])
+
+   const [colorPicked, setColorPicked] = useState("")
+   const [sizePicked, setSizePicked] = useState("")
+   const [colorIsValidated, setColorIsValidated] = useState(true)
+   const [sizeIsValidated, setSizeIsValidated] = useState(true)
+   const dispatch = useDispatch()
+   const colors = ['BlancoFrio', "BlancoCalido", 'Rojo', "Amarillo", "Naranja", 'Rosa', "Verde", "Azul", "Celeste", "Violeta"]
+
+   const handleCart = (e)=>{
+      if(!sizePicked){
+         setSizeIsValidated(false)
+         return
+      }else if(!colorPicked && product.color===true){
+         setSizeIsValidated(true)
+         setColorIsValidated(false)
+         return
+      }
+      setSizeIsValidated(true)
+      setColorIsValidated(true)
+      dispatch(addToCart(cartProduct))
+   }
+   
    const sizesArray= product?JSON.parse(product.size):""
    const cartProduct = {
       category: product?product.category:"",
@@ -177,8 +216,6 @@ const PDContainer = ()=>{
       title:product?product.title:"",
       unit_price:product?product.unit_price:0,
    }
-  /*  console.log(product) */
-   console.log(cartProduct)
    // COMPONENTE 
    if(product){
       return(
@@ -198,32 +235,33 @@ const PDContainer = ()=>{
                   
                   <Box sx={{height:"25%", display:"flex", flexDirection:"column", alignItems:"center",justifyContent:"flex-start"}}>
                   {/* <Title size="h5" sx={{marginTop:"3rem"}}>descripción:</Title> */}
-                     <Text sx={{marginTop:"1rem", textAlign:"justify"}}>
+                     <Text sx={{marginTop:"1rem", textAlign:"justify", [`@media (max-width: 600px)`]: {marginTop:"2rem", fontSize:"1.2rem"},}}>
                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque commodi sapiente provident cum tempora eius harum ad omnis est? Minima.
                      </Text>
                   </Box>
                   <Box /* sx={{height:"45%"}} */ className={classes.inputContainer}>
 
 
-                        <InputBase sx={{width:"100%"}}
-                                onChange={(e)=>setSizePicked(e.currentTarget.value)}
-                                component="select"
-                                data={JSON.parse(product.size)}
-                                placeholder="Elige uno"
-                                label="Tamaño:"
-                            >
-                                {sizesArray.map((size, index)=><option /* onClick={()=>setSizePicked(size)} */ value={size} key={index}>{size}</option>)}
-
-                            </InputBase>
-
-                     <Box className={classes.colors}>
-                        {colors.map((col,index)=> <Box key={index} className={classes.colorBox}>
+                  <InputBase sx={{width:"100%"}}
+                          onChange={(e)=>setSizePicked(e.currentTarget.value)}
+                          component="select"
+                          data={JSON.parse(product.size)}
+                          placeholder="Elige uno"
+                          label="Tamaño:"
+                      >
+                           <option hidden="hidden"></option>
+                          {sizesArray.map((size, index)=><option onClick={()=>setSizePicked(size)} value={size} key={index}>{size}</option>)}
+                  </InputBase>
+                  
+                     <Box className={product.color?classes.colors:classes.uniqueColor}>
+                        {product.color?colors.map((col,index)=> <Box key={index} className={classes.colorBox}>
                                           <UnstyledButton onClick={()=>setColorPicked(col)} className={colorPicked===col?classes.buttonActive:classes.colorButtonContainer}>
                                              <Box className={cx(classes[col], classes.colorButton)}></Box>
                                           </UnstyledButton>
-                                          <Title weight={400} color="#AAAAAA" size="0.7rem" sx={{marginLeft:"0.4rem"}}>{col}</Title>
+                                          <Title weight={400} color="#AAAAAA" size="0.7rem" sx={{marginLeft:"0.4rem", [`@media (max-width: 600px)`]: {fontSize:"1rem"},}}>{col}</Title>
                                           </Box>
-                                          )}
+                                          ):
+                                          <Title size="h2" sx={{fontWeight:"300"}}>Color único</Title>}
                      </Box>
                   </Box>
                   <Box sx={{height:"20%", width:"100%", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
@@ -231,7 +269,9 @@ const PDContainer = ()=>{
                      <Title size="h2" sx={{marginBottom:"1rem"}}>
                         {product.unit_price} ARS$
                      </Title>
-                     <Button className={classes.button} onClick={() => dispatch(addToCart(cartProduct))}>Añadir al carrito<AddShoppingCart size={20} /> </Button>
+                     <Button className={classes.button} onClick={(e) => handleCart(e)}>Añadir al carrito<AddShoppingCart size={20} /> </Button>
+                     <Text color="red" sx={{display:sizeIsValidated?"none":"-moz-initial"}}>Debes elegir un tamaño para comprar</Text>
+                     <Text color="red" sx={{display:colorIsValidated?"none":"-moz-initial"}}>Debes elegir un color para comprar</Text>
                   </Box>
                   
                </Box>

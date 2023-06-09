@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import { featuredFetch } from "../../features/actions/featuredActions";
 import Product from "../Product";
+import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -19,6 +20,7 @@ const useStyles = createStyles((theme) => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         margin: '0 0 1rem 0',
+        textDecoration:"none !important"
     },
 
     title: {
@@ -58,14 +60,17 @@ const FeaturedProducts = () => {
             setProducts(data.items);
         }
     }, [data])
-
     return (
         <Container fluid className={classes.root}>
             <Box className={classes.titleBar}>
                 <Title className={classes.title}>Nuestros destacados</Title>
-                <Text style={{
-                    fontWeight: 600,
-                }}>Ver más</Text>
+                <Link sx={{textDecoration:"none !important"}} to="/categories/type/1">
+                    <Text sx={{textDecoration:"none !important"}} style={{
+                        fontWeight: 600,
+                        textDecoration:"none !important",
+                        color:"black"
+                    }}>Ver más</Text>
+                </Link>
             </Box>
             <Box className={classes.cardContainer}>
                 <Carousel

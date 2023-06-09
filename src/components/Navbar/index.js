@@ -211,7 +211,7 @@ const tabs = [{
     link: '/contact',
 }, {
     name: 'Sobre nosotros',
-    link: '/About',
+    link: '/about',
 }];
 
 const Navbar = ({openMenu, setOpenMenu}) => {

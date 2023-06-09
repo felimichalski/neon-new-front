@@ -18,7 +18,10 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         [`&:hover`]: {
                 transform: hoverEffects && 'scale(1.02)',
                 boxShadow: hoverEffects && '0 8px 42px rgb(0 0 0 / 20%)' 
-            },
+        },
+        [`@media (max-width: 600px)`]: {
+            width:"15rem"
+        },
     },
 
     section: {
@@ -76,9 +79,7 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
 }));
 
 const Product = ({ data, hoverEffects }) => {
-
     const { classes } = useStyles({ categoryColor: data.category.color, hoverEffects });
-
     const dispatch = useDispatch();
     return (
         

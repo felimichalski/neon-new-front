@@ -12,6 +12,9 @@ const useStyles = createStyles((theme) => ({
     column: {
         display: 'flex',
         justifyContent: 'flex-start',
+        [`@media (max-width: 600px)`]: {
+            display:"none",
+          },
     },
 
     footerTitle: {

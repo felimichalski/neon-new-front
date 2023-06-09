@@ -24,7 +24,9 @@ const CategoriesSection = () => {
     if(!categories) return;
 
     return (
-        <Box>
+        <Box sx={{[`@media (max-width: 600px)`]: {
+            display:"none",
+          },}}>
             <Title mb={20}>Categorías</Title>
             <List
                 listStyleType='none'
@@ -57,7 +59,7 @@ const CategoriesSection = () => {
                         </List.Item>
                     ))}
                 </List>
-                <List.Item>
+                {/* <List.Item>
                     <Link style={{textDecoration: 'none', color: 'gray'}} to='/categories/type/3'>Algo distinto</Link>
                 </List.Item>
                 <List
@@ -70,7 +72,7 @@ const CategoriesSection = () => {
                             <Link key={category.id} style={{textDecoration: 'none', color: 'gray'}} to={`/categories/${category.id}`}>{category.name}</Link>
                         </List.Item>
                     ))}
-                </List>
+                </List> */}
             </List>
         </Box>
     )

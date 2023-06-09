@@ -39,7 +39,9 @@ const useStyles = createStyles((theme, { top }) => ({
         width:"90%",
         height:"27rem",
         /* border:"1px solid grey" */
-        
+        [`@media (max-width: 600px)`]: {
+            width:"100%",
+          },
     },
     flexButtons:{
         marginTop:"2rem",
@@ -59,6 +61,9 @@ const useStyles = createStyles((theme, { top }) => ({
         padding:"0 1rem",
         backgroundColor:"#F9F9F9",
         /* border:"1px solid " */
+        [`@media (max-width: 600px)`]: {
+            width:"100%",
+          },
     },
     column: {
         padding: '1rem',
@@ -140,7 +145,7 @@ const Cart = () => {
                     <Box className={classes.flexCart}>
                     <Box className={classes.titleBar}>
                             <Title className={classes.title}>Mi Carrito</Title>
-                            <Text className={classes.quantity}>{data.cartTotalQuantity} productos</Text>
+                            <Text className={classes.quantity}>{data.cartTotalQuantity} producto/s</Text>
                         </Box>
                         <List className={classes.flexList} listStyleType='none' styles={{
                             itemWrapper: {
@@ -163,10 +168,11 @@ const Cart = () => {
                     </Box>
                     <Box className={classes.flexButtons}>
                     <Title mb={40}>TOTAL: ${data.cartTotalAmount}</Title>
-                        <Button onClick={() => navigate('/catalog')} className={classes.payButton} color='gray' mb={10}>Seguir comprando</Button>
+                        <Button onClick={() => navigate('/categories')} className={classes.payButton} color='gray' mb={10}>Seguir comprando</Button>
                         <Button onClick={() => navigate('/checkout')} className={classes.payButton}>Finalizar compra</Button>
                     </Box>
                 </Box>
+                {/* NO RESPONSIVE */}
                 <Grid m={30} className={classes.grid} ref={payContainerRef}>
                     <Grid.Col span={7} className={[classes.productsList, classes.column]}>
                         <Box className={classes.titleBar}>
@@ -194,7 +200,7 @@ const Cart = () => {
                     </Grid.Col>
                     <Grid.Col span={4} offset={1} className={[classes.payContainer, classes.column]}>
                         <Title mb={40}>TOTAL: ${data.cartTotalAmount}</Title>
-                        <Button onClick={() => navigate('/catalog')} className={classes.payButton} color='gray' mb={10}>Seguir comprando</Button>
+                        <Button onClick={() => navigate('/categories')} className={classes.payButton} color='gray' mb={10}>Seguir comprando</Button>
                         <Button onClick={() => navigate('/checkout')} className={classes.payButton}>Finalizar compra</Button>
                     </Grid.Col>
                 </Grid>

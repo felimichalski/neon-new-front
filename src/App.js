@@ -17,6 +17,9 @@ import SideBar from './components/SideBar';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer/Footer';
 import Category from './pages/Category';
+import About from './components/About';
+import Contact from './components/Contact';
+import PageNotFound from './components/PageNotFound';
 
 const useStyles = createStyles((theme) => ({
   container:{
@@ -80,6 +83,9 @@ const App = () => {
             <Route path='type/:id' element={<Category />} />
           </Route>
           <Route path="product/:id" element={<ProductDetail/>}/>
+          <Route path="about" element={<About/>}/>
+          <Route path="contact" element={<Contact/>}/>
+          <Route path="*" element={<PageNotFound/>}/>
         </Route>
       </Routes>
       <Footer />
