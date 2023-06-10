@@ -71,10 +71,10 @@ const CartItem = ({ data }) => {
   return (
     <Grid m={4} className={classes.root}>
       <Grid.Col span={1} className={classes.column}>
-        <Image src={data.image} className={classes.image}/>
+        <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${data.image}`} className={classes.image}/>
       </Grid.Col>
       <Grid.Col className={[classes.column, classes.text]} span={1} offset={1}>
-        <Title className={classes.title}>{data.title +" "+data.size.toUpperCase()}</Title>
+        <Title className={classes.title}>{data.title +" "+data.size?.toUpperCase()}</Title>
         <Text sx={{color:"#CCCCCC"}} className={classes.category}>{data.category.name || data.category}</Text>
       </Grid.Col>
       <Grid.Col className={[classes.column, classes.quantity]} span={1} offset={0}>

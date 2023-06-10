@@ -121,7 +121,6 @@ const Cart = () => {
     const navigate = useNavigate();
 
     const data = useSelector((state) => state.cart);
-    const userToken = useSelector((state) => state.auth.userToken);
 
     useEffect(() => {
         if (data.status === 'success') {

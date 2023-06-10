@@ -88,7 +88,7 @@ const Product = ({ data, hoverEffects }) => {
                 
             <Card.Section className={[classes.section, classes.imageSection]}>
             <Link className={classes.link} to={`/product/${data.id}`}>
-                <Image src={data.image} className={classes.image}/>
+                <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${data.image}`} className={classes.image}/>
                 </Link>
             </Card.Section>
             <Card.Section radius={0} className={[classes.section, classes.textSection]}>

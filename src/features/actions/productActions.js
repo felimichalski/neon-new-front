@@ -7,11 +7,8 @@ export const postProduct = createAsyncThunk(
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/products`, {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(body),
-              
+              body: body,
+              mode: "cors"
             });
       
             if(response.status !== 201) {

@@ -204,7 +204,7 @@ const PDContainer = ()=>{
       dispatch(addToCart(cartProduct))
    }
    
-   const sizesArray= product?JSON.parse(product.size):""
+         // const sizesArray = product?JSON.parse(product.size):""
    const cartProduct = {
       category: product?product.category:"",
       color: colorPicked,
@@ -223,7 +223,7 @@ const PDContainer = ()=>{
             <Box className={classes.card}>
                <Box className={classes.imgContainer}>
                   <Image
-                    src={product.image}
+                    src={`${process.env.REACT_APP_API_URL}/mediafiles/${product.image}`}
                     alt="Product Image"
                     />
                </Box>
@@ -236,7 +236,7 @@ const PDContainer = ()=>{
                   <Box sx={{height:"25%", display:"flex", flexDirection:"column", alignItems:"center",justifyContent:"flex-start"}}>
                   {/* <Title size="h5" sx={{marginTop:"3rem"}}>descripción:</Title> */}
                      <Text sx={{marginTop:"1rem", textAlign:"justify", [`@media (max-width: 600px)`]: {marginTop:"2rem", fontSize:"1.2rem"},}}>
-                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque commodi sapiente provident cum tempora eius harum ad omnis est? Minima.
+                     {product.description}
                      </Text>
                   </Box>
                   <Box /* sx={{height:"45%"}} */ className={classes.inputContainer}>
@@ -245,12 +245,12 @@ const PDContainer = ()=>{
                   <InputBase sx={{width:"100%"}}
                           onChange={(e)=>setSizePicked(e.currentTarget.value)}
                           component="select"
-                          data={JSON.parse(product.size)}
+                          data={product.size}
                           placeholder="Elige uno"
                           label="Tamaño:"
                       >
                            <option hidden="hidden"></option>
-                          {sizesArray.map((size, index)=><option onClick={()=>setSizePicked(size)} value={size} key={index}>{size}</option>)}
+                          {/* {sizesArray.map((size, index)=><option onClick={()=>setSizePicked(size)} value={size} key={index}>{size}</option>)} */}
                   </InputBase>
                   
                      <Box className={product.color?classes.colors:classes.uniqueColor}>

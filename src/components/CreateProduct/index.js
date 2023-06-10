@@ -3,6 +3,7 @@ import { useForm } from "@mantine/form";
 import { useDispatch } from "react-redux";
 import { postProduct } from '../../features/actions/productActions';
 import { useEffect, useState } from 'react';
+import FileUpload from '../FileUpload';
 
 const useStyles = createStyles(theme => ({
     flexContainer:{
@@ -46,10 +47,10 @@ const CreateProduct = ()=>{
     const [categories, setCategories] = useState([])
     const form = useForm({
         initialValues:{
-            image: "",
+            files: null,
             category:[],
             description:"",
-            isFeatured: true,
+            isFeatured: false,
             title:"",
             unit_price:0,
             size:[],
@@ -60,6 +61,7 @@ const CreateProduct = ()=>{
             title: (value) => (value === "" ? 'El producto debe tener título' : null),
             category: (value) => (value.length === 0 ? 'El producto debe tener categoría' : null),
             description: (value) => (value === "" ? 'El producto debe tener descripción' : null),
+			files: (value) => value.name.length < 1 ? 'El producto debe tener imagen' : null
           }
     })
 
@@ -82,16 +84,28 @@ const CreateProduct = ()=>{
         fetchCategories()
     }, [])
 
+    const createProduct = (values) => {
+        const formData = new FormData();
+		formData.append("files", values.files);
+		formData.append("category", values.category);
+		formData.append("description", values.description);
+		formData.append("isFeatured", values.isFeatured);
+		formData.append("title", values.title);
+		formData.append("unit_price", values.unit_price);
+		formData.append("size", values.size);
+		formData.append("color", values.color);
+        for (const pair of formData.entries()) {
+            console.log(`${pair[0]}: ${pair[1]}`);
+          }
+
+        dispatch(postProduct(formData));
+    }
+
     return(
             <Container fluid sx={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", marginTop:"2rem"}}>
                     <Title order={1} size="h1">Crear Producto</Title>
                     <Flex className={classes.flexContainer}>
-                        <form className={classes.form} onSubmit={form.onSubmit(values =>{
-                            values.color = JSON.stringify(values.color);
-                            values.size = JSON.stringify(values.size);
-                             dispatch(postProduct(values));
-                        }
-                        )}>
+                        <form className={classes.form} onSubmit={form.onSubmit(createProduct)}>
                             <TextInput className={classes.inputs}
                                 onChange={(e)=>form.setFieldValue("title", e.currentTarget.value)}
                                 label="Nombre del producto"
@@ -127,20 +141,28 @@ const CreateProduct = ()=>{
                             <InputBase className={classes.inputs}
                                 onChange={(e)=>form.setFieldValue("category", e.currentTarget.value)}
                                 component="select"
-                                data={['si', 'no']}
                                 label="Categoría del producto"
                                 {...form.getInputProps("category")}
                             >
-                                {categories.map(cat=><option value={cat.name}>{cat.name}</option>)}
+                                {categories.map(cat=><option value={cat.id}>{cat.name}</option>)}
                             </InputBase>
 
-                            <TextInput className={classes.inputs}
+                            {/* <TextInput className={classes.inputs}
                             onChange={(e)=>form.setFieldValue("image", e.currentTarget.value)}
                             label="Link de la imagen"
                                 placeholder="Link de la imagen"
                                 {...form.getInputProps("image")}
-                            />
-
+                            /> */}
+                            <FileUpload
+									name='files'
+									label='Imagen'
+									{...form.getInputProps('files')}
+									onChange={files => {
+                                        form.setFieldValue("files", files)
+                                    }}
+									error={form.errors.files}
+                                    multiple={true}
+							/>
                             <NumberInput className={classes.inputs}
                             onChange={(e)=>form.setFieldValue("unit_price", e.currentTarget.value)}
                             label="Precio del producto"
