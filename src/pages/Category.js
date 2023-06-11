@@ -56,56 +56,60 @@ const useStyles = createStyles((theme) => ({
 }))
 
 const Category = () => {
-
-    const [category, setCategory] = useState(undefined)
+    // const [typeName, setTypeName] = useState(undefined)
+    // const [categoryName, setCategoryName] = useState(undefined)
     const [products, setProducts] = useState([])
+    const [breadcrumbs, setBreadcrumbs] = useState([])
     const [selectValue, setSelectValue] = useState('date')
     const [page, setPage] = useState(1);
-    let { id } = useParams();
-    id = parseInt(id);
+    const { type, category } = useParams();
     const { classes } = useStyles();
-    const location = useLocation();
-    const isType = location.pathname.includes('type')
+
     const loadProducts = useCallback(async () => {
         let endpoint;
-        isType ? endpoint = `${process.env.REACT_APP_API_URL}/products/type/${id}` : endpoint = `${process.env.REACT_APP_API_URL}/products/category/${id}`;
-        
-        if (id) {
-            const response = await fetch(endpoint, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                mode: 'cors',
-            });
-
-            const data = await response.json()
-            setProducts(data[0])
+        if(!type) {
+            endpoint = `${process.env.REACT_APP_API_URL}/products`
+        } else if(!category) {
+            endpoint = `${process.env.REACT_APP_API_URL}/products/filter/${type}`
         } else {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/products`, {
-                headers: { 'Content-Type': 'application/json' },
-                mode: 'cors',
-            });
-
-            const data = await response.json()
-            setProducts(data)
+            endpoint = `${process.env.REACT_APP_API_URL}/products/filter/${type}/${category}`
         }
-    }, [id, isType])
 
+        const response = await fetch(endpoint, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            mode: 'cors',
+        });
+
+        const data = await response.json()
+        setProducts(data)
+    }, [type, category])
+
+    
     useEffect(() => {
-        const getCategory = async () => {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/${id}`, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                mode: 'cors'
-            })
-            const data = await response.json();
-            setCategory(data);
-        }
+        const getBreadcrumbs = async () => {
+            if(!type) {
+                setBreadcrumbs(["Todos los productos"])
+            } else if (!category) {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/types/${type}`, {
+                    mode: 'cors',
+                });
 
-        (id) && getCategory();
+                const { breadcrumbsArray } = await response.json()
+                setBreadcrumbs(breadcrumbsArray);
+            } else {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/${type}`, {
+                    mode: 'cors',
+                });
+
+                const { breadcrumbsArray } = await response.json()
+                setBreadcrumbs(breadcrumbsArray);
+            }
+        }
+        getBreadcrumbs();
         loadProducts();
-    }, [id, loadProducts])
+    }, [loadProducts, type, category])
 
     return (
         <Container sx={{height:"180vh",[`@media (max-width: 600px)`]: {
@@ -115,13 +119,8 @@ const Category = () => {
             <Breadcrumbs classNames={{
                 breadcrumb: classes.breadcrumbs,
                 separator: classes.breadcrumbs
-            }}>{category ?
-                    isType ?
-                        ['Categorías', id === 1 ? 'Neones de diseño' : id === 2 ? 'Artístico' : 'Algo distinto']
-                    :
-                        ['Categorías', id === 1 ? 'Neones de diseño' : id === 2 ? 'Artístico' : 'Algo distinto', category.name]
-                : 
-                    ['Categorías', 'Todos los productos']}
+            }}>
+                {breadcrumbs}
             </Breadcrumbs>
             <Grid m={1} sx={{[`@media (max-width: 600px)`]: {
                         display:"flex",
@@ -144,13 +143,13 @@ const Category = () => {
                       },}} span={17} offset={1}>
                     <Box  className={classes.tableHeader}>
                         <Title className={classes.categoriesTitle}>
-                            {category ? 
+                            {/* {category ? 
                                 isType ?
                                     id === 1 ? 'Neones de diseño' : id === 2 ? 'Artístico' : 'Algo distinto'
                                 :
                                     category.name
                             : 
-                                'Todos los productos'}
+                                'Todos los productos'} */}
                         </Title>
                         <Box className={classes.filter}>
                             <Box>
@@ -201,8 +200,10 @@ const Category = () => {
             </Box>
             <Box sx={{width:"100%",[`@media (min-width: 600px)`]: {
             display:"none",
-            },}}>
+            }}}>
+                {products &&
                 <ProductsSection products={products} page={page} />
+                }
             </Box>
             <Grid sx={{[`@media (max-width: 600px)`]: {
                         display:"none",

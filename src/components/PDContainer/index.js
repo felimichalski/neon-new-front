@@ -211,7 +211,7 @@ const PDContainer = ()=>{
       description:product?product.description:"",
       id:product?product.id:"",
       image: product?product.image:"",
-      isFeatured:product?product.isFeatured:false,
+      is_featured:product?product.is_featured:false,
       size:sizePicked,
       title:product?product.title:"",
       unit_price:product?product.unit_price:0,

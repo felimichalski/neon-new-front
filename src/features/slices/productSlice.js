@@ -6,7 +6,7 @@ const initialState = {
             image: "",
             category:"",
             description:"",
-            isFeatured: true,
+            is_featured: true,
             title:"",
             unit_price:0
 }

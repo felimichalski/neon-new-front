@@ -21,10 +21,7 @@ const useStyles = createStyles((theme) => ({
 
 const ProductsSection = ({ products, page }) => {
     const {classes} = useStyles()
-    /* let productContainer = []; */
-    /* products.map(prod=>productContainer.push(prod)) */
-    console.log(products)
-    const productsContainer = products.slice(page===1?0:(page-1)*6,page*6);
+    const productsContainer = products?.slice(page===1?0:(page-1)*6,page*6);
     return (
         <Box className={classes.root}>
             {productsContainer.map((product, key) => (

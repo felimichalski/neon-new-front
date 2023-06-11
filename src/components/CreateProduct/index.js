@@ -50,7 +50,7 @@ const CreateProduct = ()=>{
             files: null,
             category:[],
             description:"",
-            isFeatured: false,
+            is_featured: false,
             title:"",
             unit_price:0,
             size:[],
@@ -89,15 +89,11 @@ const CreateProduct = ()=>{
 		formData.append("files", values.files);
 		formData.append("category", values.category);
 		formData.append("description", values.description);
-		formData.append("isFeatured", values.isFeatured);
+		formData.append("is_featured", values.is_featured);
 		formData.append("title", values.title);
 		formData.append("unit_price", values.unit_price);
 		formData.append("size", values.size);
 		formData.append("color", values.color);
-        for (const pair of formData.entries()) {
-            console.log(`${pair[0]}: ${pair[1]}`);
-          }
-
         dispatch(postProduct(formData));
     }
 
@@ -170,11 +166,11 @@ const CreateProduct = ()=>{
                             />
 
                             <InputBase className={classes.inputs}
-                                onChange={(e)=>form.setFieldValue("isFeatured", e.currentTarget.value)}
+                                onChange={(e)=>form.setFieldValue("is_featured", e.currentTarget.value)}
                                 component="select"
                                 data={['si', 'no']}
                                 label="¿El producto es destacado?"
-                                {...form.getInputProps("isFeatured")}
+                                {...form.getInputProps("is_featured")}
                             >
                                 <option value={true}>Sí</option>
                                 <option value={false}>No</option>
