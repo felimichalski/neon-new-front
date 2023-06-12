@@ -96,15 +96,15 @@ const Category = () => {
                     mode: 'cors',
                 });
 
-                const { breadcrumbsArray } = await response.json()
-                setBreadcrumbs(breadcrumbsArray);
+                const { name } = await response.json()
+                setBreadcrumbs(name);
             } else {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/${type}`, {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/${category}`, {
                     mode: 'cors',
                 });
 
-                const { breadcrumbsArray } = await response.json()
-                setBreadcrumbs(breadcrumbsArray);
+                const { name, type } = await response.json()
+                setBreadcrumbs([type.name, name]);
             }
         }
         getBreadcrumbs();

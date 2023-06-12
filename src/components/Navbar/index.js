@@ -376,7 +376,7 @@ const Navbar = ({openMenu, setOpenMenu}) => {
 
     return (
         <Container fluid className={classes.navbar}>
-            {/* <Carousel
+            <Carousel
                 className={classes.offer}
                 loop
                 withControls={false}
@@ -392,7 +392,7 @@ const Navbar = ({openMenu, setOpenMenu}) => {
                 <Carousel.Slide>
                     <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
                 </Carousel.Slide>
-            </Carousel> */}
+            </Carousel>
             <Box className={classes.main} >
                 <Group className={classes.tabContainer}>
                     <Anchor sx={{[`@media (max-width: 600px)`]: {

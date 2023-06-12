@@ -1,4 +1,4 @@
-import { Box, Title, Container, createStyles, MultiSelect, TextInput, InputBase, Flex, Image, Button, NumberInput, Select } from '@mantine/core'
+import { Box, Title, Container, createStyles, MultiSelect, TextInput, InputBase, Flex, Image, Button, NumberInput, Select, LoadingOverlay } from '@mantine/core'
 import { useForm } from "@mantine/form";
 import { useDispatch } from "react-redux";
 import { postProduct } from '../../features/actions/productActions';
@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import FileUpload from '../FileUpload';
 
 const useStyles = createStyles(theme => ({
-    flexContainer:{
+    flexContainer: {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-around",
@@ -18,172 +18,186 @@ const useStyles = createStyles(theme => ({
         marginTop: "3rem",
         marginBottom: "3rem",
     },
-    imageBox:{
-        display:"flex",
-        alignItems:"center",
-        width:"30%",
-        height:"50%",
+    imageBox: {
+        display: "flex",
+        alignItems: "center",
+        width: "30%",
+        height: "50%",
         background: "none"
     },
-    form:{
-        display:"flex",
-        flexDirection:"column",
-        justifyContent:"center",
-        alignItems:"center",
-        width:"70%",
+    form: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "70%",
         /* background:"aqua" */
     },
-    inputs:{
-        marginTop:"0.5rem",
+    inputs: {
+        marginTop: "0.5rem",
         marginBottom: "0.5rem",
-        width:"100%"
+        width: "100%"
     },
 }))
 
 
-const CreateProduct = ()=>{
-    const {classes} = useStyles()
+const CreateProduct = () => {
+    const { classes } = useStyles()
     const dispatch = useDispatch()
     const [categories, setCategories] = useState([])
+    const [sizes, setSizes] = useState([])
+    const [colors, setColors] = useState([])
     const form = useForm({
-        initialValues:{
+        initialValues: {
             files: null,
-            category:[],
-            description:"",
+            category: null,
+            description: "",
             is_featured: false,
-            title:"",
-            unit_price:0,
-            size:[],
-            color:true,
+            title: "",
+            unit_price: 0,
+            sizes: [],
+            colors: [],
         },
         validate: {
-            unit_price: (value) => (value === 0? 'El producto debe tener precio' : null),
+            unit_price: (value) => (value === 0 ? 'El producto debe tener precio' : null),
             title: (value) => (value === "" ? 'El producto debe tener título' : null),
             category: (value) => (value.length === 0 ? 'El producto debe tener categoría' : null),
             description: (value) => (value === "" ? 'El producto debe tener descripción' : null),
-			files: (value) => value.name.length < 1 ? 'El producto debe tener imagen' : null
-          }
+            files: (value) => value.name.length < 1 ? 'El producto debe tener imagen' : null
+        }
     })
 
-    const fetchCategories = async () => {
+    const fetchData = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/categories`, {
+            const categoriesResponse = await fetch(`${process.env.REACT_APP_API_URL}/categories/thin`, {
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
             });
-            const data = await response.json();
+            let categories = await categoriesResponse.json();
+            setCategories(categories);
 
-            setCategories(data);
+            const colorsResponse = await fetch(`${process.env.REACT_APP_API_URL}/colors/thin`, {
+                method: "GET",
+            });
+            const colors = await colorsResponse.json();
+            setColors(colors);
+
+            const sizesResponse = await fetch(`${process.env.REACT_APP_API_URL}/sizes/thin`, {
+                method: "GET",
+            });
+            const sizes = await sizesResponse.json();
+            setSizes(sizes);
         } catch (error) {
             console.log(error);
         }
     };
-    useEffect(() => {
-        fetchCategories()
-    }, [])
 
     const createProduct = (values) => {
         const formData = new FormData();
-		formData.append("files", values.files);
-		formData.append("category", values.category);
-		formData.append("description", values.description);
-		formData.append("is_featured", values.is_featured);
-		formData.append("title", values.title);
-		formData.append("unit_price", values.unit_price);
-		formData.append("size", values.size);
-		formData.append("color", values.color);
+        for(const color of values.colors) {
+            formData.append("colors[]", color);
+        }
+        for(const size of values.sizes) {
+            formData.append("sizes[]", size);
+        }
+        formData.append("files", values.files);
+        formData.append("category", values.category);
+        formData.append("description", values.description);
+        formData.append("is_featured", values.is_featured);
+        formData.append("title", values.title);
+        formData.append("unit_price", values.unit_price);
         dispatch(postProduct(formData));
     }
 
-    return(
-            <Container fluid sx={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", marginTop:"2rem"}}>
-                    <Title order={1} size="h1">Crear Producto</Title>
-                    <Flex className={classes.flexContainer}>
-                        <form className={classes.form} onSubmit={form.onSubmit(createProduct)}>
-                            <TextInput className={classes.inputs}
-                                onChange={(e)=>form.setFieldValue("title", e.currentTarget.value)}
-                                label="Nombre del producto"
-                                {...form.getInputProps("title")}
-                            />
+    useEffect(() => {
+        fetchData()
+    }, [])
 
-                            <TextInput className={classes.inputs}
-                            onChange={(e)=>form.setFieldValue("description", e.currentTarget.value)}
-                            label="Descripción del producto"
-                               placeholder="agregar referencias de tamaños a la descripción"
-                                {...form.getInputProps("description")}
-                            />
+    useEffect(() => {
+        console.log(categories)
+    }, [categories])
 
-                            <MultiSelect className={classes.inputs}
-                            onChange={(e)=>form.setFieldValue("size", e.currentTarget.value)}
-                            label="Tamaños disponíbles del producto"
-                                data={['s', 'm', 'l']}
-                                {...form.getInputProps("size")}
-                            />
+    return (
+        <Container fluid sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", marginTop: "2rem" }}>
+            <Title order={1} size="h1">Crear Producto</Title>
+            <Flex className={classes.flexContainer}>
+                <form className={classes.form} onSubmit={form.onSubmit(createProduct)}>
+                    <TextInput className={classes.inputs}
+                        onChange={(e) => form.setFieldValue("title", e.currentTarget.value)}
+                        label="Nombre del producto"
+                        {...form.getInputProps("title")}
+                    />
 
-                            
-                            <InputBase className={classes.inputs}
-                                onChange={(e)=>form.setFieldValue("color", e.currentTarget.value)}
-                                component="select"
-                                data={['si', 'no']}
-                                label="¿El producto tiene distintos colores disponibles?"
-                                {...form.getInputProps("color")}
-                            >
-                                <option value={true}>Sí</option>
-                                <option value={false}>No</option>
-                            </InputBase>
+                    <TextInput className={classes.inputs}
+                        onChange={(e) => form.setFieldValue("description", e.currentTarget.value)}
+                        label="Descripción del producto"
+                        placeholder="Agregar referencias de tamaños a la descripción"
+                        {...form.getInputProps("description")}
+                    />
 
-                            <InputBase className={classes.inputs}
-                                onChange={(e)=>form.setFieldValue("category", e.currentTarget.value)}
-                                component="select"
-                                label="Categoría del producto"
-                                {...form.getInputProps("category")}
-                            >
-                                {categories.map(cat=><option value={cat.id}>{cat.name}</option>)}
-                            </InputBase>
+                    {sizes.length > 0 &&
+                        <MultiSelect className={classes.inputs}
+                            onChange={(e) => form.values.sizes.push(e.currentTarget.value)}
+                            label="Tamaños disponibles del producto"
+                            data={sizes}
+                            {...form.getInputProps("sizes")}
+                        />
+                    }
 
-                            {/* <TextInput className={classes.inputs}
-                            onChange={(e)=>form.setFieldValue("image", e.currentTarget.value)}
-                            label="Link de la imagen"
-                                placeholder="Link de la imagen"
-                                {...form.getInputProps("image")}
-                            /> */}
-                            <FileUpload
-									name='files'
-									label='Imagen'
-									{...form.getInputProps('files')}
-									onChange={files => {
-                                        form.setFieldValue("files", files)
-                                    }}
-									error={form.errors.files}
-                                    multiple={true}
-							/>
-                            <NumberInput className={classes.inputs}
-                            onChange={(e)=>form.setFieldValue("unit_price", e.currentTarget.value)}
-                            label="Precio del producto"
-                                {...form.getInputProps("unit_price")}
-                            />
+                    {colors.length > 0 &&
+                        <MultiSelect className={classes.inputs}
+                            onChange={(e) => form.values.colors.push(e.currentTarget.value)}
+                            label="Colores disponibles del producto"
+                            data={colors}
+                            {...form.getInputProps("colors")}
+                        />
+                    }
 
-                            <InputBase className={classes.inputs}
-                                onChange={(e)=>form.setFieldValue("is_featured", e.currentTarget.value)}
-                                component="select"
-                                data={['si', 'no']}
-                                label="¿El producto es destacado?"
-                                {...form.getInputProps("is_featured")}
-                            >
-                                <option value={true}>Sí</option>
-                                <option value={false}>No</option>
-                            </InputBase>
-                            {/* <Box className={classes.imageBox}>
+                    {categories.length > 0 &&
+                        <Select className={classes.inputs}
+                            onChange={(e) => form.setFieldValue("category", e.currentTarget.value)}
+                            label="Categoría del producto"
+                            data={categories}
+                            {...form.getInputProps("category")}
+                        />
+                    }
+
+                    <FileUpload
+                        name='files'
+                        label='Imagen'
+                        {...form.getInputProps('files')}
+                        onChange={files => {
+                            form.setFieldValue("files", files)
+                        }}
+                        error={form.errors.files}
+                        multiple={true}
+                        style={{
+                            width: '100%'
+                        }}
+                    />
+                    <NumberInput className={classes.inputs}
+                        onChange={(e) => form.setFieldValue("unit_price", e.currentTarget.value)}
+                        label="Precio del producto"
+                        {...form.getInputProps("unit_price")}
+                    />
+
+                    <InputBase className={classes.inputs}
+                        onChange={(e) => form.setFieldValue("is_featured", e.currentTarget.value)}
+                        component="select"
+                        data={['si', 'no']}
+                        label="¿El producto es destacado?"
+                        {...form.getInputProps("is_featured")}
+                    >
+                        <option value={true}>Sí</option>
+                        <option value={false}>No</option>
+                    </InputBase>
+                    {/* <Box className={classes.imageBox}>
                             <Image alt="ref image" src={"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png"}/>
                         </Box> */}
-                            <Button sx={{margin:"0.5rem 0", marginTop:"3rem", width:"50%"}} type="submit">Subir</Button>
-                        </form>
-                    </Flex>    
-            </Container>
+                    <Button sx={{ margin: "0.5rem 0", marginTop: "3rem", width: "50%" }} type="submit">Subir</Button>
+                </form>
+            </Flex>
+        </Container>
     )
 
 }
 export default CreateProduct
-                    
