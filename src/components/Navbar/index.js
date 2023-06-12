@@ -174,6 +174,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         border: 'none',
         marginTop: '-1px',
         minWidth: '100%',
+        maxWidth: '100%',
         pointerEvents,
         padding: 0
     },
@@ -220,13 +221,7 @@ const Navbar = ({openMenu, setOpenMenu}) => {
     const [loggedIn, setLoggedIn] = useState(undefined)
     const [authModalOpened, setAuthModalOpened] = useState(false);
     const [userMenuOpened, setUserMenuOpened] = useState(false);
-    const [categories, setCategories] = useState({
-        type1: [],
-        type2: [],
-        type3: [],
-    });
-    
-
+    const [types, setTypes] = useState(undefined);
 
     const navigate = useNavigate()
     const autoplay = useRef(Autoplay({ delay: 7000 }));
@@ -237,9 +232,9 @@ const Navbar = ({openMenu, setOpenMenu}) => {
     const dispatch = useDispatch()
 
 
-    const fetchCategories = async (type, columns) => {
+    const fetchCategories = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/type/${type}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/types/all`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -247,19 +242,7 @@ const Navbar = ({openMenu, setOpenMenu}) => {
             });
             const data = await response.json();
 
-            const categoriesPerGroup = Math.ceil(data.length / columns);
-            const groupedCategories = [];
-
-            for (let i = 0; i < columns; i++) {
-                const startIndex = i * categoriesPerGroup;
-                const endIndex = (i + 1) * categoriesPerGroup;
-                groupedCategories.push(data.slice(startIndex, endIndex));
-            }
-
-            setCategories((prevState) => ({
-                ...prevState,
-                [`type${type}`]: groupedCategories,
-            }));
+            setTypes(data);
         } catch (error) {
             console.log(error);
         }
@@ -274,9 +257,7 @@ const Navbar = ({openMenu, setOpenMenu}) => {
     }, [data])
 
     useEffect(() => {
-        fetchCategories(1, 3);
-        fetchCategories(2, 1);
-        fetchCategories(3, 2);
+        fetchCategories();
     }, []);
 
     const logOutAndGoToHome = () => {
@@ -360,7 +341,7 @@ const Navbar = ({openMenu, setOpenMenu}) => {
                     </Menu.Target>
                     
                     <Menu.Dropdown className={classes.categoryList}>
-                        <CategoryList categories={categories}/>
+                        <CategoryList types={types}/>
                     </Menu.Dropdown>
                     
                 </Menu>

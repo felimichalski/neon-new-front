@@ -63,9 +63,9 @@ const App = () => {
       <CustomFonts />
       <ToastContainer pauseOnHover={false} theme='light' autoClose={2000} position='bottom-right' />
       <Navbar openMenu={openMenu} setOpenMenu={setOpenMenu}/>
-      <Box className={openMenu?classes.openSideBar:classes.closeSideBar} >
+      {/* <Box className={openMenu?classes.openSideBar:classes.closeSideBar} >
           <SideBar openMenu={openMenu} setOpenMenu={setOpenMenu}/>
-      </Box>
+      </Box> */}
       <Routes location={location} key={location.pathname}>
       <Route element={<ProtectedRoute />}>
           {/* <Route path="/create_product" element={<CreateProduct />} /> */}
