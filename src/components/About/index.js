@@ -3,30 +3,50 @@ import backgroundA from '../../assets/bgAbout.jpg'
 
 const useStyles = createStyles((theme) => ({
     root:{
-        height:"auto",
-        padding:"8rem 0",
         display:"flex",
         flexDirection:"column",
-        justifyContent:"center",
+        alignItems:"center"
+    },
+    header:{
+        display:"flex",
         alignItems:"center",
-        background:"rgba(0, 0, 0, 0.2)",
+        justifyContent:"center",
+        height:"15rem",
+        width:"auto",
+        /* position:"relative", */
+    },
+    title:{
+        color:"white", 
+        textShadow:"0 0 10px rgba(0, 0, 0, 0.5)", 
+        marginBottom:"2rem",
+        [`@media (max-width: 600px)`]: {
+            fontSize:"1.8rem",
+            textAlign:"center"
+          },
     },
     textContainer:{
-        width:"95%",
-        padding:"3rem 4rem",
+        padding:"8rem 6rem",
         background:"rgba(255, 255, 255, 0.8)",
-        fontWeight:500,
-        borderRadius:"1rem",
-        fontSize:"1.4rem"
+        fontWeight:400,
+        fontSize:"1.4rem",
+        width:"90%",
+        [`@media (max-width: 600px)`]: {
+            width:"100%",
+            padding:"1.5rem",
+            fontSize:"1.2rem"
+          },
     },
 }))
 
 const About = ()=>{
     const {classes} = useStyles()
     return(
-        <BackgroundImage src={backgroundA}>
-            <Box className={classes.root}>
-                <Title sx={{color:"white", textShadow:"0 0 10px rgba(0, 0, 0, 0.5)", marginBottom:"2rem"}}>Lo que debes saber sobre Neon Infinito</Title>
+        <Box className={classes.root}>
+            <BackgroundImage src={backgroundA} className={classes.header}>
+            <Box sx={{height:"100%",width:"100%",display:"flex",alignItems:"center",justifyContent:"center", background:"rgba(0, 0, 0, 0.4)"}}>
+                <Title className={classes.title}>Lo que tenés que saber sobre Neon Infinito</Title>
+            </Box>
+            </BackgroundImage>
                 <Box className={classes.textContainer}>
                     <Text>En 2020, nació Neon Infinito con el propósito de ofrecer decoración y comunicación a través de la tecnología del neón LED. Nos especializamos en embellecer espacios y crear experiencias impactantes, tanto en el ámbito de la decoración del hogar, como en colaboraciones con marcas internacionales.</Text>
                     <br/>
@@ -38,8 +58,7 @@ const About = ()=>{
                     <br/>
                     <Text>Gracias por visitar nuestra web. Esperamos que encuentres inspiración en nuestros carteles de neón para transformar tus espacios en algo verdaderamente especial.</Text>
                 </Box>
-            </Box>
-        </BackgroundImage>
+        </Box>
     )
 }
 export default About;

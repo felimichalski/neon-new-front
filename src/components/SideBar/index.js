@@ -71,9 +71,8 @@ const SideBar = ({openMenu, setOpenMenu})=>{
                     <MenuItem className={classes.subMenuItem}> Cerrar sesión </MenuItem>
                 </SubMenu>
                 <MenuItem onClick={()=>setOpenMenu(false)} component={<Link to="/cart" />} className={classes.menuItem}> <Cart size={20}/> Mi carrito </MenuItem>
-                <MenuItem className={classes.menuItem}> Contactános </MenuItem>
-                <MenuItem className={classes.menuItem}> Sobre nosotros </MenuItem>
-                <MenuItem className={classes.menuItem}> Calendar </MenuItem>
+                <MenuItem onClick={()=>setOpenMenu(false)} component={<Link to="/contact" />} className={classes.menuItem}> Contactános </MenuItem>
+                <MenuItem onClick={()=>setOpenMenu(false)} component={<Link to="/about" />} className={classes.menuItem}> Sobre nosotros </MenuItem>
             </Menu>
         </Sidebar>
     )

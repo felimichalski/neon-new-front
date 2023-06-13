@@ -17,17 +17,26 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         justifyContent:"center",
         height:"15rem",
         width:"auto",
-        /* position:"relative", */
+        [`@media (max-width: 600px)`]: {
+            boxShadow:"0 0 20px 1px rgb(0, 0, 0, 0.2)",
+          },
     },
     title:{
-        color:"white"
+        color:"white",
+        [`@media (max-width: 600px)`]: {
+            fontSize:"1.8rem",
+            textAlign:"center"
+          },
     },
     infoContainer:{
         display:"flex",
         alignItems:"center",
         justifyContent:"center",
         height:"45rem",
-/*         padding:"10rem 0" */
+        [`@media (max-width: 600px)`]: {
+            flexDirection:"column-reverse",
+            /* justifyContent:"revert" */
+          },
     },
     form:{
         display:"flex",
@@ -37,7 +46,12 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         height:"35rem",
         boxShadow:"0 0 20px 1px rgb(0, 0, 0, 0.2)",
         width:"60%",
-        padding:"1rem 0"
+        padding:"1rem 0",
+        [`@media (max-width: 600px)`]: {
+            width:"100%",
+            boxShadow:"none",
+            marginBottom:"2rem"
+          },
     },
     textBox:{
         width:"30%",
@@ -46,12 +60,20 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         display:"flex",
         alignItems:"center",
         justifyContent:"center",
-        padding:"4rem"
+        padding:"4rem",
+        [`@media (max-width: 600px)`]: {
+            width:"100%",
+            padding:"0 2rem",
+            textAlign:"center",
+          },
     },
     text:{
         fontWeight:"500",
         letterSpacing:"0.1rem",
-        fontSize:"1.2rem"
+        fontSize:"1.2rem",
+        [`@media (max-width: 600px)`]: {
+            fontSize:"1.1rem"
+          },
     },
     input:{
         height:"2rem",
