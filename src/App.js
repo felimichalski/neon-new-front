@@ -23,15 +23,18 @@ import PageNotFound from './components/PageNotFound';
 
 const useStyles = createStyles((theme) => ({
   container:{
-    position:"relative",
+    /* position:"relative", */
   },
+ /*  sidebar:{
+    position:"sticky"
+  }, */
   openSideBar:{
-    position:"absolute",
-    
+    position:"fixed",
   },
-  closeSideBar:{
-    display:"none"
-  }
+  /* closeSideBar:{
+    position:"sticky",
+    top:"80px"
+  } */
 }))
 
 const App = () => {
@@ -39,6 +42,7 @@ const App = () => {
   const location = useLocation();
   const [openMenu, setOpenMenu] = useState(false)
 
+  if(openMenu===false){
   return (
     <MantineProvider
       withGlobalStyles
@@ -64,7 +68,7 @@ const App = () => {
       <ToastContainer pauseOnHover={false} theme='light' autoClose={2000} position='bottom-right' />
       <Navbar openMenu={openMenu} setOpenMenu={setOpenMenu}/>
       {/* <Box className={openMenu?classes.openSideBar:classes.closeSideBar} >
-          <SideBar openMenu={openMenu} setOpenMenu={setOpenMenu}/>
+          <SideBar className={classes.sidebar} openMenu={openMenu} setOpenMenu={setOpenMenu}/>
       </Box> */}
       <Routes location={location} key={location.pathname}>
       <Route element={<ProtectedRoute />}>
@@ -90,6 +94,36 @@ const App = () => {
       <Footer />
     </MantineProvider>
   );
+}else{
+  return(
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        colorScheme: 'light',
+        focusRing: 'never',
+        fontFamily: ['Gotham', 'Proxima Nova', 'Lexend', 'ITC Avant Garde Gothic', 'ITC Avant Garde Gothic Cn'],
+        fontFamilyMonospace: ['Gotham', 'Proxima Nova', 'Lexend', 'ITC Avant Garde Gothic', 'ITC Avant Garde Gothic Cn'],
+        headings: {
+          fontFamily: ['Gotham', 'Proxima Nova', 'Lexend']
+        },
+        breakpoints: {
+          xs: 350,
+          sm: 600,
+          md: 950,
+          lg: 1150,
+          xl: 1400,
+        },
+      }}
+    >
+      <Navbar openMenu={openMenu} setOpenMenu={setOpenMenu}/>
+      <Box className={openMenu?classes.openSideBar:classes.closeSideBar} >
+          <SideBar className={classes.sidebar} openMenu={openMenu} setOpenMenu={setOpenMenu}/>
+      </Box>
+      {/* <Footer /> */}
+    </MantineProvider>
+  )
+}
 }
 
 export default App;

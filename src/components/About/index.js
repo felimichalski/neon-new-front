@@ -9,7 +9,7 @@ const useStyles = createStyles((theme) => ({
         flexDirection:"column",
         justifyContent:"center",
         alignItems:"center",
-        background:"rgba(255, 255, 255, 0.5)",
+        background:"rgba(0, 0, 0, 0.2)",
     },
     textContainer:{
         width:"95%",
@@ -26,7 +26,7 @@ const About = ()=>{
     return(
         <BackgroundImage src={backgroundA}>
             <Box className={classes.root}>
-                <Title sx={{color:"white", textShadow:"0 0 10px black", marginBottom:"2rem"}}>Lo que debes saber sobre Neon Infinito</Title>
+                <Title sx={{color:"white", textShadow:"0 0 10px rgba(0, 0, 0, 0.5)", marginBottom:"2rem"}}>Lo que debes saber sobre Neon Infinito</Title>
                 <Box className={classes.textContainer}>
                     <Text>En 2020, nació Neon Infinito con el propósito de ofrecer decoración y comunicación a través de la tecnología del neón LED. Nos especializamos en embellecer espacios y crear experiencias impactantes, tanto en el ámbito de la decoración del hogar, como en colaboraciones con marcas internacionales.</Text>
                     <br/>

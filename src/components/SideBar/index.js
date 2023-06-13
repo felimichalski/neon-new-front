@@ -30,51 +30,36 @@ const useStyles = createStyles((theme) => ({
 
 const SideBar = ({openMenu, setOpenMenu})=>{
     const { classes } = useStyles()
-    const [categories, setCategories] = useState({
-        type1: [],
-        type2: [],
-        type3: [],
-    });
+    const [firstCategory, setFirstCategory] = useState([]);
 
-    const fetchCategories = async (type, columns) => {
+    const fetchCategories = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/type/${type}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/types/all`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
             const data = await response.json();
-
-            const categoriesPerGroup = Math.ceil(data.length / columns);
-            const groupedCategories = [];
-
-            for (let i = 0; i < columns; i++) {
-                const startIndex = i * categoriesPerGroup;
-                const endIndex = (i + 1) * categoriesPerGroup;
-                groupedCategories.push(data.slice(startIndex, endIndex));
-            }
-
-            setCategories((prevState) => ({
-                ...prevState,
-                [`type${type}`]: groupedCategories,
-            }));
+            const arrOfCat1 = [];
+            data[0].categories.map(cat=>arrOfCat1.push(cat))
+            setFirstCategory(arrOfCat1)
+            console.log(firstCategory)
+            console.log(data)
         } catch (error) {
             console.log(error);
         }
     };
 
     useEffect(() => {
-        fetchCategories(1, 3);
-        fetchCategories(2, 1);
-        fetchCategories(3, 2);
+        fetchCategories()
     }, []);
     return(
         <Sidebar className={classes.sideBar} rtl={false} width="100vw" backgroundColor="white">
             <Menu>
                 <SubMenu label={"Categorías"} className={classes.menuItem}>
                     <SubMenu label={"Neones de diseño"} className={classes.subMenuItem}>
-                        {categories.type1.map(arr=>arr.map((cat, index)=><MenuItem key={index} component={<Link onClick={()=>setOpenMenu(false)} to={`categories/${cat.id}`} key={index}></Link>} className={classes.subMenuCategoryItem}>{cat.name}</MenuItem>))}
+                        {firstCategory.map((cat,index)=><MenuItem key={index} component={<Link onClick={()=>setOpenMenu(false)} to={`categories/${cat.id}`} key={index}></Link>} className={classes.subMenuCategoryItem}>{cat.name}</MenuItem>)}
                     </SubMenu>
                     <SubMenu label={"Colecciones"} className={classes.subMenuItem}>
 
