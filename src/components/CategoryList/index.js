@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Menu, Title } from '@mantine/core';
+import { Box, Container, Grid, Menu, Title } from '@mantine/core';
 import { Link } from "react-router-dom";
 import { ChevronRight } from '@styled-icons/entypo'
 
@@ -9,21 +9,15 @@ const useStyles = createStyles((theme) => ({
     column: {
         padding: 10,
         color: 'white',
+        width: '100%',
 
         '&:nth-of-type(1)': {
-            width: '40%',
             backgroundColor: '#5c84ac'
         },
 
         '&:nth-of-type(2)': {
-            width: '30%',
             backgroundColor: '#0d4c9b'
         },
-
-        '&:nth-of-type(3)': {
-            width: '30%',
-            backgroundColor: '#15244c'
-        }
     },
 
     item: {
@@ -52,51 +46,32 @@ const useStyles = createStyles((theme) => ({
     }
 }));
 
-const CategoryList = ({ categories }) => {
+const CategoryList = ({ types }) => {
     const { classes } = useStyles();
 
     return (
         <Container fluid display='flex' m={0} p={0}>
-            <Box className={classes.column}>
-                <Box mb={15} display='flex' style={{ justifyContent: 'space-between' }}>
-                    <Title style={{ width: '100%' }} >Neones de diseño</Title>
-                    <Menu.Item className={[classes.item, classes.customItem]}>
-                        <Link style={{textDecoration: 'none', color: 'rgba(255, 255, 255, .3)'}} to='/categories'>Ver todo</Link>
-                    </Menu.Item>
-                </Box>
-                <Box display='flex'>
-                    {categories.type1.map((categoryGroup, index) => (
-                        <div key={index} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                            {categoryGroup.map((category, index) => (
-                                <Link to={`categories/${category.id}`} className={classes.link} key={index}>
-                                    <Menu.Item icon={<ChevronRight size={16} />} key={index} className={classes.item}>
+            {types && types.map((type, key) => (
+                <Box className={classes.column} key={key}>
+                    <Box mb={15} display='flex' style={{ justifyContent: 'space-between' }}>
+                        <Title style={{ width: '100%' }} >{type.name}</Title>
+                        <Menu.Item className={[classes.item, classes.customItem]}>
+                            <Link style={{textDecoration: 'none', color: 'rgba(255, 255, 255, .3)'}} to={`/categories/${type.id}`}>Ver todo</Link>
+                        </Menu.Item>
+                    </Box>
+                    <Grid m={1}>
+                        {type.categories.length > 0 && type.categories.map((category, index) => (
+                            <Grid.Col span={4}>
+                                <Link to={`/categories/${type.id}/${category.id}`} className={classes.link} key={index}>
+                                    <Menu.Item icon={<ChevronRight size={16} />} className={classes.item}>
                                         {category.name}
                                     </Menu.Item>
                                 </Link>
-                            ))}
-                        </div>
-                    ))}
+                            </Grid.Col>
+                        ))}
+                    </Grid>
                 </Box>
-            </Box>
-            <Box className={classes.column}>
-                <Title style={{ width: '100%' }} mb={15}>Artístico</Title>
-            </Box>
-            <Box className={classes.column}>
-                <Title style={{ width: '100%' }} mb={15}>Algo distinto</Title>
-                <Box display='flex'>
-                    {categories.type3.map((categoryGroup, index) => (
-                        <div key={index} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                            {categoryGroup.map((category, index) => (
-                                <Link to={`categories/${category.id}`} className={classes.link} key={index}>
-                                    <Menu.Item icon={<ChevronRight size={16} />} key={index} className={classes.item}>
-                                        {category.name}
-                                    </Menu.Item>
-                                </Link>
-                            ))}
-                        </div>
-                    ))}
-                </Box>
-            </Box>
+            ))}
         </Container>
     );
 };

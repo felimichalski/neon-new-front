@@ -4,6 +4,7 @@ import { logOut } from '../../features/slices/authSlice'
 import { Anchor, Box, Container, createStyles, Divider, Group, Image, Menu, Tabs, Text, UnstyledButton } from '@mantine/core'
 import { Link, useNavigate } from 'react-router-dom'
 
+import {Admin} from "@styled-icons/remix-line/Admin"
 import { Person, Search, Cart, LineHorizontal3, ArrowEnter, SignOut, Pen, Star } from '@styled-icons/fluentui-system-regular'
 import { ChevronDown } from '@styled-icons/entypo'
 
@@ -26,7 +27,8 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         borderBottom: '1px solid rgb(229 229 229 / 1)',
         position: 'sticky',
         top: 0,
-        zIndex: 10000
+        zIndex: 10000,
+        
     },
 
     offer: {
@@ -58,9 +60,9 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
 
     tabs: {
         height: '100%',
-        [theme.fn.smallerThan('md')]: {
-            display: 'none',
-        }
+        [`@media (max-width: 949px)`]: {
+            display:"none"
+          },
     },
 
     tabsList: {
@@ -92,6 +94,13 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
             backgroundColor: 'transparent',
             borderBottom: '3px solid black !important',
         },
+        [`@media (max-width: 1025px)`]: {
+            fontSize:"10px"
+          },
+          [`@media (max-width: 967px)`]: {
+            fontSize:"8px"
+          },
+          
     },
 
     tabNoBorder: {
@@ -109,6 +118,16 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         textDecoration: 'none',
         display: 'flex',
         height: '100%'
+    },
+    tabContainer:{
+        /* border:"5px solid black", */
+        [`@media (max-width: 600px)`]: {
+            /* border:"5px solid aqua", */
+            width:"100%",
+            display:"flex",
+            justifyContent:"center",
+            alignItems:"center"
+          },
     },
 
     iconContainer: {
@@ -134,20 +153,20 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         display: 'none',
 
         [theme.fn.smallerThan('md')]: {
-            display: 'flex',
+            display: 'none',
         },
 
-        [theme.fn.smallerThan('sm')]: {
-            display: 'none',
-        }
+        [`@media (max-width: 600px)`]: {
+            display:"none",
+          },
     },
 
     sidebarButton: {
         display: 'none',
 
-        [theme.fn.smallerThan('sm')]: {
-            display: 'flex',
-        }
+        [`@media (max-width: 949px)`]: {
+            display:"flex",
+          },
     },
 
     categoryList: {
@@ -155,6 +174,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         border: 'none',
         marginTop: '-1px',
         minWidth: '100%',
+        maxWidth: '100%',
         pointerEvents,
         padding: 0
     },
@@ -175,7 +195,8 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
     categoryChevron: {
         transform: categoryListOpen ? 'rotate(-180deg)' : 'rotate(0deg)',
         transition: 'all .2s ease'
-    }
+    },
+    
 }))
 
 const tabs = [{
@@ -187,37 +208,33 @@ const tabs = [{
 }, {
     name: 'Categorías',
 }, {
-    name: 'Personalizados',
-    link: '/custom',
-}, {
     name: 'Contactanos',
     link: '/contact',
+}, {
+    name: 'Sobre nosotros',
+    link: '/about',
 }];
 
-const Navbar = () => {
-
+const Navbar = ({openMenu, setOpenMenu}) => {
     const [categoryListOpen, setCategoryListOpen] = useState(false)
     const [pointerEvents, setPointerEvents] = useState('auto')
     const [loggedIn, setLoggedIn] = useState(undefined)
     const [authModalOpened, setAuthModalOpened] = useState(false);
     const [userMenuOpened, setUserMenuOpened] = useState(false);
-    const [categories, setCategories] = useState({
-        type1: [],
-        type2: [],
-        type3: [],
-    });
+    const [types, setTypes] = useState(undefined);
 
     const navigate = useNavigate()
     const autoplay = useRef(Autoplay({ delay: 7000 }));
     const { classes, cx } = useStyles({ categoryListOpen, pointerEvents })
 
     const data = useSelector((state) => state.auth);
+    const logedUser = useSelector(state=> state.auth.userInfo)
     const dispatch = useDispatch()
 
 
-    const fetchCategories = async (type, columns) => {
+    const fetchCategories = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/type/${type}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/types/all`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -225,19 +242,7 @@ const Navbar = () => {
             });
             const data = await response.json();
 
-            const categoriesPerGroup = Math.ceil(data.length / columns);
-            const groupedCategories = [];
-
-            for (let i = 0; i < columns; i++) {
-                const startIndex = i * categoriesPerGroup;
-                const endIndex = (i + 1) * categoriesPerGroup;
-                groupedCategories.push(data.slice(startIndex, endIndex));
-            }
-
-            setCategories((prevState) => ({
-                ...prevState,
-                [`type${type}`]: groupedCategories,
-            }));
+            setTypes(data);
         } catch (error) {
             console.log(error);
         }
@@ -252,9 +257,7 @@ const Navbar = () => {
     }, [data])
 
     useEffect(() => {
-        fetchCategories(1, 3);
-        fetchCategories(2, 1);
-        fetchCategories(3, 2);
+        fetchCategories();
     }, []);
 
     const logOutAndGoToHome = () => {
@@ -330,14 +333,17 @@ const Navbar = () => {
                     transition='scale-y'
                     transitionDuration={200}
                 >
+                    
                     <Menu.Target>
                         <Tabs.Tab value={removeAccents(tab.name.toLowerCase())} className={[classes.tab, classes.tabNoBorder]}>
                             <Text style={{ display: 'flex', alignItems: 'center' }}>{tab.name}</Text><ChevronDown size={16} className={classes.categoryChevron} />
                         </Tabs.Tab>
                     </Menu.Target>
+                    
                     <Menu.Dropdown className={classes.categoryList}>
-                        <CategoryList categories={categories}/>
+                        <CategoryList types={types}/>
                     </Menu.Dropdown>
+                    
                 </Menu>
                 :
                 <Link to={tab.link} className={classes.tabLink}>
@@ -368,12 +374,17 @@ const Navbar = () => {
                     <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
                 </Carousel.Slide>
             </Carousel>
-            <Box className={classes.main}>
-                <Group>
-                    <Anchor component={Link} to="/" style={{ padding: '10px 0' }}>
+            <Box className={classes.main} >
+                <Group className={classes.tabContainer}>
+                    <Anchor sx={{[`@media (max-width: 600px)`]: {
+            position:"relative",
+            left:"1rem"
+          }}} component={Link} to="/" style={{ padding: '10px 0' }}>
                         <Image src={logo} height={40} />
                     </Anchor>
-                    <Divider mx={20} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
+                    <Divider sx={{[`@media (max-width: 600px)`]: {
+            display:"none",
+          },}} mx={20} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <Tabs classNames={{
                         root: classes.tabs,
                         tabsList: classes.tabsList,
@@ -385,10 +396,24 @@ const Navbar = () => {
                     </Tabs>
                 </Group>
                 <Group style={{ gap: 0 }} className={classes.collapsableMD}>
+                    
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <UnstyledButton className={classes.iconContainer}>
                         <Search size={20} />
                     </UnstyledButton>
+
+                    {logedUser?.admin?
+                    <Divider sx={{marginRight:"-1.5rem"}} px={10} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />:""
+                    }
+                    {
+                    logedUser?.admin?
+                <UnstyledButton onClick={() => navigate('/admin')} className={classes.iconContainer}>
+                    <Admin size={20} />
+                </UnstyledButton>
+                :
+                ""    
+                }
+
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     {userButton}
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
@@ -415,8 +440,8 @@ const Navbar = () => {
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                 </Group>
                 <Group className={classes.sidebarButton}>
-                    <UnstyledButton className={classes.iconContainer}>
-                            <LineHorizontal3 size={20} />
+                    <UnstyledButton onClick={()=>{openMenu?setOpenMenu(false):setOpenMenu(true)}}>
+                     <LineHorizontal3 size={20} />
                     </UnstyledButton>
                 </Group>
             </Box>

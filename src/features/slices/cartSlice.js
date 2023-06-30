@@ -14,7 +14,7 @@ const cartSlice = createSlice({
   reducers: {
     addToCart(state, action) {
       const existingIndex = state.cartItems.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item.id === action.payload.id && item.color === action.payload.color && item.size === action.payload.size
       );
 
       if (existingIndex >= 0) {
@@ -37,10 +37,10 @@ const cartSlice = createSlice({
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
     decreaseCart(state, action) {
+      
       const itemIndex = state.cartItems.findIndex(
-        (item) => item.id === action.payload.id
-      );
-
+        (item) => item.id === action.payload.id && item.color === action.payload.color && item.size === action.payload.size
+        );
       if (state.cartItems[itemIndex].quantity > 1) {
         state.cartItems[itemIndex].quantity -= 1;
         toast.error("Producto eliminado del carrito", {
@@ -48,9 +48,9 @@ const cartSlice = createSlice({
         });
       } else if (state.cartItems[itemIndex].quantity === 1) {
         const nextCartItems = state.cartItems.filter(
-          (item) => item.id !== action.payload.id
+          (item) => {
+            return(item.id !== action.payload.id || item.color !== action.payload.color || item.size !== action.payload.size)}
         );
-
         state.cartItems = nextCartItems;
 
         if (state.cartItems.length > 0) {
@@ -69,9 +69,9 @@ const cartSlice = createSlice({
     },
     removeFromCart(state, action) {
       state.cartItems.map((cartItem) => {
-        if (cartItem.id === action.payload.id) {
+        if (cartItem.id === action.payload.id && cartItem.color === action.payload.color && cartItem.size === action.payload.size) {
           const nextCartItems = state.cartItems.filter(
-            (item) => item.id !== cartItem.id
+            (item) => item.id !== cartItem.id || item.color !== cartItem.color || item.size !== cartItem.size
           );
 
           state.cartItems = nextCartItems;
