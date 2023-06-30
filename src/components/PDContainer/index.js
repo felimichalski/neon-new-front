@@ -1,9 +1,10 @@
 import { useEffect, useState, useCallback, } from "react"
 import { useParams } from "react-router-dom"
-import { Box, Title, createStyles, Card, Image, Text, Divider, Button, Select, UnstyledButton, InputBase } from "@mantine/core"
+import { Box, Title, createStyles, Image, Text, Divider, Button, UnstyledButton, InputBase } from "@mantine/core"
 import { useDispatch } from "react-redux"
 import { addToCart } from '../../features/slices/cartSlice'
 import { AddShoppingCart } from '@styled-icons/material'
+import { Carousel } from '@mantine/carousel';
 
 const useStyles = createStyles((theme,) => ({
    container:{
@@ -210,7 +211,7 @@ const PDContainer = ()=>{
       color: colorPicked,
       description:product?product.description:"",
       id:product?product.id:"",
-      image: product?product.image:"",
+      image: product?product.images:[],
       is_featured:product?product.is_featured:false,
       size:sizePicked,
       title:product?product.title:"",
@@ -221,12 +222,27 @@ const PDContainer = ()=>{
       return(
          <Box className={classes.container}>
             <Box className={classes.card}>
-               <Box className={classes.imgContainer}>
-                  <Image
-                    src={`${process.env.REACT_APP_API_URL}/mediafiles/${product.image}`}
-                    alt="Product Image"
-                    />
-               </Box>
+               <Carousel
+               className={classes.imgContainer}
+               loop
+               draggable={false}
+               styles={{
+                  control: {
+                        background: 'none',
+                        border: 'none',
+                        color: 'white'
+                  }
+               }}
+               >
+                  {product.images?.map((image) => (
+                     <Carousel.Slide key={image.id}>
+                        <Image
+                          src={`${process.env.REACT_APP_API_URL}/mediafiles/${image.key}`}
+                          alt="Product Image"
+                          />
+                     </Carousel.Slide>
+                  ))}
+               </Carousel>
                <Box className={classes.infoContainer}>
                   <Box sx={{height:"10%", width:"100%", }}>
                      <Title className={classes.title}>{product.title}</Title>

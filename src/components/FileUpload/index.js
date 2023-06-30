@@ -23,15 +23,13 @@ export const dropzoneChildren = (status, theme) => (
 
 export default function FileUpload({ onChange, label, status, error, multiple }) {
 	const theme = useMantineTheme();
-	const [fileName, setFileName] = useState("");
 	return (
 		<div>
             <Text style={{ display: 'inline-block', marginBottom: '4px', fontSize: '14px', fontWeight: '500', color: '#C1C2C5', wordBreak: 'break-word', cursor: 'default', fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif' }}>{label}</Text>
 			<Dropzone
 				accept={[MIME_TYPES.jpeg, MIME_TYPES.avif, MIME_TYPES.png, MIME_TYPES.gif, MIME_TYPES.svg]}
 				onDrop={files => {
-					setFileName(files[0].name);
-					onChange(files[0]);
+					onChange(files);
 				}}
 				onReject={files => console.log("rejected files", files)}
 				maxSize={3 * 1024 ** 2}
@@ -40,9 +38,9 @@ export default function FileUpload({ onChange, label, status, error, multiple })
 			>
 				{status => dropzoneChildren(status, theme)}
 			</Dropzone>
-			{fileName && 
+			{/* {fileName && 
 			<h5>{fileName}</h5>
-			}
+			} */}
 			{error && 
 			<span
 				style={{

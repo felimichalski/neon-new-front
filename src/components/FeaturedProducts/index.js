@@ -74,7 +74,6 @@ const FeaturedProducts = () => {
             </Box>
             <Box className={classes.cardContainer}>
                 <Carousel
-
                     align='start'
                     loop='true'
                     slideSize={`${100 / 5}%`}
@@ -87,7 +86,7 @@ const FeaturedProducts = () => {
                     }}
                     breakpoints={[
                         { maxWidth: 'md', slideSize: '50%' },
-                        { maxWidth: 'sm', slideSize: '60%', slideGap: 0,  },
+                        { maxWidth: 'sm', slideSize: '60%', slideGap: 0},
                       ]}
                 >
                     {products && products.map((product, key) => (

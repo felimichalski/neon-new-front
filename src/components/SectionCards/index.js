@@ -43,7 +43,7 @@ const SectionCards = ({ data, updateText, setUpdateText }) => {
     <Container fluid className={classes.root}>
       <Box className={classes.flexContainer}>
       {data.map(({background, title, text, bgText, textColor, buttonText, type}, key) => (
-          <Box className={classes.flexItem}>
+          <Box className={classes.flexItem} key={key}>
             <SectionCard id={key} updateText={updateText} setUpdateText={setUpdateText} background={background} title={title} text={text} bgText={bgText} textColor={textColor} buttonText={buttonText} type={type} />
           </Box>
         ))}

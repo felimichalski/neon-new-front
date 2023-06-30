@@ -1,10 +1,11 @@
-import { Button, Card, createStyles, Image, Text, Title, UnstyledButton } from "@mantine/core"
+import { Button, Card, createStyles, Image, Text, Title } from "@mantine/core"
 import { AddShoppingCart } from '@styled-icons/material'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../../features/slices/cartSlice'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { Carousel } from '@mantine/carousel'
 
-const useStyles = createStyles((theme, { hoverEffects }) => ({
+const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
     root: {
         margin: '0 auto',
         display: 'flex',
@@ -13,27 +14,22 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         backgroundColor: 'white',
         borderRadius: 7,
         transition: 'all .1s linear',
-        boxShadow: !hoverEffects && '0 8px 42px rgb(0 0 0 / 20%)', 
+        boxShadow: !hoverEffects && '0 8px 42px rgb(0 0 0 / 20%)',
 
         [`&:hover`]: {
-                transform: hoverEffects && 'scale(1.02)',
-                boxShadow: hoverEffects && '0 8px 42px rgb(0 0 0 / 20%)' 
+            transform: hoverEffects && 'scale(1.02)',
+            boxShadow: hoverEffects && '0 8px 42px rgb(0 0 0 / 20%)',
         },
         [`@media (max-width: 600px)`]: {
-            width:"15rem"
+            width: "15rem"
         },
     },
 
-    section: {
-        // marginBottom: '1rem',
-    },
-    
     imageSection: {
-        overflow: 'hidden',
         borderTopLeftRadius: 7,
         borderTopRightRadius: 7,
     },
-    
+
     textSection: {
         // alignSelf: 'flex-start',
         padding: '1rem !important',
@@ -61,8 +57,8 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         fontFamily: 'ITC Avant Garde Gothic',
         fontWeight: 400,
         marginBottom: '.5rem',
-        textDecoration:"none",
-        color:"black"
+        textDecoration: "none",
+        color: "black"
     },
 
     button: {
@@ -74,37 +70,53 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         }
     },
     link: {
-        textDecoration:"none"
+        textDecoration: "none"
     }
 }));
 
 const Product = ({ data, hoverEffects }) => {
-    const { classes } = useStyles({ categoryColor: data.category.color, hoverEffects });
+    const { classes } = useStyles({ hoverEffects });
     const dispatch = useDispatch();
+    
     return (
-        
-
         <Card radius={0} className={classes.root}>
-                
-            <Card.Section className={[classes.section, classes.imageSection]}>
-            <Link className={classes.link} to={`/product/${data.id}`}>
-                <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${data.image}`} className={classes.image}/>
-                </Link>
+            <Card.Section className={classes.imageSection}>
+                {data.images.length > 1 ?
+                    <Carousel
+                    loop
+                    draggable={false}
+                    styles={{
+                        control: {
+                            background: 'none',
+                            border: 'none',
+                            color: 'white'
+                        }
+                    }}
+                    >
+                        {data.images.map((image) => (
+                            <Carousel.Slide>
+                                <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${image.key}`} />
+                            </Carousel.Slide>
+                        ))}
+                    </Carousel>
+                : data.images.length > 0 &&
+                    <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${data.images[0].key}`}/>
+                }
             </Card.Section>
-            <Card.Section radius={0} className={[classes.section, classes.textSection]}>
-            <Link className={classes.link} to={`/product/${data.id}`}>
-                <Title className={classes.title}>{data.title}</Title>
+            <Card.Section radius={0} className={classes.textSection}>
+                <Link className={classes.link} to={`/product/${data.id}`}>
+                    <Title className={classes.title}>{data.title}</Title>
                 </Link>
                 <Text className={classes.category}>{data.category.name}</Text>
             </Card.Section>
-            
-            <Card.Section radius={0} className={[classes.section, classes.priceSection]}>
+
+            <Card.Section radius={0} className={classes.priceSection}>
                 <Text>${data.unit_price}</Text>
                 <Button className={classes.button} onClick={() => dispatch(addToCart(data))}><AddShoppingCart size={20} /></Button>
             </Card.Section>
         </Card>
-        
-      
+
+
     )
 }
 

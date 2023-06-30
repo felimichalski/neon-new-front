@@ -46,7 +46,6 @@ const CreateProduct = () => {
     const dispatch = useDispatch()
     const [categories, setCategories] = useState([])
     const [sizes, setSizes] = useState([])
-    const [colors, setColors] = useState([])
     const form = useForm({
         initialValues: {
             files: null,
@@ -56,14 +55,15 @@ const CreateProduct = () => {
             title: "",
             unit_price: 0,
             sizes: [],
-            colors: [],
+            color: null,
         },
         validate: {
             unit_price: (value) => (value === 0 ? 'El producto debe tener precio' : null),
             title: (value) => (value === "" ? 'El producto debe tener título' : null),
             category: (value) => (value.length === 0 ? 'El producto debe tener categoría' : null),
             description: (value) => (value === "" ? 'El producto debe tener descripción' : null),
-            files: (value) => value.name.length < 1 ? 'El producto debe tener imagen' : null
+            files: (value) => value.length < 1 ? 'El producto debe tener imagen' : null,
+            color: (value) => (value == null ? 'Elija si el producto debe tener o no diferentes colores' : null)
         }
     })
 
@@ -74,12 +74,6 @@ const CreateProduct = () => {
             });
             let categories = await categoriesResponse.json();
             setCategories(categories);
-
-            const colorsResponse = await fetch(`${process.env.REACT_APP_API_URL}/colors/thin`, {
-                method: "GET",
-            });
-            const colors = await colorsResponse.json();
-            setColors(colors);
 
             const sizesResponse = await fetch(`${process.env.REACT_APP_API_URL}/sizes/thin`, {
                 method: "GET",
@@ -93,28 +87,25 @@ const CreateProduct = () => {
 
     const createProduct = (values) => {
         const formData = new FormData();
-        for(const color of values.colors) {
-            formData.append("colors[]", color);
-        }
         for(const size of values.sizes) {
             formData.append("sizes[]", size);
         }
-        formData.append("files", values.files);
+        for(const file of values.files) {
+            formData.append("files", file);
+        }
+        formData.append("color", values.color);
         formData.append("category", values.category);
         formData.append("description", values.description);
         formData.append("is_featured", values.is_featured);
         formData.append("title", values.title);
         formData.append("unit_price", values.unit_price);
+        console.log(values.color)
         dispatch(postProduct(formData));
     }
 
     useEffect(() => {
         fetchData()
     }, [])
-
-    useEffect(() => {
-        console.log(categories)
-    }, [categories])
 
     return (
         <Container fluid sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", marginTop: "2rem" }}>
@@ -143,14 +134,12 @@ const CreateProduct = () => {
                         />
                     }
 
-                    {colors.length > 0 &&
-                        <MultiSelect className={classes.inputs}
-                            onChange={(e) => form.values.colors.push(e.currentTarget.value)}
-                            label="Colores disponibles del producto"
-                            data={colors}
-                            {...form.getInputProps("colors")}
-                        />
-                    }
+                    <Select className={classes.inputs}
+                        onChange={(e) => form.values.color.push(e.currentTarget.value)}
+                        label="¿El producto tiene diferentes colores?"
+                        data={[{value: true, label: "Si"}, {value: false, label: "No"}]}
+                        {...form.getInputProps("color")}
+                    />
 
                     {categories.length > 0 &&
                         <Select className={classes.inputs}
@@ -180,16 +169,12 @@ const CreateProduct = () => {
                         {...form.getInputProps("unit_price")}
                     />
 
-                    <InputBase className={classes.inputs}
+                    <Select className={classes.inputs}
                         onChange={(e) => form.setFieldValue("is_featured", e.currentTarget.value)}
-                        component="select"
-                        data={['si', 'no']}
+                        data={[{value: true, label: "Si"}, {value: false, label: "No"}]}
                         label="¿El producto es destacado?"
                         {...form.getInputProps("is_featured")}
-                    >
-                        <option value={true}>Sí</option>
-                        <option value={false}>No</option>
-                    </InputBase>
+                    />
                     {/* <Box className={classes.imageBox}>
                             <Image alt="ref image" src={"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png"}/>
                         </Box> */}
