@@ -14,7 +14,7 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
         backgroundColor: 'white',
         borderRadius: 7,
         transition: 'all .1s linear',
-        boxShadow: !hoverEffects && '0 8px 42px rgb(0 0 0 / 20%)',
+        boxShadow: '0 8px 42px rgb(0 0 0 / 20%)',
 
         [`&:hover`]: {
             transform: hoverEffects && 'scale(1.02)',
@@ -69,9 +69,14 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
             backgroundColor: theme.colors.gray[8]
         }
     },
+
     link: {
-        textDecoration: "none"
-    }
+        textDecoration: "none",
+        color: 'black',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center'
+    },    
 }));
 
 const Product = ({ data, hoverEffects }) => {
@@ -95,22 +100,26 @@ const Product = ({ data, hoverEffects }) => {
                     >
                         {data.images.map((image) => (
                             <Carousel.Slide>
-                                <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${image.key}`} />
+                                <Link className={classes.link} to={`/product/${data.id}`}>
+                                    <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${image.key}`} />
+                                </Link>
                             </Carousel.Slide>
                         ))}
                     </Carousel>
                 : data.images.length > 0 &&
-                    <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${data.images[0].key}`}/>
+                    <Link className={classes.link} to={`/product/${data.id}`}>
+                        <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${data.images[0].key}`}/>
+                    </Link>
                 }
             </Card.Section>
-            <Card.Section radius={0} className={classes.textSection}>
-                <Link className={classes.link} to={`/product/${data.id}`}>
+            <Link className={classes.link} to={`/product/${data.id}`}>
+                <Card.Section radius={0} className={classes.textSection}>
                     <Title className={classes.title}>{data.title}</Title>
-                </Link>
-                <Text className={classes.category}>{data.category.name}</Text>
-            </Card.Section>
+                    {/* <Text className={classes.category}>{data.categories}</Text> */}
+                </Card.Section>
+            </Link>
 
-            <Card.Section radius={0} className={classes.priceSection}>
+            <Card.Section radius={0} className={classes.priceSection} component="a">
                 <Text>${data.unit_price}</Text>
                 <Button className={classes.button} onClick={() => dispatch(addToCart(data))}><AddShoppingCart size={20} /></Button>
             </Card.Section>

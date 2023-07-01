@@ -38,11 +38,11 @@ const Checkout = () => {
             lastName: (val) => val.length > 0 ? null : 'Debe ingresar su apellido',
             email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Mail inválido'),
             address: (val) => val.length > 0 ? null : 'Debe ingresar su dirección',
-            phone: (val) => val.length > 0 ? null : 'Debe ingresar su número de teléfono',
+            phone: (val) => val.length > 6 ? null : 'Debe ingresar su número de teléfono',
         },
     });
     
-    const {classes} = useStyles({ error: form.errors.phone});
+    const { classes } = useStyles({ error: form.errors.phone});
 
     const validateData = () => {
         const { hasErrors } = form.validate()
@@ -56,7 +56,7 @@ const Checkout = () => {
             width: '80vw',
             maxWidth: '35rem'
         }}>
-            <form onSubmit={form.onSubmit(() => { })}>
+            <form onSubmit={form.onSubmit(validateData)}>
                 <Stack>
                     <Title weight={500} mb={30} style={{
                         fontSize: 30,
@@ -128,7 +128,7 @@ const Checkout = () => {
                     />
                     {form.errors.phone && 
                     <span style={{
-                        webkitTapHighlightColor: 'transparent',
+                        WebkitTapHighlightColor: 'transparent',
                         webkitTextDecoration: 'none',
                         textDecoration: 'none',
                         wordBreak: 'break-word',
@@ -138,7 +138,7 @@ const Checkout = () => {
                         display: 'block'
                     }}>{form.errors.phone}</span>
                     }
-                    <Button onClick={validateData}>Elegir método de pago</Button>
+                    <Button type='submit'>Elegir método de pago</Button>
                 </Stack>
             </form>
             <PaymentModal opened={paymentModalOpen} setOpened={setPaymentModalOpen} info={form.values}/>
