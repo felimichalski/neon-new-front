@@ -30,7 +30,7 @@ const ProductsSection = ({ products, page }) => {
                     padding: '1rem',
                     
                 }} */>
-                    <Product data={product} key={key} hoverEffects={false}/>
+                    <Product data={product} key={key} hoverEffects={true}/>
                 </Box>
             ))}
         </Box>

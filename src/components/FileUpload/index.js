@@ -1,31 +1,29 @@
-import { Group, Text, useMantineTheme } from "@mantine/core";
-import { useState } from "react";
+import { Group, Text } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
-import { FileEarmarkX } from "@styled-icons/bootstrap"
+import { FileEarmarkPlusFill } from "@styled-icons/bootstrap"
 
-export const dropzoneChildren = (status, theme) => (
+const DropzoneChildren = () => (
 	<Group
 		position="center"
 		spacing="xl"
-		style={{ minHeight: 220, pointerEvents: "none" }}
+		style={{ pointerEvents: "none", width: '100%' }}
 	>
-		<FileEarmarkX size="4x"/>
+		<FileEarmarkPlusFill size="30"/>
 		<div>
 			<Text size="xl" inline>
-				Drag a file here or click to open the File Explorer
+				Arrastre archivos aquí o clickee para abrir el explorador
 			</Text>
             <Text size="sm" color="dimmed" inline mt={7}>
-				The file should be .pdf, .doc or .docx
+				Los archivos deben ser una imágenes
 			</Text>
 		</div>
 	</Group>
 );
 
-export default function FileUpload({ onChange, label, status, error, multiple }) {
-	const theme = useMantineTheme();
+export default function FileUpload({ onChange, label, style, error, multiple }) {
 	return (
-		<div>
-            <Text style={{ display: 'inline-block', marginBottom: '4px', fontSize: '14px', fontWeight: '500', color: '#C1C2C5', wordBreak: 'break-word', cursor: 'default', fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif' }}>{label}</Text>
+		<div style={style}>
+            <Text style={{ display: 'inline-block', marginBottom: '4px', fontSize: '14px', fontWeight: 500, color: 'black', wordBreak: 'break-word', cursor: 'default', fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif' }}>{label}</Text>
 			<Dropzone
 				accept={[MIME_TYPES.jpeg, MIME_TYPES.avif, MIME_TYPES.png, MIME_TYPES.gif, MIME_TYPES.svg]}
 				onDrop={files => {
@@ -34,19 +32,15 @@ export default function FileUpload({ onChange, label, status, error, multiple })
 				onReject={files => console.log("rejected files", files)}
 				maxSize={3 * 1024 ** 2}
 				multiple={multiple}
-                style={{height: '100%', border: error && '1px solid red'}}
+                style={{border: error && '1px solid red', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem'}}
 			>
-				{status => dropzoneChildren(status, theme)}
+				<DropzoneChildren />
 			</Dropzone>
-			{/* {fileName && 
-			<h5>{fileName}</h5>
-			} */}
 			{error && 
 			<span
 				style={{
 					fontFamily: '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji',
 					webkitTapHighlightColor: 'transparent',
-					color: 'inherit',
 					fontSize: '14px',
 					lineHeight: '1.55',
 					webkitTextDecoration: 'none',

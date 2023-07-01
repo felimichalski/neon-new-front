@@ -1,27 +1,27 @@
-import AdminBar from "../components/AdminBar"
-import CreateProduct from "../components/CreateProduct";
 import { useDocumentTitle } from '@mantine/hooks';
-import { Box, Container, createStyles, MultiSelect, TextInput, InputBase, Flex, Image, Button, NumberInput } from '@mantine/core'
+import { Grid } from '@mantine/core'
 import { motion } from 'framer-motion';
 
-import { useState } from "react";
-
+import Sidebar from "../components/Admin/Sidebar";
+import { Outlet } from "react-router-dom";
 
 const Admin = () => {
-    useDocumentTitle("Neon Infinito - Panel de administrador")
-    const [selected, setSelected] = useState("create")
-    
+    useDocumentTitle("Neon Infinito - Panel de administrador")    
     return(
         <motion.div
         initial={{opacity: 0}}
         animate={{opacity: 1}}
         exit={{opacity: 0}}
         >
-            <Container fluid sx={{width:"100%"}}>
-                <AdminBar/>
-                {selected === "create"?<CreateProduct/>:""}
-                   
-            </Container>
+            <Grid mx={1}>
+                <Grid.Col p={0} span={3} style={{position: 'relative'}}>
+                    <Sidebar />
+                </Grid.Col>
+
+                <Grid.Col p={32} span={9}>
+                    <Outlet />
+                </Grid.Col>
+            </Grid>
         </motion.div>
     )
 }

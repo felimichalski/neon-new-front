@@ -13,19 +13,19 @@ export function PaymentModal({ opened, setOpened, info }) {
     const ref = useRef();
     const [initialization, setInitialization] = useState(undefined)
     const [isDataReady, setIsDataReady] = useState(false);
-    const { auth, cart } = useSelector(state => state);
+    const cart = useSelector(state => state.cart);
 
-    useEffect(() => {
-        initMercadoPago(process.env.REACT_APP_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
-    }, []);
+    // useEffect(() => {
+    //     initMercadoPago(process.env.REACT_APP_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
+    // }, []);
 
     useEffect(() => {
         const fetchPaymentInfo = async () => {
+            await initMercadoPago(process.env.REACT_APP_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
             const response = await fetch(`${process.env.REACT_APP_API_URL}/payments`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${auth.userToken}`,
                 },
                 body: JSON.stringify({
                     items: cart.cartItems
@@ -42,13 +42,14 @@ export function PaymentModal({ opened, setOpened, info }) {
                 amount: cart.cartTotalAmount,
                 preferenceId: id
             })
+
             setIsDataReady(true);
         }
 
-        if (auth.status === 'success' && cart.status === 'success' && opened === true) {
+        if (cart.status === 'success' && opened === true) {
             fetchPaymentInfo();
         }
-    }, [auth, cart, navigate, opened]);
+    }, [cart, navigate, opened]);
 
     const savePaymentInfo = async (info) => {
         // TODO implement this method to save user info before confirm or reject the payment,

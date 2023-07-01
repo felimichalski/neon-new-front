@@ -12,7 +12,7 @@ export const postProduct = createAsyncThunk(
       });
 
       if (response.status !== 201) {
-        toast.error("EL producto no pudo ser creado", {
+        toast.error("El producto no pudo ser creado", {
           position: "bottom-left",
         });
         return rejectWithValue(response.statusText);
