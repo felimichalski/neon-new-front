@@ -55,7 +55,7 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
     },
     textBox:{
         width:"30%",
-        background:"aqua",
+        /* background:"aqua", */
         height:"60%",
         display:"flex",
         alignItems:"center",
