@@ -98,8 +98,8 @@ const Product = ({ data, hoverEffects }) => {
                         }
                     }}
                     >
-                        {data.images.map((image) => (
-                            <Carousel.Slide>
+                        {data.images.map((image, key) => (
+                            <Carousel.Slide key={key}>
                                 <Link className={classes.link} to={`/product/${data.id}`}>
                                     <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${image.key}`} />
                                 </Link>

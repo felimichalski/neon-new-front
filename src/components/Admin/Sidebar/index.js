@@ -1,8 +1,9 @@
-import { Navbar, Group, Code, ScrollArea, createStyles, Text, Title, Button } from '@mantine/core';
+import { Navbar, Group, ScrollArea, createStyles, Title, Button } from '@mantine/core';
 import LinksGroup from '../LinksGroup';
 
 import { Gauge } from '@styled-icons/entypo'
 import { Sitemap } from '@styled-icons/fa-solid'
+import { Discount } from '@styled-icons/boxicons-solid'
 import { Link } from 'react-router-dom';
 
 const items = [
@@ -13,6 +14,14 @@ const items = [
     links: [
       { label: 'Cargar', url: 'products/create' },
       { label: 'Editar / Eliminar', url: 'products/update' },
+    ],
+  },
+  {
+    label: 'Códigos de descuento',
+    icon: Discount,
+    links: [
+      { label: 'Cargar', url: 'discounts/create' },
+      { label: 'Editar / Eliminar', url: 'discounts/update' },
     ],
   },
 ];
