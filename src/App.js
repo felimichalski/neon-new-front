@@ -22,7 +22,9 @@ import Contact from './components/Contact';
 import PageNotFound from './components/PageNotFound';
 import Dashboard from './components/Admin/Dashboard';
 import CreateProduct from './components/CreateProduct';
+import CreateCategory from './components/CreateCategory';
 import ProductsTable from './components/Admin/ProductsTable';
+import NeonArt from './pages/NeonArt'
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -89,6 +91,9 @@ const App = () => {
                 <Route path='create' element={<CreateProduct />}/>
                 <Route path='update' element={<ProductsTable />}/>
               </Route>
+              <Route path='category'>
+                <Route path='create' element={<CreateCategory />}/>
+              </Route>
               <Route path='*' element={<Dashboard />}/>
             </Route>
             {/* <Route path="/create_product" element={<CreateProduct />} /> */}
@@ -105,6 +110,7 @@ const App = () => {
             </Route>
             <Route path="product/:id" element={<ProductDetail />} />
             <Route path="about" element={<About />} />
+            <Route path='neonart' element={<NeonArt />} />
             <Route path="contact" element={<Contact />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>

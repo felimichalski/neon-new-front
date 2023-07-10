@@ -15,6 +15,13 @@ const items = [
       { label: 'Editar / Eliminar', url: 'products/update' },
     ],
   },
+  {
+    label: 'Categorías',
+    icon: Sitemap,
+    links: [
+      { label: 'Cargar / Eliminar', url: 'category/create' },
+    ],
+  },
 ];
 
 const useStyles = createStyles((theme) => ({

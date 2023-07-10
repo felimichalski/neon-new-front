@@ -213,6 +213,9 @@ const tabs = [{
 }, {
     name: 'Sobre nosotros',
     link: '/about',
+}, {
+    name:'Neon Art',
+    link:'/neonart'
 }];
 
 const Navbar = ({openMenu, setOpenMenu}) => {
