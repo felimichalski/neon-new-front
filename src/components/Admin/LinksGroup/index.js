@@ -65,8 +65,8 @@ const LinksGroup = ({ icon: Icon, label, initiallyOpened, link, links }) => {
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const ChevronIcon = theme.dir === 'ltr' ? ChevronRight : ChevronLeft;
-  const items = (hasLinks ? links : []).map((link) => (
-    <Link to={'/admin/' + link.url} style={{
+  const items = (hasLinks ? links : []).map((link, key) => (
+    <Link to={'/admin/' + link.url} key={key} style={{
       textDecoration: 'none',
     }}>
       <Text

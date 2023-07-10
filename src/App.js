@@ -21,9 +21,12 @@ import About from './components/About';
 import Contact from './components/Contact';
 import PageNotFound from './components/PageNotFound';
 import Dashboard from './components/Admin/Dashboard';
-import CreateProduct from './components/CreateProduct';
+import CreateProduct from './components/Admin/Product/CreateProduct';
 import CreateCategory from './components/CreateCategory';
-import ProductsTable from './components/Admin/ProductsTable';
+import ProductsTable from './components/Admin/Product/ProductsTable';
+import ScrollToTop from './components/ScrollToTop';
+import CreateDiscount from './components/Admin/Discount/CreateDiscount';
+import DiscountTable from './components/Admin/Discount/DiscountTable';
 import NeonArt from './pages/NeonArt'
 
 const useStyles = createStyles((theme) => ({
@@ -80,6 +83,7 @@ const App = () => {
       >
         <CustomFonts />
         <ToastContainer pauseOnHover={false} theme='light' autoClose={2000} position='bottom-right' />
+        <ScrollToTop />
         {viewFull &&
           <Navbar openMenu={openMenu} setOpenMenu={setOpenMenu} />
         }
@@ -90,6 +94,10 @@ const App = () => {
               <Route path='products'>
                 <Route path='create' element={<CreateProduct />}/>
                 <Route path='update' element={<ProductsTable />}/>
+              </Route>
+              <Route path='discounts'>
+                <Route path='create' element={<CreateDiscount />}/>
+                <Route path='update' element={<DiscountTable />}/>
               </Route>
               <Route path='category'>
                 <Route path='create' element={<CreateCategory />}/>

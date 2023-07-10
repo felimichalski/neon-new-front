@@ -1,9 +1,9 @@
-import { Box, Title, Container, createStyles, MultiSelect, TextInput, InputBase, Flex, Image, Button, NumberInput, Select, LoadingOverlay, Loader, Text, Group, Divider } from '@mantine/core'
+import { Box, Container, createStyles, MultiSelect, TextInput, Flex, Button, NumberInput, Select, Loader, Text, Group, Divider } from '@mantine/core'
 import { useForm } from "@mantine/form";
 import { useDispatch } from "react-redux";
-import { postProduct } from '../../features/actions/productActions';
+import { postProduct } from '../../../../features/actions/productActions';
 import { useEffect, useState } from 'react';
-import FileUpload from '../FileUpload';
+import FileUpload from '../../../FileUpload';
 
 const useStyles = createStyles(theme => ({
     flexContainer: {
