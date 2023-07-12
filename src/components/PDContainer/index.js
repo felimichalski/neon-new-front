@@ -204,10 +204,9 @@ const PDContainer = ()=>{
       setColorIsValidated(true)
       dispatch(addToCart(cartProduct))
    }
-   
-         // const sizesArray = product?JSON.parse(product.size):""
+
    const cartProduct = {
-      category: product?product.category:"",
+      categories: product?.categories?product.categories:[],
       color: colorPicked,
       description:product?product.description:"",
       id:product?product.id:"",
@@ -217,6 +216,7 @@ const PDContainer = ()=>{
       title:product?product.title:"",
       unit_price:product?product.unit_price:0,
    }
+   console.log(product?product:"")
    // COMPONENTE 
    if(product){
       return(
@@ -248,7 +248,7 @@ const PDContainer = ()=>{
                      <Title className={classes.title}>{product.title}</Title>
                      <Divider className={classes.divider} sx={{marginTop:"0.1rem"}} color="#DDDDDD" size="sm"/>
                   </Box>
-                  
+
                   <Box sx={{height:"25%", display:"flex", flexDirection:"column", alignItems:"center",justifyContent:"flex-start"}}>
                   {/* <Title size="h5" sx={{marginTop:"3rem"}}>descripción:</Title> */}
                      <Text sx={{marginTop:"1rem", textAlign:"justify", [`@media (max-width: 600px)`]: {marginTop:"2rem", fontSize:"1.2rem"},}}>
@@ -256,7 +256,6 @@ const PDContainer = ()=>{
                      </Text>
                   </Box>
                   <Box /* sx={{height:"45%"}} */ className={classes.inputContainer}>
-
 
                   <InputBase sx={{width:"100%"}}
                           onChange={(e)=>setSizePicked(e.currentTarget.value)}
@@ -266,7 +265,9 @@ const PDContainer = ()=>{
                           label="Tamaño:"
                       >
                            <option hidden="hidden"></option>
-                          {/* {sizesArray.map((size, index)=><option onClick={()=>setSizePicked(size)} value={size} key={index}>{size}</option>)} */}
+                           <option onClick={()=>setSizePicked("s")} value="s">{`S (${product.size.small_width}cm x ${product.size.small_height}cm)`}</option>
+                           <option onClick={()=>setSizePicked("m")} value="m">{`M (${product.size.medium_width}cm x ${product.size.medium_height}cm)`}</option>
+                           <option onClick={()=>setSizePicked("l")} value="l">{`L (${product.size.large_width}cm x ${product.size.large_height}cm)`}</option>
                   </InputBase>
                   
                      <Box className={product.color?classes.colors:classes.uniqueColor}>
@@ -289,7 +290,6 @@ const PDContainer = ()=>{
                      <Text color="red" sx={{display:sizeIsValidated?"none":"-moz-initial"}}>Debes elegir un tamaño para comprar</Text>
                      <Text color="red" sx={{display:colorIsValidated?"none":"-moz-initial"}}>Debes elegir un color para comprar</Text>
                   </Box>
-                  
                </Box>
             </Box>
          </Box>

@@ -1,29 +1,23 @@
-import { Box, Title, Container, createStyles, MultiSelect, TextInput, InputBase, Flex, Image, Button, NumberInput, Select, LoadingOverlay, Loader, Text, Group, Divider } from '@mantine/core'
+import { Box, Title, Container, createStyles,TextInput, Flex, Button, Loader, UnstyledButton} from '@mantine/core'
 import { useForm } from "@mantine/form";
 import { useDispatch } from "react-redux";
 import { postProduct } from '../../features/actions/productActions';
 import { useEffect, useState } from 'react';
 import FileUpload from '../FileUpload';
 import { postCategory } from '../../features/actions/categoryActions';
+import { Trash3Fill } from '@styled-icons/bootstrap';
+import { toast } from "react-toastify";
 
 const useStyles = createStyles(theme => ({
     flexContainer: {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-around",
-        width: "90%",
+        width: "100%",
         height: "max-content",
         background: "none",
-        boxShadow: "box-shadow: 2px -1px 23px 6px rgba(168,168,168,0.75);-webkit-box-shadow: 2px -1px 23px 6px rgba(168,168,168,0.75);-moz-box-shadow: 2px -1px 23px 6px rgba(168,168,168,0.75);",
+        boxShadow: "box-shadow: 2px -1px 23px 6px rgba(168,168,168,0.3);-webkit-box-shadow: 2px -1px 23px 6px rgba(168,168,168,0.4);-moz-box-shadow: 2px -1px 23px 6px rgba(168,168,168,0.75);",
         padding: "3rem",
-    },
-
-    imageBox: {
-        display: "flex",
-        alignItems: "center",
-        width: "30%",
-        height: "50%",
-        background: "none"
     },
 
     form: {
@@ -42,30 +36,37 @@ const useStyles = createStyles(theme => ({
     smallInput: {
         width: "35%"
     },
-
-    mantineText: {
-        display: 'inline-block',
-        margin: ".5rem 0 4px 0",
-        fontSize: '14px',
-        fontWeight: 500,
-        color: 'black',
-        wordBreak: 'break-word',
-        cursor: 'default',
-        fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif'
+    categoryContainer:{
+        margin:"5rem",
+        width:"110%",
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center",
+        flexDirection:"column",
+        borderTop:"1px solid #DDDDDD",
+        borderBottom:"1px solid #DDDDDD"
     },
-
-    sizes: {
-        display: 'flex',
-        margin: '2rem 0'
+    eachCategory:{
+        width:"100%",
+        height:"4.5rem",
+        paddingLeft:"7rem",
+        display:"flex",
+        alignItems:"center",
+        border:"1px solid #DDDDDD",
+        /* borderBottom:"1px solid #DDDDDD", */
     },
-
-    sizeBox: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        padding: '10px',
-        margin: '0 .5rem'
+    categoryTitle:{
+        fontSize:"1.2rem",
+        width:"50%",
+        fontWeight:"400",
+        letterSpacing:"0.1rem",
+        alignItems:"center"
+    },
+    iconBox:{
+        width:"50%",
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center"
     }
 }))
 
@@ -98,27 +99,43 @@ const CreateCategory = () => {
         }
     };
 
-    /* const createProduct = async (values) => {
-        setUploading(true)
-        const formData = new FormData();
-        for (const category of values.categories) {
-            formData.append("categories", category);
+    const deleteCategory = async (categoryId) => {
+        /* setLoading(true) */
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/${categoryId}`, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            mode: 'cors',
+            method: 'DELETE'
+        });
+        
+        if (response.status !== 200) {
+            toast.error("El producto no pudo ser eliminado", {
+              position: "bottom-right",
+            });
         }
-        formData.append("name", values.name);
-        await dispatch(postCategory(formData));
-        setUploading(false)
-    } */
+
+        toast.success("Producto Eliminado", {
+            position: "bottom-right",
+        });
+
+        /* reloadProducts();
+        setOpened(false)
+        setLoading(false) */
+    }
 
     useEffect(() => {
         fetchData()
     }, [])
     /* console.log(categories) */
     return (
-        <Container fluid sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", marginTop: "2rem" }}>
+        <Container fluid sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", marginTop: "2rem", width:"100%", padding:"0" }}>
+            <Title sx={{marginBottom:"4rem"}}>CARGAR</Title>
             <Flex className={classes.flexContainer}>
                 <form className={classes.form} onSubmit={form.onSubmit(values=>dispatch(postCategory(values)))}>
                     <TextInput className={classes.inputs}
                         onChange={(e) => form.setFieldValue("name", e.currentTarget.value)}
+                        /* placeholder='Nombre de la nueva categoría' */
                         label="Nombre de la categoría"
                         {...form.getInputProps("name")}
                     />
@@ -126,9 +143,10 @@ const CreateCategory = () => {
                     <Button sx={{margin: "0.5rem 0", marginTop: "3rem", width: "50%"}} type="submit" disabled={uploading}>{(uploading) ? <Loader size='xs' /> : 'Cargar'}</Button>
                 </form>
             </Flex>
-            <Flex className={classes.flexContainer} sx={{margin:"3rem"}}>
-                {categories?categories.map(e=><Box>{e.label}</Box>):""}
-            </Flex>
+            <Title sx={{marginTop:"5rem"}}>ELIMINAR</Title>
+            <Box className={classes.categoryContainer} sx={{margin:"3rem"}}>
+                {categories?categories.map(e=><Box className={classes.eachCategory}><Title className={classes.categoryTitle}>{e.label?e.label.toUpperCase():""}</Title><UnstyledButton className={classes.iconBox} onClick={()=>deleteCategory(e.value)}><Trash3Fill size={25} color="red"/></UnstyledButton></Box>):""}
+            </Box>
         </Container>
     )
 

@@ -68,6 +68,7 @@ const useStyles = createStyles((theme) => ({
 const CartItem = ({ data }) => {
   const { classes } = useStyles();
   const dispatch = useDispatch();
+  console.log(data)
   return (
     <Grid m={4} className={classes.root}>
       <Grid.Col span={1} className={classes.column}>
@@ -78,6 +79,7 @@ const CartItem = ({ data }) => {
                 src={`${process.env.REACT_APP_API_URL}/mediafiles/${image.key}`}
                 alt="Product Image"
               /> */}
+              
               <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${image.key}`} className={classes.image} />
             </Carousel.Slide>
           ))}
@@ -85,7 +87,7 @@ const CartItem = ({ data }) => {
       </Grid.Col>
       <Grid.Col className={[classes.column, classes.text]} span={1} offset={1}>
         <Title className={classes.title}>{data.title + " " + data.size?.toUpperCase()}</Title>
-        <Text sx={{ color: "#CCCCCC" }} className={classes.category}>{data.category.name || data.category}</Text>
+        <Text sx={{ color: "#CCCCCC" }} className={classes.category}>{data.categories?data.categories.length>1?data.categories[0].name + "...":data.categories[0]:""}</Text>
       </Grid.Col>
       <Grid.Col className={[classes.column, classes.quantity]} span={1} offset={0}>
         <ActionIcon size={30} variant="subtle" onClick={() => dispatch(decreaseCart(data))} className={classes.actionIcon}>
