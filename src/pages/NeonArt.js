@@ -1,5 +1,16 @@
-import { Box, Title, createStyles, Text, BackgroundImage } from "@mantine/core"
+import { Box, Title, createStyles, Text, BackgroundImage, Image } from "@mantine/core"
 import backgroundA from '../assets/bgAbout.jpg'
+import IMG1 from '../assets/NeonArt1.jpg'
+import IMG2 from '../assets/NeonArt2.jpg'
+import IMG3 from '../assets/NeonArt3.jpg'
+import IMG4 from '../assets/NeonArt4.jpg'
+import IMG5 from '../assets/NeonArt5.jpg'
+import IMG6 from '../assets/NeonArt6.JPG'
+import IMG7 from '../assets/NeonArt7.JPG'
+import IMG8 from '../assets/NeonArt8.JPG'
+import IMG9 from '../assets/NeonArt9.jpg'
+import IMG10 from '../assets/NeonArt10.JPG'
+
 
 const useStyles = createStyles((theme) => ({
     root:{
@@ -36,6 +47,19 @@ const useStyles = createStyles((theme) => ({
             fontSize:"1.2rem"
           },
     },
+    images:{
+        margin:"2rem 4rem"
+    },
+    imageBox1:{
+        display:"flex",
+        justifyContent:"flex-start",
+        alignItems:"center"
+    },
+    imageBox2:{
+            display:"flex",
+            justifyContent:"flex-end",
+            alignItems:"center"
+    }
 }))
 
 const NeonArt = () => {  
@@ -55,6 +79,49 @@ const NeonArt = () => {
                     <Text>Nos enorgullece haber concretado proyectos importantes con diversos clientes y marcas. Hemos dejado nuestra impronta en lugares emblemáticos como el <b>Casino Trilenium</b> a lo largo de todo el país, hemos colaborado con agencias productoras de TV y hemos sido elegidos por marcas reconocidas como <b>Givenchy</b>, <b>Chandon</b> y <b>Smirnoff</b>, entre otras, para llevar a cabo proyectos de neón exclusivos.</Text>
                     <br/>
                     <Text>En Neon Infinito, nuestra trayectoria y experiencia son nuestro aval. Nos comprometemos a ofrecerte carteles de neón de la más alta calidad. Cada uno de nuestros trabajos refleja la dedicación y la atención al detalle que nos caracteriza.</Text>
+{/*                     <br/>
+                    <Title sx={{textAlign:"center"}}>Algunos de nuestros trabajos</Title> */}
+                    <br/>
+                    <Box className={classes.imageBox1}>
+                        <Image width={300} height={300} src={IMG1} alt="image1" className={classes.images}/>
+                        <Text><b>·</b> Desarrollos para ambentación de eventos corporativos</Text>
+                    </Box>
+                    <Box className={classes.imageBox2}>
+                        <Text><b>·</b> Adaptación del Neon Art a todos los espacios</Text>
+                        <Image width={350} height={330} src={IMG2} alt="image1" className={classes.images}/>
+                    </Box>
+                    <Box className={classes.imageBox1}>
+                        <Image width={400} height={350} src={IMG3} alt="image1" className={classes.images}/>
+                        <Text><b>·</b> Luces de alta calidad adecuadas a cada evento</Text>
+                    </Box>
+                    <Box className={classes.imageBox2}>
+                        <Text><b>·</b> Implementacion de distintas tecnicas y materiales</Text>
+                        <Image width={350} height={400} src={IMG4} alt="image1" className={classes.images}/>
+                    </Box>
+                    <Box className={classes.imageBox1}>
+                        <Image width={380} height={300} src={IMG5} alt="image1" className={classes.images}/>
+                        <Text><b>·</b> Colores variados y vivos</Text>
+                    </Box>
+                    <Box className={classes.imageBox2}>
+                        <Text><b>·</b> Decoracion para darle un toque único a tus espacios más personales</Text>
+                        <Image width={300} height={380} src={IMG6} alt="image1" className={classes.images}/>
+                    </Box>
+                    <Box className={classes.imageBox1}>
+                        <Image width={400} height={330} src={IMG7} alt="image1" className={classes.images}/>
+                        <Text><b>·</b> Cartelería a gran escala para casinos y espacios multitudinarios</Text>
+                    </Box>
+                    <Box className={classes.imageBox2}>
+                        <Text><b>·</b> Implementacion de neon en stands y festivales</Text>
+                        <Image width={380} height={380} src={IMG8} alt="image1" className={classes.images}/>
+                    </Box>
+                    <Box className={classes.imageBox1}>
+                        <Image width={300} height={400} src={IMG9} alt="image1" className={classes.images}/>
+                        <Text><b>·</b> Producciones en serie enfocadas en marcas y distribuidores</Text>
+                    </Box>
+                    <Box className={classes.imageBox2}>
+                        <Text><b>·</b> Logos y diseños totalmente personalizados</Text>
+                        <Image width={330} height={460} src={IMG10} alt="image1" className={classes.images}/>
+                    </Box>
                     <br/>
                     <Text>Gracias por visitar nuestra web. Esperamos que encuentres inspiración en nuestros carteles de neón para transformar tus espacios en algo verdaderamente especial.</Text>
                 </Box>
