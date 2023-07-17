@@ -48,17 +48,28 @@ const useStyles = createStyles((theme) => ({
           },
     },
     images:{
-        margin:"2rem 4rem"
+        margin:"2rem 4rem",
+        [`@media (max-width: 600px)`]: {
+            margin:"1rem"
+          },
     },
     imageBox1:{
         display:"flex",
         justifyContent:"flex-start",
-        alignItems:"center"
+        alignItems:"center",
+        [`@media (max-width: 600px)`]: {
+            flexDirection:"column",
+            margin:"3rem"
+          },
     },
     imageBox2:{
             display:"flex",
             justifyContent:"flex-end",
-            alignItems:"center"
+            alignItems:"center",
+            [`@media (max-width: 600px)`]: {
+                flexDirection:"column-reverse",
+                margin:"3rem"
+              },
     }
 }))
 
@@ -88,39 +99,39 @@ const NeonArt = () => {
                     </Box>
                     <Box className={classes.imageBox2}>
                         <Text><b>·</b> Adaptación del Neon Art a todos los espacios</Text>
-                        <Image width={350} height={330} src={IMG2} alt="image1" className={classes.images}/>
+                        <Image width={350} height={330} src={IMG2} alt="image2" className={classes.images}/>
                     </Box>
                     <Box className={classes.imageBox1}>
-                        <Image width={400} height={350} src={IMG3} alt="image1" className={classes.images}/>
+                        <Image width={400} height={350} src={IMG3} alt="image3" className={classes.images}/>
                         <Text><b>·</b> Luces de alta calidad adecuadas a cada evento</Text>
                     </Box>
                     <Box className={classes.imageBox2}>
                         <Text><b>·</b> Implementacion de distintas tecnicas y materiales</Text>
-                        <Image width={350} height={400} src={IMG4} alt="image1" className={classes.images}/>
+                        <Image width={350} height={400} src={IMG4} alt="image4" className={classes.images}/>
                     </Box>
                     <Box className={classes.imageBox1}>
-                        <Image width={380} height={300} src={IMG5} alt="image1" className={classes.images}/>
+                        <Image width={380} height={300} src={IMG5} alt="image5" className={classes.images}/>
                         <Text><b>·</b> Colores variados y vivos</Text>
                     </Box>
                     <Box className={classes.imageBox2}>
                         <Text><b>·</b> Decoracion para darle un toque único a tus espacios más personales</Text>
-                        <Image width={300} height={380} src={IMG6} alt="image1" className={classes.images}/>
+                        <Image width={300} height={380} src={IMG6} alt="image6" className={classes.images}/>
                     </Box>
                     <Box className={classes.imageBox1}>
-                        <Image width={400} height={330} src={IMG7} alt="image1" className={classes.images}/>
+                        <Image width={400} height={330} src={IMG7} alt="image7" className={classes.images}/>
                         <Text><b>·</b> Cartelería a gran escala para casinos y espacios multitudinarios</Text>
                     </Box>
                     <Box className={classes.imageBox2}>
                         <Text><b>·</b> Implementacion de neon en stands y festivales</Text>
-                        <Image width={380} height={380} src={IMG8} alt="image1" className={classes.images}/>
+                        <Image width={380} height={380} src={IMG8} alt="image8" className={classes.images}/>
                     </Box>
                     <Box className={classes.imageBox1}>
-                        <Image width={300} height={400} src={IMG9} alt="image1" className={classes.images}/>
+                        <Image width={300} height={400} src={IMG9} alt="image9" className={classes.images}/>
                         <Text><b>·</b> Producciones en serie enfocadas en marcas y distribuidores</Text>
                     </Box>
                     <Box className={classes.imageBox2}>
                         <Text><b>·</b> Logos y diseños totalmente personalizados</Text>
-                        <Image width={330} height={460} src={IMG10} alt="image1" className={classes.images}/>
+                        <Image width={330} height={460} src={IMG10} alt="image10" className={classes.images}/>
                     </Box>
                     <br/>
                     <Text>Gracias por visitar nuestra web. Esperamos que encuentres inspiración en nuestros carteles de neón para transformar tus espacios en algo verdaderamente especial.</Text>
