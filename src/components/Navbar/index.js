@@ -211,9 +211,6 @@ const tabs = [{
     name: 'Contactanos',
     link: '/contact',
 }, {
-    name: 'Sobre nosotros',
-    link: '/about',
-}, {
     name:'Neon Art',
     link:'/neonart'
 }];
