@@ -216,7 +216,6 @@ const PDContainer = ()=>{
       title:product?product.title:"",
       unit_price:product?product.unit_price:0,
    }
-   console.log(product?product:"")
    // COMPONENTE 
    if(product){
       return(

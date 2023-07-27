@@ -1,4 +1,4 @@
-import { Box, Title, createStyles, Text, BackgroundImage, Image } from "@mantine/core"
+import { Box, Title, createStyles, Text, BackgroundImage, Image, Grid } from "@mantine/core"
 import backgroundA from '../assets/bgAbout.jpg'
 import IMG1 from '../assets/NeonArt1.jpg'
 import IMG2 from '../assets/NeonArt2.jpg'
@@ -11,8 +11,21 @@ import IMG8 from '../assets/NeonArt8.JPG'
 import IMG9 from '../assets/NeonArt9.jpg'
 import IMG10 from '../assets/NeonArt10.JPG'
 
+const allImages= [
+    [IMG1,"Desarrollos para ambentación de eventos corporativos"],
+    [IMG2,"Adaptación del Neon Art a todos los espacios"],
+    [IMG3,"Luces de alta calidad adecuadas a cada evento"],
+    [IMG4,"Implementacion de distintas tecnicas y materiales"],
+    [IMG5,"Colores variados y vivos"],
+    [IMG6,"Decoracion para darle un toque único a tus espacios más personales"],
+    [IMG7,"Cartelería a gran escala para casinos y espacios multitudinarios"],
+/*     [IMG8,"Implementacion de neon en stands y festivales"], */
+    [IMG9,"Producciones en serie enfocadas en marcas y distribuidores"],
+    [IMG10,"Logos y diseños totalmente personalizados"],
+]
 
-const useStyles = createStyles((theme) => ({
+
+const useStyles = createStyles((theme, { hoverEffects }) => ({
     root:{
         display:"flex",
         flexDirection:"column",
@@ -47,34 +60,46 @@ const useStyles = createStyles((theme) => ({
             fontSize:"1.2rem"
           },
     },
-    images:{
-        margin:"2rem 4rem",
-        [`@media (max-width: 600px)`]: {
-            margin:"1rem"
-          },
-    },
-    imageBox1:{
+    image:{
         display:"flex",
-        justifyContent:"flex-start",
         alignItems:"center",
-        [`@media (max-width: 600px)`]: {
-            flexDirection:"column",
-            margin:"3rem"
+        justifyContent:"center",
+        height:"20rem",
+        background:"black",
+        width:"auto",
+        [`&:hover`]: {
+            transform: hoverEffects && 'scale(1.02)',
+            boxShadow: hoverEffects && '0 8px 42px rgb(0 0 0 / 20%)',
+        },
+        [`@media (min-width: 1900px)`]: {
+            height:"30rem",
           },
     },
-    imageBox2:{
-            display:"flex",
-            justifyContent:"flex-end",
-            alignItems:"center",
-            [`@media (max-width: 600px)`]: {
-                flexDirection:"column-reverse",
-                margin:"3rem"
-              },
+    hoverBox:{
+        background:"transparent",
+        display:"flex",
+        alignItems:"center",
+        justifyContent:"center",
+        width:"100%",
+        height:"100%", 
+        color:"transparent",
+        textAlign:"center",
+        fontSize:"1rem",
+        padding:"1.5rem",
+        transition:"background, color, 0.5s",
+
+        [`&:hover`]: {
+            background: 'rgba(0, 0, 0, 0.5)',
+            color:"white",
+        },
+        [`@media (min-width: 1900px)`]: {
+            fontSize:"1.5rem",
+          },
     }
 }))
 
-const NeonArt = () => {  
-    const {classes} = useStyles()
+const NeonArt = ({hoverEffects}) => {  
+    const {classes} = useStyles({hoverEffects})
     return(
         <Box className={classes.root}>
             <BackgroundImage src={backgroundA} className={classes.header}>
@@ -93,46 +118,18 @@ const NeonArt = () => {
 {/*                     <br/>
                     <Title sx={{textAlign:"center"}}>Algunos de nuestros trabajos</Title> */}
                     <br/>
-                    <Box className={classes.imageBox1}>
-                        <Image width={300} height={300} src={IMG1} alt="image1" className={classes.images}/>
-                        <Text><b>·</b> Desarrollos para ambentación de eventos corporativos</Text>
-                    </Box>
-                    <Box className={classes.imageBox2}>
-                        <Text><b>·</b> Adaptación del Neon Art a todos los espacios</Text>
-                        <Image width={350} height={330} src={IMG2} alt="image2" className={classes.images}/>
-                    </Box>
-                    <Box className={classes.imageBox1}>
-                        <Image width={400} height={350} src={IMG3} alt="image3" className={classes.images}/>
-                        <Text><b>·</b> Luces de alta calidad adecuadas a cada evento</Text>
-                    </Box>
-                    <Box className={classes.imageBox2}>
-                        <Text><b>·</b> Implementacion de distintas tecnicas y materiales</Text>
-                        <Image width={350} height={400} src={IMG4} alt="image4" className={classes.images}/>
-                    </Box>
-                    <Box className={classes.imageBox1}>
-                        <Image width={380} height={300} src={IMG5} alt="image5" className={classes.images}/>
-                        <Text><b>·</b> Colores variados y vivos</Text>
-                    </Box>
-                    <Box className={classes.imageBox2}>
-                        <Text><b>·</b> Decoracion para darle un toque único a tus espacios más personales</Text>
-                        <Image width={300} height={380} src={IMG6} alt="image6" className={classes.images}/>
-                    </Box>
-                    <Box className={classes.imageBox1}>
-                        <Image width={400} height={330} src={IMG7} alt="image7" className={classes.images}/>
-                        <Text><b>·</b> Cartelería a gran escala para casinos y espacios multitudinarios</Text>
-                    </Box>
-                    <Box className={classes.imageBox2}>
-                        <Text><b>·</b> Implementacion de neon en stands y festivales</Text>
-                        <Image width={380} height={380} src={IMG8} alt="image8" className={classes.images}/>
-                    </Box>
-                    <Box className={classes.imageBox1}>
-                        <Image width={300} height={400} src={IMG9} alt="image9" className={classes.images}/>
-                        <Text><b>·</b> Producciones en serie enfocadas en marcas y distribuidores</Text>
-                    </Box>
-                    <Box className={classes.imageBox2}>
-                        <Text><b>·</b> Logos y diseños totalmente personalizados</Text>
-                        <Image width={330} height={460} src={IMG10} alt="image10" className={classes.images}/>
-                    </Box>
+                    <Grid>
+                        {allImages.map((e, index)=>
+                        <Grid.Col sm={12} md={6} lg={4}>
+                            <BackgroundImage src={e[0]} alt={`image${index + 1}`} className={classes.image}>
+                                    <Box className={classes.hoverBox}>
+                                        <Text sx={{width:"90%"}}><b>·</b> {e[1]}</Text>
+                                    </Box>
+                                </BackgroundImage>
+                        </Grid.Col>
+                        )}
+                       
+                    </Grid>
                     <br/>
                     <Text>Gracias por visitar nuestra web. Esperamos que encuentres inspiración en nuestros carteles de neón para transformar tus espacios en algo verdaderamente especial.</Text>
                 </Box>
