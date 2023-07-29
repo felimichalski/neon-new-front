@@ -5,6 +5,7 @@ import { Gauge } from '@styled-icons/entypo'
 import { Sitemap } from '@styled-icons/fa-solid'
 import { Discount } from '@styled-icons/boxicons-solid'
 import { Link } from 'react-router-dom';
+import { Category } from '@styled-icons/boxicons-solid'
 
 const items = [
   { label: 'Menu', icon: Gauge, link: '' },
@@ -26,9 +27,10 @@ const items = [
   },
   {
     label: 'Categorías',
-    icon: Sitemap,
+    icon: Category,
     links: [
-      { label: 'Cargar / Eliminar', url: 'category/create' },
+      { label: 'Cargar', url: 'category/create' },
+      { label: 'Editar / Eliminar', url: 'category/update' },
     ],
   },
 ];
@@ -81,7 +83,7 @@ const Sidebar = () => {
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <Button><Link to='/' style={{ textDecoration: 'none', color: 'white' }}>Volver</Link></Button>
+      <Link to='/' style={{ textDecoration: 'none', color: 'white' }}><Button>Volver</Button></Link>
       </Navbar.Section>
     </Navbar>
   );
