@@ -83,7 +83,7 @@ const Sidebar = () => {
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-      <Link to='/' style={{ textDecoration: 'none', color: 'white' }}><Button>Volver</Button></Link>
+      <Link to='/' style={{ textDecoration: 'none', color: 'white' }}><Button style={{ backgroundColor: '#339AF0' }}>Volver</Button></Link>
       </Navbar.Section>
     </Navbar>
   );

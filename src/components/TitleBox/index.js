@@ -157,9 +157,10 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
                     margin: '0 5px',
                     border: '3px solid white',
                     opacity: 1,
+                    backgroundColor: 'white !important',
                     
                     '&[data-active]': {
-                        backgroundColor: 'black',
+                        backgroundColor: 'black !important',
                     }
                 },
             }}
