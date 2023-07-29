@@ -44,7 +44,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const FeaturedProducts = () => {
+const FeaturedProducts = ({ customText }) => {
     const { classes } = useStyles();
 
     const data = useSelector(state => state.featured)
@@ -63,7 +63,7 @@ const FeaturedProducts = () => {
     return (
         <Container fluid className={classes.root}>
             <Box className={classes.titleBar}>
-                <Title className={classes.title}>Nuestros destacados</Title>
+                <Title className={classes.title}>{customText ? customText : 'Nuestros destacados'}</Title>
                 <Link sx={{textDecoration:"none !important"}} to="/categories/type/1">
                     <Text sx={{textDecoration:"none !important"}} style={{
                         fontWeight: 600,
