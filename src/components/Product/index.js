@@ -15,6 +15,7 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
         borderRadius: 7,
         transition: 'all .1s linear',
         boxShadow: '0 8px 42px rgb(0 0 0 / 20%)',
+        height: '100%',
 
         [`&:hover`]: {
             transform: hoverEffects && 'scale(1.02)',
@@ -41,7 +42,8 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
-        marginBottom: '.5rem !important'
+        marginBottom: '.5rem !important',
+        justifySelf: 'flex-end'
     },
 
     category: {
