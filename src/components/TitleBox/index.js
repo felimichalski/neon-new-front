@@ -89,7 +89,7 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
     const dispatch = useDispatch()
     const { classes } = useStyles({ hoverEffects });
     const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }))
-    const firstPublic = publics.length?publics.filter(title => title.name==="Home Title")[0].content:""
+    const firstPublic = publics.length ? publics.filter(title => title.name === "Home Title")[0].content : ""
     const form = useForm({
         initialValues:{
             content:"",
@@ -102,7 +102,7 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
 
     useEffect(() => {
         dispatch(getPublics())
-      }, [dispatch,publics[0]])
+      }, [dispatch])
 
     const handleEdit = (e)=>{
         console.log(e.currentTarget.name)
@@ -157,8 +157,9 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
                     margin: '0 5px',
                     border: '3px solid white',
                     opacity: 1,
+                    
                     '&[data-active]': {
-                    backgroundColor: 'black',
+                        backgroundColor: 'black',
                     }
                 },
             }}
@@ -168,19 +169,16 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
             <Carousel.Slide>
                 <BackgroundImage className={classes.root} src={background1}>
                     <div className={classes.overlay} />
-                    {/* <Title className={classes.title}>Title 1</Title> */}
                 </BackgroundImage>
             </Carousel.Slide>
             <Carousel.Slide>
                 <BackgroundImage className={classes.root} src={background2}>
                     <div className={classes.overlay} />
-                    {/* <Title className={classes.title}>Title 2</Title> */}
                 </BackgroundImage>
             </Carousel.Slide>
             <Carousel.Slide>
                 <BackgroundImage className={classes.root} src={background3}>
                     <div className={classes.overlay} />
-                    {/* <Title className={classes.title}>Title 3</Title> */}
                 </BackgroundImage>
             </Carousel.Slide>
         </Carousel>
