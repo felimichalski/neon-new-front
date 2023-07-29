@@ -2,22 +2,14 @@ import { Button, Group, Loader, Modal, Title, createStyles } from "@mantine/core
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
     cancel: {
-        backgroundColor: "gray",
-
-        '&:hover': {
-            backgroundColor: "gray",
-        }
+        backgroundColor: "gray !important",
     },
 
 
     confirm: {
-        backgroundColor: "red",
-
-        '&:hover': {
-            backgroundColor: "red",
-        }
+        backgroundColor: "red !important",
     }
 }));
 

@@ -67,8 +67,10 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
         backgroundColor: 'black',
         fontFamily: 'ITC Avant Garde Gothic',
         fontWeight: 400,
+        backgroundColor: 'black !important',
+
         '&:hover': {
-            backgroundColor: theme.colors.gray[8]
+            backgroundColor: `${theme.colors.gray[8]} !important`
         }
     },
 

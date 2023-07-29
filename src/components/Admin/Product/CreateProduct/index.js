@@ -276,7 +276,7 @@ const CreateProduct = () => {
                         }}
                     />
 
-                    <Button sx={{ margin: "0.5rem 0", marginTop: "3rem", width: "50%" }} type="submit" disabled={uploading}>{(uploading) ? <Loader size='xs' /> : 'Cargar'}</Button>
+                    <Button sx={{ margin: "0.5rem 0", marginTop: "3rem", width: "50%" }} style={{ backgroundColor: '#339AF0' }} type="submit" disabled={uploading}>{(uploading) ? <Loader size='xs' /> : 'Cargar'}</Button>
                 </form>
             </Flex>
         </Container>

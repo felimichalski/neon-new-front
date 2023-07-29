@@ -4,20 +4,12 @@ import { toast } from "react-toastify";
 
 const useStyles = createStyles((theme) => ({
     cancel: {
-        backgroundColor: "gray",
-
-        '&:hover': {
-            backgroundColor: "gray",
-        }
+        backgroundColor: "gray !important",
     },
 
 
     confirm: {
-        backgroundColor: "red",
-
-        '&:hover': {
-            backgroundColor: "red",
-        }
+        backgroundColor: "red !important",
     }
 }));
 
