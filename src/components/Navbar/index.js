@@ -1,10 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { logOut } from '../../features/slices/authSlice'
 
-import { Anchor, Box, Container, createStyles, Divider, Group, Image, Menu, Tabs, Text, UnstyledButton } from '@mantine/core'
+import { Anchor, Box, Container, createStyles, Divider, Group, Image, Indicator, Menu, Tabs, Text, UnstyledButton } from '@mantine/core'
 import { Link, useNavigate } from 'react-router-dom'
 
-import {Admin} from "@styled-icons/remix-line/Admin"
+import { Admin } from "@styled-icons/remix-line/Admin"
 import { Person, Search, Cart, LineHorizontal3, ArrowEnter, SignOut, Pen, Star } from '@styled-icons/fluentui-system-regular'
 import { ChevronDown } from '@styled-icons/entypo'
 
@@ -28,7 +28,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         position: 'sticky',
         top: 0,
         zIndex: 10000,
-        
+
     },
 
     offer: {
@@ -61,8 +61,8 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
     tabs: {
         height: '100%',
         [`@media (max-width: 949px)`]: {
-            display:"none"
-          },
+            display: "none"
+        },
     },
 
     tabsList: {
@@ -95,12 +95,12 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
             borderBottom: '3px solid black !important',
         },
         [`@media (max-width: 1025px)`]: {
-            fontSize:"10px"
-          },
-          [`@media (max-width: 967px)`]: {
-            fontSize:"8px"
-          },
-          
+            fontSize: "10px"
+        },
+        [`@media (max-width: 967px)`]: {
+            fontSize: "8px"
+        },
+
     },
 
     tabNoBorder: {
@@ -119,15 +119,15 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         display: 'flex',
         height: '100%'
     },
-    tabContainer:{
+    tabContainer: {
         /* border:"5px solid black", */
         [`@media (max-width: 600px)`]: {
             /* border:"5px solid aqua", */
-            width:"100%",
-            display:"flex",
-            justifyContent:"center",
-            alignItems:"center"
-          },
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+        },
     },
 
     iconContainer: {
@@ -157,16 +157,16 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         },
 
         [`@media (max-width: 600px)`]: {
-            display:"none",
-          },
+            display: "none",
+        },
     },
 
     sidebarButton: {
         display: 'none',
 
         [`@media (max-width: 949px)`]: {
-            display:"flex",
-          },
+            display: "flex",
+        },
     },
 
     categoryList: {
@@ -196,7 +196,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         transform: categoryListOpen ? 'rotate(-180deg)' : 'rotate(0deg)',
         transition: 'all .2s ease'
     },
-    
+
 }))
 
 const tabs = [{
@@ -215,7 +215,7 @@ const tabs = [{
     link:'/neonart'
 }];
 
-const Navbar = ({openMenu, setOpenMenu}) => {
+const Navbar = ({ openMenu, setOpenMenu }) => {
     const [categoryListOpen, setCategoryListOpen] = useState(false)
     const [pointerEvents, setPointerEvents] = useState('auto')
     const [loggedIn, setLoggedIn] = useState(undefined)
@@ -228,7 +228,8 @@ const Navbar = ({openMenu, setOpenMenu}) => {
     const { classes, cx } = useStyles({ categoryListOpen, pointerEvents })
 
     const data = useSelector((state) => state.auth);
-    const logedUser = useSelector(state=> state.auth.userInfo)
+    const logedUser = useSelector(state => state.auth.userInfo)
+    const cartTotalQuantity = useSelector((state) => state.cart.cartTotalQuantity);
     const dispatch = useDispatch()
 
 
@@ -249,7 +250,7 @@ const Navbar = ({openMenu, setOpenMenu}) => {
     };
 
     useEffect(() => {
-        if(data.userToken) {
+        if (data.userToken) {
             setLoggedIn(true)
         } else {
             setLoggedIn(false)
@@ -267,13 +268,13 @@ const Navbar = ({openMenu, setOpenMenu}) => {
 
     const userButton = loggedIn ?
         <Menu
-        width={260}
-        offset={0}
-        position="bottom-end"
-        transition='pop-top-right'
-        onClose={() => setUserMenuOpened(false)}
-        onOpen={() => setUserMenuOpened(true)}
-        withinPortal
+            width={260}
+            offset={0}
+            position="bottom-end"
+            transition='pop-top-right'
+            onClose={() => setUserMenuOpened(false)}
+            onOpen={() => setUserMenuOpened(true)}
+            withinPortal
         >
             <Menu.Target>
                 <UnstyledButton className={cx(classes.iconContainer, { [classes.userActive]: userMenuOpened })}>
@@ -287,7 +288,7 @@ const Navbar = ({openMenu, setOpenMenu}) => {
                         fontSize: 16,
                         color: 'black'
                     }}
-                    icon={<Person size={16}/>}
+                    icon={<Person size={16} />}
                     disabled
                 >
                     {data.userInfo.firstName} {data.userInfo.lastName}
@@ -304,17 +305,17 @@ const Navbar = ({openMenu, setOpenMenu}) => {
                     Editar perfil
                 </Menu.Item>
                 <Menu.Item
-                onClick={logOutAndGoToHome}
-                icon={<SignOut size={16} />}
-                style={{ color: 'red' }}
+                    onClick={logOutAndGoToHome}
+                    icon={<SignOut size={16} />}
+                    style={{ color: 'red' }}
                 >Cerrar sesión</Menu.Item>
             </Menu.Dropdown>
         </Menu>
         :
         <UnstyledButton className={classes.iconContainer} onClick={() => setAuthModalOpened(true)}>
-            <ArrowEnter size={20}/>
+            <ArrowEnter size={20} />
         </UnstyledButton >
-    
+
     const items = tabs?.map((tab, key) => (
         <Box key={key}>
             {tab.name === 'Categorías' ?
@@ -333,17 +334,17 @@ const Navbar = ({openMenu, setOpenMenu}) => {
                     transition='scale-y'
                     transitionDuration={200}
                 >
-                    
+
                     <Menu.Target>
                         <Tabs.Tab value={removeAccents(tab.name.toLowerCase())} className={[classes.tab, classes.tabNoBorder]}>
                             <Text style={{ display: 'flex', alignItems: 'center' }}>{tab.name}</Text><ChevronDown size={16} className={classes.categoryChevron} />
                         </Tabs.Tab>
                     </Menu.Target>
-                    
+
                     <Menu.Dropdown className={classes.categoryList}>
-                        <CategoryList types={types}/>
+                        <CategoryList types={types} />
                     </Menu.Dropdown>
-                    
+
                 </Menu>
                 :
                 <Link to={tab.link} className={classes.tabLink}>
@@ -376,15 +377,19 @@ const Navbar = ({openMenu, setOpenMenu}) => {
             </Carousel>
             <Box className={classes.main} >
                 <Group className={classes.tabContainer}>
-                    <Anchor sx={{[`@media (max-width: 600px)`]: {
-            position:"relative",
-            left:"1rem"
-          }}} component={Link} to="/" style={{ padding: '10px 0' }}>
+                    <Anchor sx={{
+                        [`@media (max-width: 600px)`]: {
+                            position: "relative",
+                            left: "1rem"
+                        }
+                    }} component={Link} to="/" style={{ padding: '10px 0' }}>
                         <Image src={logo} height={40} />
                     </Anchor>
-                    <Divider sx={{[`@media (max-width: 600px)`]: {
-            display:"none",
-          },}} mx={20} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
+                    <Divider sx={{
+                        [`@media (max-width: 600px)`]: {
+                            display: "none",
+                        },
+                    }} mx={20} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <Tabs classNames={{
                         root: classes.tabs,
                         tabsList: classes.tabsList,
@@ -396,29 +401,31 @@ const Navbar = ({openMenu, setOpenMenu}) => {
                     </Tabs>
                 </Group>
                 <Group style={{ gap: 0 }} className={classes.collapsableMD}>
-                    
+
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <UnstyledButton className={classes.iconContainer}>
                         <Search size={20} />
                     </UnstyledButton>
 
-                    {logedUser?.admin?
-                    <Divider sx={{marginRight:"-1.5rem"}} px={10} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />:""
+                    {logedUser?.admin ?
+                        <Divider sx={{ marginRight: "-1.5rem" }} px={10} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' /> : ""
                     }
                     {
-                    logedUser?.admin?
-                <UnstyledButton onClick={() => navigate('/admin')} className={classes.iconContainer}>
-                    <Admin size={20} />
-                </UnstyledButton>
-                :
-                ""    
-                }
+                        logedUser?.admin ?
+                            <UnstyledButton onClick={() => navigate('/admin')} className={classes.iconContainer}>
+                                <Admin size={20} />
+                            </UnstyledButton>
+                            :
+                            ""
+                    }
 
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     {userButton}
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <UnstyledButton onClick={() => navigate('/cart')} className={classes.iconContainer}>
-                        <Cart size={20} />
+                        <Indicator size={15} label={cartTotalQuantity.toString()} styles={{ indicator: { padding: '0' } }}>
+                            <Cart size={20} />
+                        </Indicator>
                     </UnstyledButton>
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                 </Group>
@@ -440,13 +447,13 @@ const Navbar = ({openMenu, setOpenMenu}) => {
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                 </Group>
                 <Group className={classes.sidebarButton}>
-                    <UnstyledButton onClick={()=>{openMenu?setOpenMenu(false):setOpenMenu(true)}}>
-                     <LineHorizontal3 size={20} />
+                    <UnstyledButton onClick={() => { openMenu ? setOpenMenu(false) : setOpenMenu(true) }}>
+                        <LineHorizontal3 size={20} />
                     </UnstyledButton>
                 </Group>
             </Box>
             <div className={classes.categoryOverlay} />
-            <AuthModal opened={authModalOpened} setOpened={setAuthModalOpened}/>
+            <AuthModal opened={authModalOpened} setOpened={setAuthModalOpened} />
         </Container>
     )
 }

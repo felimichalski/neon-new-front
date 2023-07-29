@@ -1,10 +1,8 @@
 import { Box, Title, Container, createStyles,TextInput, Flex, Button, Loader, UnstyledButton} from '@mantine/core'
 import { useForm } from "@mantine/form";
 import { useDispatch } from "react-redux";
-import { postProduct } from '../../features/actions/productActions';
 import { useEffect, useState } from 'react';
-import FileUpload from '../FileUpload';
-import { postCategory } from '../../features/actions/categoryActions';
+import { postCategory } from '../../../../features/actions/categoryActions'
 import { Trash3Fill } from '@styled-icons/bootstrap';
 import { toast } from "react-toastify";
 
@@ -74,7 +72,6 @@ const useStyles = createStyles(theme => ({
 const CreateCategory = () => {
     const { classes } = useStyles()
     const dispatch = useDispatch()
-    const [categories, setCategories] = useState([])
     const [uploading, setUploading] = useState(false)
     const form = useForm({
         initialValues: {
@@ -87,52 +84,14 @@ const CreateCategory = () => {
         }
     })
 
-    const fetchData = async () => {
-        try {
-            const categoriesResponse = await fetch(`${process.env.REACT_APP_API_URL}/categories/thin`, {
-                method: "GET",
-            });
-            let categories = await categoriesResponse.json();
-            setCategories(categories);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const deleteCategory = async (categoryId) => {
-        /* setLoading(true) */
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/${categoryId}`, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            mode: 'cors',
-            method: 'DELETE'
-        });
-        
-        if (response.status !== 200) {
-            toast.error("El producto no pudo ser eliminado", {
-              position: "bottom-right",
-            });
-        }
-
-        toast.success("Producto Eliminado", {
-            position: "bottom-right",
-        });
-
-        /* reloadProducts();
-        setOpened(false)
-        setLoading(false) */
-    }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
-    /* console.log(categories) */
     return (
-        <Container fluid sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", marginTop: "2rem", width:"100%", padding:"0" }}>
-            <Title sx={{marginBottom:"4rem"}}>CARGAR</Title>
+        <Container fluid sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", marginTop: "2rem" }}>
             <Flex className={classes.flexContainer}>
-                <form className={classes.form} onSubmit={form.onSubmit(values=>dispatch(postCategory(values)))}>
+                <form className={classes.form} onSubmit={form.onSubmit(values => {
+                    setUploading(true)
+                    dispatch(postCategory(values))
+                    setUploading(false)
+                })}>
                     <TextInput className={classes.inputs}
                         onChange={(e) => form.setFieldValue("name", e.currentTarget.value)}
                         /* placeholder='Nombre de la nueva categoría' */
@@ -143,10 +102,6 @@ const CreateCategory = () => {
                     <Button sx={{margin: "0.5rem 0", marginTop: "3rem", width: "50%"}} type="submit" disabled={uploading}>{(uploading) ? <Loader size='xs' /> : 'Cargar'}</Button>
                 </form>
             </Flex>
-            <Title sx={{marginTop:"5rem"}}>ELIMINAR</Title>
-            <Box className={classes.categoryContainer} sx={{margin:"3rem"}}>
-                {categories?categories.map(e=><Box className={classes.eachCategory}><Title className={classes.categoryTitle}>{e.label?e.label.toUpperCase():""}</Title><UnstyledButton className={classes.iconBox} onClick={()=>deleteCategory(e.value)}><Trash3Fill size={25} color="red"/></UnstyledButton></Box>):""}
-            </Box>
         </Container>
     )
 
