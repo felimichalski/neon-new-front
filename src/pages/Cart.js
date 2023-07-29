@@ -144,7 +144,7 @@ const Cart = () => {
                     <Box className={classes.flexCart}>
                     <Box className={classes.titleBar}>
                             <Title className={classes.title}>Mi Carrito</Title>
-                            <Text className={classes.quantity}>{data.cartTotalQuantity} producto/s</Text>
+                            <Text className={classes.quantity}>{data.cartTotalQuantity} productos</Text>
                         </Box>
                         <List className={classes.flexList} listStyleType='none' styles={{
                             itemWrapper: {

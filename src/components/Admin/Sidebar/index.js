@@ -1,9 +1,11 @@
-import { Navbar, Group, Code, ScrollArea, createStyles, Text, Title, Button } from '@mantine/core';
+import { Navbar, Group, ScrollArea, createStyles, Title, Button } from '@mantine/core';
 import LinksGroup from '../LinksGroup';
 
 import { Gauge } from '@styled-icons/entypo'
 import { Sitemap } from '@styled-icons/fa-solid'
+import { Discount } from '@styled-icons/boxicons-solid'
 import { Link } from 'react-router-dom';
+import { Category } from '@styled-icons/boxicons-solid'
 
 const items = [
   { label: 'Menu', icon: Gauge, link: '' },
@@ -13,6 +15,22 @@ const items = [
     links: [
       { label: 'Cargar', url: 'products/create' },
       { label: 'Editar / Eliminar', url: 'products/update' },
+    ],
+  },
+  {
+    label: 'Códigos de descuento',
+    icon: Discount,
+    links: [
+      { label: 'Cargar', url: 'discounts/create' },
+      { label: 'Editar / Eliminar', url: 'discounts/update' },
+    ],
+  },
+  {
+    label: 'Categorías',
+    icon: Category,
+    links: [
+      { label: 'Cargar', url: 'category/create' },
+      { label: 'Editar / Eliminar', url: 'category/update' },
     ],
   },
 ];
@@ -65,7 +83,7 @@ const Sidebar = () => {
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <Button><Link to='/' style={{ textDecoration: 'none', color: 'white' }}>Volver</Link></Button>
+      <Link to='/' style={{ textDecoration: 'none', color: 'white' }}><Button>Volver</Button></Link>
       </Navbar.Section>
     </Navbar>
   );

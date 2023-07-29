@@ -11,18 +11,23 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Admin from "./pages/Admin";
 import ProtectedRoute from './components/middleware/ProtectedRoute';
-import ProductDetail from './pages/ProductDetail';
 import SideBar from './components/SideBar';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer/Footer';
 import Category from './pages/Category';
-import About from './components/About';
 import Contact from './components/Contact';
 import PageNotFound from './components/PageNotFound';
 import Dashboard from './components/Admin/Dashboard';
-import CreateProduct from './components/CreateProduct';
-import ProductsTable from './components/Admin/ProductsTable';
+import CreateProduct from './components/Admin/Product/CreateProduct';
+import CreateCategory from './components/Admin/Category/CreateCategory';
+import ProductsTable from './components/Admin/Product/ProductsTable';
+import ScrollToTop from './components/ScrollToTop';
+import CreateDiscount from './components/Admin/Discount/CreateDiscount';
+import DiscountTable from './components/Admin/Discount/DiscountTable';
+import NeonArt from './pages/NeonArt'
+import CategoriesTable from './components/Admin/Category/CategoriesTable';
+import ProductDetail from './pages/ProductDetail';
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -78,6 +83,7 @@ const App = () => {
       >
         <CustomFonts />
         <ToastContainer pauseOnHover={false} theme='light' autoClose={2000} position='bottom-right' />
+        <ScrollToTop />
         {viewFull &&
           <Navbar openMenu={openMenu} setOpenMenu={setOpenMenu} />
         }
@@ -88,6 +94,14 @@ const App = () => {
               <Route path='products'>
                 <Route path='create' element={<CreateProduct />}/>
                 <Route path='update' element={<ProductsTable />}/>
+              </Route>
+              <Route path='discounts'>
+                <Route path='create' element={<CreateDiscount />}/>
+                <Route path='update' element={<DiscountTable />}/>
+              </Route>
+              <Route path='category'>
+                <Route path='create' element={<CreateCategory />}/>
+                <Route path='update' element={<CategoriesTable />}/>
               </Route>
               <Route path='*' element={<Dashboard />}/>
             </Route>
@@ -104,7 +118,7 @@ const App = () => {
               <Route path=':type/:category' />
             </Route>
             <Route path="product/:id" element={<ProductDetail />} />
-            <Route path="about" element={<About />} />
+            <Route path='neonart' element={<NeonArt />} />
             <Route path="contact" element={<Contact />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
@@ -129,7 +143,7 @@ const App = () => {
           },
           breakpoints: {
             xs: 350,
-            sm: 600,
+            sm: 750,
             md: 950,
             lg: 1150,
             xl: 1400,

@@ -9,11 +9,10 @@ import {
     Center,
     TextInput,
     Box,
-    Button,
 } from '@mantine/core';
 import { ChevronExpand, ChevronDown, ChevronUp, Search, Trash3Fill } from '@styled-icons/bootstrap';
 import { Edit2Outline } from '@styled-icons/evaicons-outline'
-import ConfirmModal from './ConfirmModal';
+import ConfirmModal from './ConfirmModal.js';
 
 const useStyles = createStyles((theme) => ({
     th: {

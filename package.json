@@ -5,6 +5,7 @@
   "dependencies": {
     "@emailjs/browser": "^3.11.0",
     "@emotion/react": "^11.10.6",
+    "@headlessui/react": "^1.7.16",
     "@mantine/carousel": "^5.10.5",
     "@mantine/core": "^5.10.5",
     "@mantine/dropzone": "^5.10.5",
@@ -12,6 +13,7 @@
     "@mantine/hooks": "^5.10.5",
     "@mercadopago/sdk-react": "^0.0.3",
     "@reduxjs/toolkit": "^1.9.3",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -54,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
   }
 }

@@ -1,9 +1,9 @@
-import { Box, Title, Container, createStyles, MultiSelect, TextInput, InputBase, Flex, Image, Button, NumberInput, Select, LoadingOverlay, Loader, Text, Group, Divider } from '@mantine/core'
+import { Box, Container, createStyles, MultiSelect, TextInput, Flex, Button, NumberInput, Select, Loader, Text, Group, Divider } from '@mantine/core'
 import { useForm } from "@mantine/form";
 import { useDispatch } from "react-redux";
-import { postProduct } from '../../features/actions/productActions';
+import { postProduct } from '../../../../features/actions/productActions';
 import { useEffect, useState } from 'react';
-import FileUpload from '../FileUpload';
+import FileUpload from '../../../FileUpload';
 
 const useStyles = createStyles(theme => ({
     flexContainer: {
@@ -81,7 +81,9 @@ const CreateProduct = () => {
             description: "",
             is_featured: false,
             title: "",
-            unit_price: 0,
+            small_price: 0,
+            medium_price: 0,
+            large_price: 0,
             color: null,
             small_width: 0,
             small_height: 0,
@@ -91,7 +93,9 @@ const CreateProduct = () => {
             large_height: 0,
         },
         validate: {
-            unit_price: (value) => (value === 0 ? 'El producto debe tener precio' : null),
+            small_price: (value) => (value === 0 ? 'Elija el precio' : null),
+            medium_price: (value) => (value === 0 ? 'Elija el precio' : null),
+            large_price: (value) => (value === 0 ? 'Elija el precio' : null),
             title: (value) => (value === "" ? 'El producto debe tener título' : null),
             categories: (value) => (value == null || value.length === 0 ? 'El producto debe tener categoría' : null),
             description: (value) => (value === "" ? 'El producto debe tener descripción' : null),
@@ -131,7 +135,9 @@ const CreateProduct = () => {
         formData.append("description", values.description);
         formData.append("is_featured", values.is_featured);
         formData.append("title", values.title);
-        formData.append("unit_price", values.unit_price);
+        formData.append("small_price", values.small_price);
+        formData.append("medium_price", values.medium_price);
+        formData.append("large_price", values.large_price);
         formData.append("small_width", values.small_width);
         formData.append("small_height", values.small_height);
         formData.append("medium_width", values.medium_width);
@@ -179,12 +185,6 @@ const CreateProduct = () => {
                         />
                     }
 
-                    <NumberInput className={classes.inputs}
-                        onChange={(e) => form.setFieldValue("unit_price", e.currentTarget.value)}
-                        label="Precio del producto"
-                        {...form.getInputProps("unit_price")}
-                    />
-
                     <Select className={classes.inputs}
                         onChange={(e) => form.setFieldValue("is_featured", e.currentTarget.value)}
                         data={[{ value: true, label: "Si" }, { value: false, label: "No" }]}
@@ -209,6 +209,11 @@ const CreateProduct = () => {
                                     {...form.getInputProps("small_height")}
                                 />
                             </Group>
+                            <NumberInput className={classes.inputs}
+                                onChange={(e) => form.setFieldValue("small_price", e.currentTarget.value)}
+                                label="Precio"
+                                {...form.getInputProps("small_price")}
+                            />
                         </div>
                         <Divider size="xs" orientation="vertical" />
                         <div className={classes.sizeBox}>
@@ -226,6 +231,11 @@ const CreateProduct = () => {
                                     {...form.getInputProps("medium_height")}
                                 />
                             </Group>
+                            <NumberInput className={classes.inputs}
+                                onChange={(e) => form.setFieldValue("medium_price", e.currentTarget.value)}
+                                label="Precio"
+                                {...form.getInputProps("medium_price")}
+                            />
                         </div>
                         <Divider size="xs" orientation="vertical" />
                         <div className={classes.sizeBox}>
@@ -243,6 +253,11 @@ const CreateProduct = () => {
                                     {...form.getInputProps("large_height")}
                                 />
                             </Group>
+                            <NumberInput className={classes.inputs}
+                                onChange={(e) => form.setFieldValue("large_price", e.currentTarget.value)}
+                                label="Precio"
+                                {...form.getInputProps("large_price")}
+                            />
                         </div>
                     </Box>
 
