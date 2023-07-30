@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { postProduct, getProduct } from '../actions/productActions';
+import { postProduct } from '../actions/productActions';
 
 const initialState = {
             image: "",

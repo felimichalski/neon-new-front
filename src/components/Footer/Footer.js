@@ -1,8 +1,8 @@
-import { Box, createStyles, Divider, Grid, Image, List, Text, Title, ThemeIcon, TextInput, Button } from "@mantine/core"
+import { Box, createStyles, Divider, Grid, Image, List, Text, ThemeIcon } from "@mantine/core"
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom'
-import { Phone, GeoAlt, Envelope, ChevronRight } from '@styled-icons/bootstrap'
+import { Phone, GeoAlt, Envelope } from '@styled-icons/bootstrap'
 
 import logo from '../../assets/logo.png'
 

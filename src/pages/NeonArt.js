@@ -1,4 +1,4 @@
-import { Box, Title, createStyles, Text, BackgroundImage, Image, Grid } from "@mantine/core"
+import { Box, Title, createStyles, Text, BackgroundImage, Grid } from "@mantine/core"
 import backgroundA from '../assets/bgAbout.jpg'
 import IMG1 from '../assets/NeonArt1.jpg'
 import IMG2 from '../assets/NeonArt2.jpg'
@@ -7,7 +7,6 @@ import IMG4 from '../assets/NeonArt4.jpg'
 import IMG5 from '../assets/NeonArt5.jpg'
 import IMG6 from '../assets/NeonArt6.JPG'
 import IMG7 from '../assets/NeonArt7.JPG'
-import IMG8 from '../assets/NeonArt8.JPG'
 import IMG9 from '../assets/NeonArt9.jpg'
 import IMG10 from '../assets/NeonArt10.JPG'
 

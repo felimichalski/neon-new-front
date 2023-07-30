@@ -2,7 +2,6 @@ import { ActionIcon, createStyles, Grid, Image, Text, Title } from "@mantine/cor
 import { useDispatch } from "react-redux";
 import { addToCart, decreaseCart, removeFromCart } from "../../features/slices/cartSlice";
 import { Minus, Plus, Trash2 as Trash } from '@styled-icons/evaicons-solid'
-import { Carousel } from "@mantine/carousel";
 
 const useStyles = createStyles(() => ({
   root: {

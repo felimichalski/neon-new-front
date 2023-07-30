@@ -1,4 +1,4 @@
-import { BackgroundImage, Box, Card, createStyles, Text, Title, UnstyledButton, Button, TextInput } from "@mantine/core"
+import { BackgroundImage, Box, Card, createStyles, Text, Title, UnstyledButton } from "@mantine/core"
 /* import { useSelector, useDispatch } from "react-redux";
 import { Edit2Outline } from "@styled-icons/evaicons-outline/Edit2Outline"
 import { getPublics, updatePublic } from "../../features/actions/publicActions";

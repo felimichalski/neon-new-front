@@ -1,6 +1,6 @@
 import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import { createStyles } from '@mantine/core';
-import { Person, Search, Cart, LineHorizontal3, ArrowEnter, SignOut, Pen, Star } from '@styled-icons/fluentui-system-regular'
+import { Person, Cart } from '@styled-icons/fluentui-system-regular'
 import { Link } from "react-router-dom"
 import { useState, useEffect } from 'react';
 
@@ -28,30 +28,27 @@ const useStyles = createStyles((theme) => ({
     }
   }))
 
-const SideBar = ({openMenu, setOpenMenu})=>{
+const SideBar = ({ setOpenMenu })=>{
     const { classes } = useStyles()
     const [firstCategory, setFirstCategory] = useState([]);
 
-    const fetchCategories = async () => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/types/all`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const data = await response.json();
-            const arrOfCat1 = [];
-            data[0].categories.map(cat=>arrOfCat1.push(cat))
-            setFirstCategory(arrOfCat1)
-            console.log(firstCategory)
-            console.log(data)
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/types/all`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+                const data = await response.json();
+                const arrOfCat1 = [];
+                data[0].categories.map(cat=>arrOfCat1.push(cat))
+                setFirstCategory(arrOfCat1)
+            } catch (error) {
+                console.log(error);
+            }
+        };
         fetchCategories()
     }, []);
     return(

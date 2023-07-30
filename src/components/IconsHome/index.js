@@ -1,10 +1,8 @@
-import { Box, createStyles, Flex, Container, Text, Image } from "@mantine/core"
+import { Box, createStyles, Flex, Text, Image } from "@mantine/core"
 import { Truck } from "@styled-icons/bootstrap/Truck"
-import { MoneyHand } from "@styled-icons/fluentui-system-regular/MoneyHand"
-import { CheckShield } from "@styled-icons/boxicons-regular/CheckShield"
 import { Payment } from "@styled-icons/fluentui-system-regular/Payment"
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
 flexContainer:{
     alignItems:"center",
     justifyContent:"space-around",

@@ -1,11 +1,9 @@
 import { Container, createStyles, TextInput, Flex, Button, NumberInput, Select, Loader } from '@mantine/core'
 import { useForm } from "@mantine/form";
-import { useDispatch } from "react-redux";
-import { postProduct } from '../../../../features/actions/productActions';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const useStyles = createStyles(theme => ({
+const useStyles = createStyles(() => ({
     flexContainer: {
         flexDirection: "column",
         alignItems: "center",

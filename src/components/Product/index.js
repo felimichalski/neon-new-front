@@ -64,7 +64,6 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
     },
 
     button: {
-        backgroundColor: 'black',
         fontFamily: 'ITC Avant Garde Gothic',
         fontWeight: 400,
         backgroundColor: 'black !important',

@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Box, Container, Grid, Menu, Title } from '@mantine/core';
 import { Link } from "react-router-dom";
 import { ChevronRight } from '@styled-icons/entypo'

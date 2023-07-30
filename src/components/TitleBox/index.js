@@ -1,5 +1,5 @@
 import { Carousel } from '@mantine/carousel';
-import { BackgroundImage, createStyles, Title, Box, Button, Input, TextInput } from '@mantine/core'
+import { BackgroundImage, createStyles, Title, Box, Button, TextInput } from '@mantine/core'
 import { getPublics } from '../../features/actions/publicActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect} from 'react';

@@ -1,7 +1,6 @@
-import { Box, createStyles, TextInput, Button, Title, Text, Textarea, BackgroundImage } from "@mantine/core"
+import { Box, createStyles, Title, Text, BackgroundImage } from "@mantine/core"
 import emailjs from "@emailjs/browser"
 /* import { useForm } from "@mantine/form"; */
-import { toast } from "react-toastify";
 import backgroundC from '../../assets/bgContact.jpg'
 
 const useStyles = createStyles((theme, { hoverEffects }) => ({
@@ -137,7 +136,7 @@ const Contact = ({hoverEffects})=>{
         }
         if(mailInput.value===""){
             mailVali.textContent = "Debes completar este campo"
-        }else if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mailInput.value)){
+        }else if(!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(mailInput.value)){
             mailVali.textContent = "Utilizá un mail válido"
         }else{
             mailVali.textContent = ""
