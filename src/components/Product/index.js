@@ -2,7 +2,7 @@ import { Button, Card, createStyles, Image, Text, Title } from "@mantine/core"
 import { AddShoppingCart } from '@styled-icons/material'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../../features/slices/cartSlice'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Carousel } from '@mantine/carousel'
 
 const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
@@ -38,7 +38,7 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
 
     priceSection: {
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
         marginBottom: '.5rem !important'
@@ -64,6 +64,7 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
     button: {
         backgroundColor: 'black',
         fontFamily: 'ITC Avant Garde Gothic',
+        width:"100%",
         fontWeight: 400,
         '&:hover': {
             backgroundColor: theme.colors.gray[8]
@@ -82,6 +83,7 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
 const Product = ({ data, hoverEffects }) => {
     const { classes } = useStyles({ hoverEffects });
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     
     return (
         <Card radius={0} className={classes.root}>
@@ -120,8 +122,8 @@ const Product = ({ data, hoverEffects }) => {
             </Link>
 
             <Card.Section radius={0} className={classes.priceSection} component="a">
-                <Text>${data.unit_price}</Text>
-                <Button className={classes.button} onClick={() => dispatch(addToCart(data))}><AddShoppingCart size={20} /></Button>
+                {/* <Text>${data.unit_price}</Text> */}
+                <Button className={classes.button} onClick={() => navigate(`/product/${data.id}`)}>Ver más</Button>
             </Card.Section>
         </Card>
 
