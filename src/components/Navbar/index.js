@@ -203,9 +203,6 @@ const tabs = [{
     name: 'Inicio',
     link: '/'
 }, {
-    name: 'Galería',
-    link: '/galery'
-}, {
     name: 'Categorías',
 }, {
     name: 'Contactanos',
