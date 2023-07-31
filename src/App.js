@@ -11,7 +11,6 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Admin from "./pages/Admin";
 import ProtectedRoute from './components/middleware/ProtectedRoute';
-import ProductDetail from './pages/ProductDetail';
 import SideBar from './components/SideBar';
 
 import Navbar from './components/Navbar';
@@ -21,12 +20,14 @@ import Contact from './components/Contact';
 import PageNotFound from './components/PageNotFound';
 import Dashboard from './components/Admin/Dashboard';
 import CreateProduct from './components/Admin/Product/CreateProduct';
-import CreateCategory from './components/CreateCategory';
+import CreateCategory from './components/Admin/Category/CreateCategory';
 import ProductsTable from './components/Admin/Product/ProductsTable';
 import ScrollToTop from './components/ScrollToTop';
 import CreateDiscount from './components/Admin/Discount/CreateDiscount';
 import DiscountTable from './components/Admin/Discount/DiscountTable';
 import NeonArt from './pages/NeonArt'
+import CategoriesTable from './components/Admin/Category/CategoriesTable';
+import ProductDetail from './pages/ProductDetail';
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -100,6 +101,7 @@ const App = () => {
               </Route>
               <Route path='category'>
                 <Route path='create' element={<CreateCategory />}/>
+                <Route path='update' element={<CategoriesTable />}/>
               </Route>
               <Route path='*' element={<Dashboard />}/>
             </Route>
@@ -141,7 +143,7 @@ const App = () => {
           },
           breakpoints: {
             xs: 350,
-            sm: 600,
+            sm: 750,
             md: 950,
             lg: 1150,
             xl: 1400,

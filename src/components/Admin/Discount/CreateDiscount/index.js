@@ -1,11 +1,9 @@
 import { Container, createStyles, TextInput, Flex, Button, NumberInput, Select, Loader } from '@mantine/core'
 import { useForm } from "@mantine/form";
-import { useDispatch } from "react-redux";
-import { postProduct } from '../../../../features/actions/productActions';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const useStyles = createStyles(theme => ({
+const useStyles = createStyles(() => ({
     flexContainer: {
         flexDirection: "column",
         alignItems: "center",
@@ -160,7 +158,7 @@ const CreateDiscount = () => {
                     }
 
 
-                    <Button sx={{ margin: "0.5rem 0", marginTop: "3rem", width: "50%" }} type="submit" disabled={uploading}>{(uploading) ? <Loader size='xs' /> : 'Cargar'}</Button>
+                    <Button sx={{ margin: "0.5rem 0", marginTop: "3rem", width: "50%" }} style={{ backgroundColor: '#339AF0' }} type="submit" disabled={uploading}>{(uploading) ? <Loader size='xs' /> : 'Cargar'}</Button>
                 </form>
             </Flex>
         </Container>

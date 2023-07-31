@@ -1,4 +1,4 @@
-import { BackgroundImage, Box, Card, createStyles, Text, Title, UnstyledButton, Button, TextInput } from "@mantine/core"
+import { BackgroundImage, Box, Card, createStyles, Text, Title, UnstyledButton } from "@mantine/core"
 /* import { useSelector, useDispatch } from "react-redux";
 import { Edit2Outline } from "@styled-icons/evaicons-outline/Edit2Outline"
 import { getPublics, updatePublic } from "../../features/actions/publicActions";
@@ -85,11 +85,11 @@ const useStyles = createStyles((theme, {hoverEffects}, { bgText, textColor }) =>
     fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
     fontWeight: 700,
     fontSize: 13,
-    backgroundColor: 'white',
     color: 'black',
     borderRadius: '5px',
     padding: '1rem 1.5rem',
     transition: '.3s all ease-in-out',
+    backgroundColor: 'white !important',
 
     '&:hover': {
       backgroundColor: '#FF8033',

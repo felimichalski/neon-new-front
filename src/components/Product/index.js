@@ -15,6 +15,7 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
         borderRadius: 7,
         transition: 'all .1s linear',
         boxShadow: '0 8px 42px rgb(0 0 0 / 20%)',
+        height: '100%',
 
         [`&:hover`]: {
             transform: hoverEffects && 'scale(1.02)',
@@ -41,7 +42,8 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        marginBottom: '.5rem !important'
+        marginBottom: '.5rem !important',
+        justifySelf: 'flex-end'
     },
 
     category: {
@@ -62,12 +64,13 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
     },
 
     button: {
-        backgroundColor: 'black',
         fontFamily: 'ITC Avant Garde Gothic',
         width:"100%",
         fontWeight: 400,
+        backgroundColor: 'black !important',
+
         '&:hover': {
-            backgroundColor: theme.colors.gray[8]
+            backgroundColor: `${theme.colors.gray[8]} !important`
         }
     },
 
