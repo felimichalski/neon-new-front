@@ -70,8 +70,27 @@ const Cart = () => {
                                 </dt>
                                 <dd className="text-sm font-medium text-gray-900">$8.32</dd>
                             </div> */}
+                            <form className="pt-5" onClick={(e) => e.preventDefault()}>
+                                <label htmlFor="discount-code-mobile" className="block text-sm font-medium text-gray-700">
+                                    Código de descuento
+                                </label>
+                                <div className="mt-1 flex space-x-4">
+                                    <input
+                                        type="text"
+                                        id="discount-code-mobile"
+                                        name="discount-code-mobile"
+                                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="rounded-md bg-gray-200 px-4 text-sm font-medium text-gray-600 hover:bg-gray-300 focus:outline-none"
+                                    >
+                                        Aplicar
+                                    </button>
+                                </div>
+                            </form>
                             <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-                                <dt className="text-base font-medium text-gray-900">Order total</dt>
+                                <dt className="text-base font-medium text-gray-900">Total</dt>
                                 <dd className="text-base font-medium text-gray-900">${parsePrice(totalAmount)}</dd>
                             </div>
                         </dl>
