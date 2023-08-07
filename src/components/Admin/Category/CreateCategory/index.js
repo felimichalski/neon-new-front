@@ -1,10 +1,8 @@
-import { Box, Title, Container, createStyles,TextInput, Flex, Button, Loader, UnstyledButton} from '@mantine/core'
+import { Container, createStyles,TextInput, Flex, Button, Loader } from '@mantine/core'
 import { useForm } from "@mantine/form";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { postCategory } from '../../../../features/actions/categoryActions'
-import { Trash3Fill } from '@styled-icons/bootstrap';
-import { toast } from "react-toastify";
 
 const useStyles = createStyles(theme => ({
     flexContainer: {

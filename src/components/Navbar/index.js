@@ -27,7 +27,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         borderBottom: '1px solid rgb(229 229 229 / 1)',
         position: 'sticky',
         top: 0,
-        zIndex: 10000,
+        zIndex: 100,
 
     },
 
@@ -35,7 +35,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         backgroundColor: theme.black,
         padding: '4px 0',
         color: theme.white,
-        zIndex: 10000,
+        zIndex: 100,
     },
 
     offerText: {
@@ -202,9 +202,6 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
 const tabs = [{
     name: 'Inicio',
     link: '/'
-}, {
-    name: 'Galería',
-    link: '/galery'
 }, {
     name: 'Categorías',
 }, {

@@ -1,117 +1,90 @@
-import { ActionIcon, createStyles, Grid, Image, Text, Title } from "@mantine/core";
 import { useDispatch } from "react-redux";
-import { addToCart, decreaseCart, removeFromCart } from "../../features/slices/cartSlice";
-import { Minus, Plus, Trash2 as Trash } from '@styled-icons/evaicons-solid'
-import { Carousel } from "@mantine/carousel";
+import { Xmark } from '@styled-icons/fa-solid'
+import { removeFromCart, updateFromCart } from "../../features/slices/cartSlice";
 
-const useStyles = createStyles(() => ({
-  root: {
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: "space-around",
-    height: '7vw',
-    [`@media (maxWidth: 600px)`]: {
-      height: "5rem",
-    },
-  },
-
-  column: {
-    height: '100%',
-    padding: 0,
-  },
-
-  center: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-
-  image: {
-    height: '100%',
-    aspectRatio: '1 / 1',
-    width: 'auto !important',
-
-  },
-
-  text: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    overflow: "inherit",
-    [`@media (maxWidth: 600px)`]: {
-      paddingLeft: "2rem",
-    },
-  },
-
-  title: {
-    fontSize: "1.2rem",
-    width: '6rem',
-    /* background:"black", */
-    [`@media (maxWidth: 600px)`]: {
-      fontSize: "1rem",
-      marginRight: "1rem"
-    },
-  },
-
-  category: {
-
-  },
-
-  quantity: {
-    display: 'flex',
-    alignItems: 'center',
-    marginLeft: "2rem"
-  },
-
-  actionIcon: {
-    color: 'black',
-    display: 'flex',
-    alignItems: 'center'
-  }
-}));
-
-const CartItem = ({ data }) => {
-  const { classes } = useStyles();
+const CartItem = ({ product }) => {
   const dispatch = useDispatch();
+
+  const parsePrice = (price) => {
+    const numStr = price.toString();
+    const parsedPrice = numStr.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return parsedPrice;
+  }
+
   return (
-    <Grid m={4} className={classes.root}>
+    <>
+      {product &&
+        <>
+          <div className="flex-shrink-0">
+            <img
+              src={`${process.env.REACT_APP_API_URL}/mediafiles/${product.image}`}
+              alt={`${product.title}`}
+              className="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48"
+            />
+          </div>
 
-      <Grid.Col span={1} className={[classes.column, classes.center]}>
-        <Image src={`${process.env.REACT_APP_API_URL}/mediafiles/${data.image}`} className={classes.image} />
-      </Grid.Col>
+          <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
+            <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+              <div>
+                <div className="flex justify-between">
+                  <h3 className="text-sm">
+                    <a href={product.href} className="font-medium text-gray-700 hover:text-gray-800">
+                      {product.title}
+                    </a>
+                  </h3>
+                </div>
+                <div className="mt-1 flex text-sm">
+                  <p className="text-gray-500">{product.color}</p>
+                  {product.size ? (
+                    <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">{product.size}</p>
+                  ) : null}
+                </div>
+                <p className="mt-1 text-sm font-medium text-gray-900">${parsePrice(product.unit_price)}</p>
+              </div>
 
-      <Grid.Col className={[classes.column, classes.text]} span={1} offset={1}>
-        <Title className={classes.title}>{data.title}</Title>
-      </Grid.Col>
-      
-      <Grid.Col className={[classes.column, classes.quantity]} span={1} offset={0}>
-        <ActionIcon size={30} variant="subtle" onClick={() => dispatch(decreaseCart(data))} className={classes.actionIcon}>
-          <Minus size={16} />
-        </ActionIcon>
+              <div className="mt-4 sm:mt-0 sm:pr-9">
+                <label className="sr-only">
+                  Quantity, {product.name}
+                </label>
+                <select
+                  className="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                  value={product.quantity}
+                  onChange={(e) => dispatch(updateFromCart({product, value: e.currentTarget.value}))}
+                >
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+                  <option value={6}>6</option>
+                  <option value={7}>7</option>
+                  <option value={8}>8</option>
+                </select>
 
-        <Text mx={10}>
-          {data.quantity}
-        </Text>
+                <div className="absolute right-0 top-0">
+                  <button type="button" onClick={() => dispatch(removeFromCart(product))} className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500">
+                    <span className="sr-only">Remove</span>
+                    <Xmark className="h-5 w-5" aria-hidden="true" />
+                  </button>
+                </div>
+              </div>
+            </div>
 
-        <ActionIcon size={30} variant="subtle" onClick={() => dispatch(addToCart(data))} className={classes.actionIcon}>
-          <Plus size={16} />
-        </ActionIcon>
-      </Grid.Col>
+            {/* <p className="mt-4 flex space-x-2 text-sm text-gray-700">
+                      {product.inStock ? (
+                        <CheckIcon className="h-5 w-5 flex-shrink-0 text-green-500" aria-hidden="true" />
+                      ) : (
+                        <ClockIcon className="h-5 w-5 flex-shrink-0 text-gray-300" aria-hidden="true" />
+                      )}
 
-      <Grid.Col sx={{ display: "flex", alignItems: "center", justifyContent: "flex-start" }} span={1} offset={1}>
-        <Text>Color: {data.color ? data.color === "BlancoFrio" ? "Blanco frío" : data.color === "BlancoCalido" ? "Blanco cálido" : data.color : "Único"}</Text>
-      </Grid.Col>
+                      <span>{product.inStock ? 'In stock' : `Ships in ${product.leadTime}`}</span>
+                    </p> */}
+          </div>
+        </>
 
-      <Grid.Col span={1} offset={1}>
-        <Text sx={{ textAlign: "center" }}>${data.unit_price}</Text>
-      </Grid.Col>
+      }
+    </>
 
-      <Grid.Col span={1} offset={1}>
-        <ActionIcon size={30} variant="subtle" onClick={() => dispatch(removeFromCart(data))} className={classes.actionIcon}>
-          <Trash size={16} color='red' />
-        </ActionIcon>
-      </Grid.Col>
-    </Grid>
   )
 }
 

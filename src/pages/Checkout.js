@@ -138,7 +138,7 @@ const Checkout = () => {
                         display: 'block'
                     }}>{form.errors.phone}</span>
                     }
-                    <Button type='submit'>Elegir método de pago</Button>
+                    <Button type='submit' style={{backgroundColor: '#228BE6'}}>Elegir método de pago</Button>
                 </Stack>
             </form>
             <PaymentModal opened={paymentModalOpen} setOpened={setPaymentModalOpen} info={form.values}/>
