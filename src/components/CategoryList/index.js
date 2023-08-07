@@ -60,8 +60,8 @@ const CategoryList = ({ types }) => {
                     </Box>
                     <Grid m={1}>
                         {type.categories.length > 0 && type.categories.map((category, index) => (
-                            <Grid.Col span={4}>
-                                <Link to={`/categories/${type.id}/${category.id}`} className={classes.link} key={index}>
+                            <Grid.Col span={4} key={index}>
+                                <Link to={`/categories/${type.id}/${category.id}`} className={classes.link}>
                                     <Menu.Item icon={<ChevronRight size={16} />} className={classes.item}>
                                         {category.name}
                                     </Menu.Item>
