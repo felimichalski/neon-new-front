@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Disclosure, RadioGroup, Tab } from '@headlessui/react'
-import { Heart } from '@styled-icons/evil'
-import { Minus, Plus } from '@styled-icons/evaicons-solid'
+import { RadioGroup, Tab } from '@headlessui/react'
+// import { Disclosure } from '@headlessui/react'
+// import { Heart } from '@styled-icons/evil'
+// import { Minus, Plus } from '@styled-icons/evaicons-solid'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import SizesTable from '../components/SizesTable'
 import { addToCart } from '../features/slices/cartSlice'
 import { Switch } from '@mantine/core'
+import SizesModal from '../components/SizesModal'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -28,6 +29,7 @@ const ProductDetail = () => {
   const [selectedColor, setSelectedColor] = useState(colors[0])
   const [selectedImage, setSelectedImage] = useState(0)
   const [withControl, setWithControl] = useState(false)
+  const [sizesModalOpen, setSizesModalOpen] = useState(false)
   const { id } = useParams()
   const [size, setSize] = useState('small')
   const [price, setPrice] = useState(0)
@@ -109,7 +111,7 @@ const ProductDetail = () => {
                   {product.images.map((image, index) => (
                     <Tab
                       key={image.id}
-                      className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+                      className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none"
                       onClick={() => setSelectedImage(index)}
                     >
                       {({ selected }) => (
@@ -164,6 +166,8 @@ const ProductDetail = () => {
               <div className="mt-10">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-900">Tamaño</h3>
+                  <button className="text-sm font-bold text-indigo-600" onClick={() => setSizesModalOpen(true)}>Ver tabla de tamaños</button>
+                  <SizesModal product={product} open={sizesModalOpen} setOpen={setSizesModalOpen}/>
                 </div>
 
                 <RadioGroup value={size} onChange={(size) => {
@@ -291,7 +295,7 @@ const ProductDetail = () => {
                 <div className="mt-10 flex">
                   <button
                     type="submit"
-                    className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
+                    className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-blue-500 px-8 py-3 text-base font-medium text-white hover:bg-blue-600 focus:outline-none sm:w-full"
                     onClick={() => dispatch(addToCart(parseProductForCart()))}
                   >
                     Agregar al carrito
@@ -305,23 +309,6 @@ const ProductDetail = () => {
                     </button> */}
                 </div>
               </form>
-
-              <section aria-labelledby="details-heading" className="mt-12">
-                <h2 id="details-heading" className="sr-only">
-                  Sizes
-                </h2>
-
-                <div className="py-10 lg:col-span-2 lg:col-start-1 lg:pb-16 lg:pr-8 lg:pt-6">
-                  {/* Description and details */}
-                  <div className="mt-10">
-                    <h2 className="text-sm font-medium text-gray-900">Tabla de tamaños (Ancho x Alto)</h2>
-
-                    <div className="mt-4 space-y-6">
-                      <SizesTable product={product} />
-                    </div>
-                  </div>
-                </div>
-              </section>
             </div>
           </div>
         </div>

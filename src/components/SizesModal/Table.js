@@ -10,7 +10,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const SizesTable = ({ product }) => {
+const CustomTable = ({ product }) => {
     const { classes } = useStyles();
 
     return (
@@ -41,4 +41,4 @@ const SizesTable = ({ product }) => {
     );
 }
 
-export default SizesTable;
+export default CustomTable;
