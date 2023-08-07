@@ -110,7 +110,6 @@ const cartSlice = createSlice({
       let { total, quantity } = state.cartItems.reduce(
         (cartTotal, cartItem) => {
           const { unit_price, quantity } = cartItem;
-          console.log(unit_price, quantity)
           const itemTotal = unit_price * quantity;
 
           cartTotal.total += itemTotal;

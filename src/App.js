@@ -16,7 +16,7 @@ import SideBar from './components/SideBar';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer/Footer';
 import Category from './pages/Category';
-import Contact from './components/Contact';
+import Contact from './pages/Contact';
 import PageNotFound from './components/PageNotFound';
 import Dashboard from './components/Admin/Dashboard';
 import CreateProduct from './components/Admin/Product/CreateProduct';
