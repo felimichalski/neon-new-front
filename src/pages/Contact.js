@@ -6,6 +6,8 @@ import { useRef, useState } from 'react';
 import { Loader } from '@mantine/core';
 import { toast } from 'react-toastify';
 
+import FileUpload from '../components/FileUpload';
+
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -20,15 +22,19 @@ const Contact = () => {
             first_name: "",
             last_name: "",
             email: "",
-            phone: "",
             message: "",
+            files: [],
+            height: undefined,
+            width: undefined
         },
         validate: {
             first_name: (value) => (value === "" ? 'Campo requerido' : null),
             last_name: (value) => (value === "" ? 'Campo requerido' : null),
             email: (value) => (value === "" ? 'Campo requerido' : /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ? null : "Mail inválido"),
-            phone: (value) => (value === "" ? 'Campo requerido' : null),
-            message: (value) => (value === "" ? 'Campo requerido' : null)
+            message: (value) => (value === "" ? 'Campo requerido' : null),
+            files: (value) => (value.length < 1 ? 'Campo requerido' : null),
+            height: (value) => (!value ? 'Campo requerido' : null),
+            width: (value) => (!value ? 'Campo requerido' : null)
         }
     })
 
@@ -72,9 +78,9 @@ const Contact = () => {
                                 <rect width="100%" height="100%" strokeWidth={0} fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)" />
                             </svg>
                         </div>
-                        <h2 className="text-3xl font-bold tracking-tight text-gray-900">Contactanos</h2>
+                        <h2 className="text-3xl font-bold tracking-tight text-gray-900">Contanos tu idea</h2>
                         <p className="mt-6 text-lg leading-8 text-gray-600">
-                            Si tenés alguna duda o proyecto en el que podamos ayudarte, no dudes en enviarnos un mensaje.
+                            Mandá una foto de lo que querés neonizar para que lo podamos hacer realidad.
                         </p>
                         <dl className="mt-10 space-y-4 text-base leading-7 text-gray-600">
                             <div className="flex gap-x-4">
@@ -130,7 +136,6 @@ const Contact = () => {
                                             webkitTapHighlightColor: 'transparent',
                                             fontSize: '14px',
                                             lineHeight: '1.55',
-                                            webkitTextDecoration: 'none',
                                             textDecoration: 'none',
                                             marginTop: '5px',
                                             wordBreak: 'break-word',
@@ -166,7 +171,6 @@ const Contact = () => {
                                             webkitTapHighlightColor: 'transparent',
                                             fontSize: '14px',
                                             lineHeight: '1.55',
-                                            webkitTextDecoration: 'none',
                                             textDecoration: 'none',
                                             marginTop: '5px',
                                             wordBreak: 'break-word',
@@ -202,7 +206,6 @@ const Contact = () => {
                                             webkitTapHighlightColor: 'transparent',
                                             fontSize: '14px',
                                             lineHeight: '1.55',
-                                            webkitTextDecoration: 'none',
                                             textDecoration: 'none',
                                             marginTop: '5px',
                                             wordBreak: 'break-word',
@@ -213,45 +216,91 @@ const Contact = () => {
                                     </span>
                                 }
                             </div>
-                            <div className="sm:col-span-2">
-                                <label htmlFor="phone-number" className="block text-sm font-semibold leading-6 text-gray-900">
-                                    Número de teléfono
+                            <div>
+                                <label htmlFor="height" className="block text-sm font-semibold leading-6 text-gray-900">
+                                    Alto aproximado (en cm)
                                 </label>
                                 <div className="mt-2.5">
                                     <input
-                                        type="tel"
-                                        name="phone-number"
-                                        id="phone-number"
-                                        autoComplete="tel"
+                                        type="number"
+                                        name="height"
+                                        id="height"
+                                        autoComplete="height"
                                         className={classNames(
-                                            form.errors.phone ? "ring-red-500" : "ring-gray-300",
+                                            form.errors.height ? "ring-red-500" : "ring-gray-300",
                                             "block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                         )}
-                                        onChange={(e) => form.setFieldValue("phone", e.currentTarget.value)}
-                                        {...form.getInputProps("phone")}
+                                        onChange={(e) => form.setFieldValue("height", e.currentTarget.value)}
+                                        {...form.getInputProps("height")}
                                     />
                                 </div>
-                                {form.errors.phone &&
+                                {form.errors.height &&
                                     <span
                                         style={{
                                             fontFamily: '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji',
                                             webkitTapHighlightColor: 'transparent',
                                             fontSize: '14px',
                                             lineHeight: '1.55',
-                                            webkitTextDecoration: 'none',
                                             textDecoration: 'none',
                                             marginTop: '5px',
                                             wordBreak: 'break-word',
                                             color: '#fa5252'
                                         }}
                                     >
-                                        {form.errors.phone}
+                                        {form.errors.height}
+                                    </span>
+                                }
+                            </div>
+                            <div>
+                                <label htmlFor="width" className="block text-sm font-semibold leading-6 text-gray-900">
+                                    Ancho aproximado (en cm)
+                                </label>
+                                <div className="mt-2.5">
+                                    <input
+                                        type="number"
+                                        name="width"
+                                        id="width"
+                                        autoComplete="width"
+                                        className={classNames(
+                                            form.errors.width ? "ring-red-500" : "ring-gray-300",
+                                            "block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        )}
+                                        onChange={(e) => form.setFieldValue("width", e.currentTarget.value)}
+                                        {...form.getInputProps("width")}
+                                    />
+                                </div>
+                                {form.errors.width &&
+                                    <span
+                                        style={{
+                                            fontFamily: '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji',
+                                            webkitTapHighlightColor: 'transparent',
+                                            fontSize: '14px',
+                                            lineHeight: '1.55',
+                                            textDecoration: 'none',
+                                            marginTop: '5px',
+                                            wordBreak: 'break-word',
+                                            color: '#fa5252'
+                                        }}
+                                    >
+                                        {form.errors.width}
                                     </span>
                                 }
                             </div>
                             <div className="sm:col-span-2">
+                                <FileUpload
+                                multiple={false}
+                                label="Imagen de referencia"
+                                className="mt-2.5"
+                                dropzoneClassName="block w-full rounded-md px-3.5 py-2 text-gray-900 shadow-sm sm:text-sm sm:leading-6"
+                                onChange={files => {
+                                    form.setFieldValue("files", files)
+                                }}
+                                {...form.getInputProps('files')}        
+                                error={form.errors.files}/>
+                            </div>
+                            <div className="sm:col-span-2">
                                 <label htmlFor="message" className="block text-sm font-semibold leading-6 text-gray-900">
-                                    Mensaje
+                                    ¿Dónde va a ir colocado?
                                 </label>
                                 <div className="mt-2.5">
                                     <textarea
@@ -273,7 +322,6 @@ const Contact = () => {
                                             webkitTapHighlightColor: 'transparent',
                                             fontSize: '14px',
                                             lineHeight: '1.55',
-                                            webkitTextDecoration: 'none',
                                             textDecoration: 'none',
                                             marginTop: '5px',
                                             wordBreak: 'break-word',

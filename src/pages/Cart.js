@@ -1,23 +1,38 @@
 // import { QuestionMarkCircle } from '@styled-icons/evaicons-solid'
 import OrderSteps from '../components/OrderSteps'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CartItem from '../components/CartItem'
+import { applyDiscount } from '../features/slices/cartSlice'
+import { motion } from 'framer-motion'
 
 const Cart = () => {
     const navigate = useNavigate();
 
     const products = useSelector((state) => state.cart.cartItems);
     const totalAmount = useSelector((state) => state.cart.cartTotalAmount);
+    const discount = useSelector((state) => state.cart.discount);
 
-    const parsePrice = (price) => {
-        const numStr = price.toString();
+    const dispatch = useDispatch()
+
+    const parsePrice = (price, discount) => {
+        let discountValue = discount?.value ?? 0
+        const numStr = (price - discountValue).toString();
         const parsedPrice = numStr.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
         return parsedPrice;
     }
 
     return (
-        <div className="bg-white">
+        <motion.div
+        initial={{ filter: 'blur(10px)', opacity: 0 }}
+        animate={{ filter: 'blur(0)', opacity: 1 }}
+        exit={{ filter: 'blur(10px)', opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        style={{
+          width: '100%',
+          height: '100%',
+          background: 'url(your-image.jpg) center/cover no-repeat',
+        }} className="bg-white">
             <OrderSteps pageStep={0} />
             <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
                 <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Carrito</h1>
@@ -41,15 +56,22 @@ const Cart = () => {
                         aria-labelledby="summary-heading"
                         className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
                     >
-                        <h2 id="summary-heading" className="text-lg font-medium text-gray-900">
-                            Resumen del pedido
-                        </h2>
-
                         <dl className="mt-6 space-y-4">
                             <div className="flex items-center justify-between">
                                 <dt className="text-sm text-gray-600">Subtotal</dt>
                                 <dd className="text-sm font-medium text-gray-900">${parsePrice(totalAmount)}</dd>
                             </div>
+
+                            {discount &&
+                                <div className="flex items-center justify-between">
+                                    <dt className="text-sm text-gray-600 whitespace-nowrap truncate">Descuento
+                                        <span className="ml-2 rounded-full bg-gray-200 px-2 py-0.5 text-xs tracking-wide text-gray-600">
+                                            {discount.code}
+                                        </span>
+                                    </dt>
+                                    <dd className="text-sm font-medium text-gray-900 whitespace-nowrap">- ${parsePrice(discount.value)}</dd>
+                                </div>
+                            }
                             {/* <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                                 <dt className="flex items-center text-sm text-gray-600">
                                     <span>Shipping estimate</span>
@@ -84,6 +106,11 @@ const Cart = () => {
                                     <button
                                         type="submit"
                                         className="rounded-md bg-gray-200 px-4 text-sm font-medium text-gray-600 hover:bg-gray-300 focus:outline-none"
+                                        onClick={() => {
+                                            const code = document.querySelector('#discount-code-mobile').value
+                                            dispatch(applyDiscount({ value: 100, code }))
+                                            document.querySelector('#discount-code-mobile').value = ""
+                                        }}
                                     >
                                         Aplicar
                                     </button>
@@ -91,7 +118,7 @@ const Cart = () => {
                             </form>
                             <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                                 <dt className="text-base font-medium text-gray-900">Total</dt>
-                                <dd className="text-base font-medium text-gray-900">${parsePrice(totalAmount)}</dd>
+                                <dd className="text-base font-medium text-gray-900">${parsePrice(totalAmount, discount)}</dd>
                             </div>
                         </dl>
 
@@ -107,7 +134,7 @@ const Cart = () => {
                     </section>
                 </form>
             </div>
-        </div>
+        </motion.div>
     )
 }
 

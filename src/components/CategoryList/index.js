@@ -49,7 +49,7 @@ const CategoryList = ({ types }) => {
     const { classes } = useStyles();
 
     return (
-        <Container fluid display='flex' m={0} p={0}>
+        <Container fluid display='flex' m={0} p={0} zIndex={10}>
             {types && types.map((type, key) => (
                 <Box className={classes.column} key={key}>
                     <Box mb={15} display='flex' style={{ justifyContent: 'space-between' }}>

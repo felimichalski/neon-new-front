@@ -28,9 +28,9 @@ const CartItem = ({ product }) => {
               <div>
                 <div className="flex justify-between">
                   <h3 className="text-sm">
-                    <a href={product.href} className="font-medium text-gray-700 hover:text-gray-800">
+                    <span className="font-medium text-gray-700 hover:text-gray-800">
                       {product.title}
-                    </a>
+                    </span>
                   </h3>
                 </div>
                 <div className="mt-1 flex text-sm">

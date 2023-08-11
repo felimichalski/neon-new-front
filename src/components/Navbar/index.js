@@ -11,8 +11,8 @@ import { ChevronDown } from '@styled-icons/entypo'
 import logo from '../../assets/logo.png'
 import removeAccents from '../../utils/removeAccents'
 import { useRef, useState } from 'react'
-import { Carousel } from '@mantine/carousel'
-import Autoplay from 'embla-carousel-autoplay'
+// import { Carousel } from '@mantine/carousel'
+// import Autoplay from 'embla-carousel-autoplay'
 import { useEffect } from 'react'
 import { AuthModal } from '../AuthModal'
 import CategoryList from '../CategoryList'
@@ -51,7 +51,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         padding: '0 45px',
         display: 'flex',
         justifyContent: 'space-between',
-        zIndex: 10000
+        zIndex: 100
     },
 
     divider: {
@@ -151,6 +151,7 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
 
     collapsableSM: {
         display: 'none',
+        zIndex: 10,
 
         [theme.fn.smallerThan('md')]: {
             display: 'none',
@@ -167,6 +168,10 @@ const useStyles = createStyles((theme, { categoryListOpen, pointerEvents }) => (
         [`@media (max-width: 949px)`]: {
             display: "flex",
         },
+    },
+
+    category: {
+        zIndex: 10
     },
 
     categoryList: {
@@ -205,8 +210,11 @@ const tabs = [{
 }, {
     name: 'Categorías',
 }, {
-    name: 'Contactanos',
-    link: '/contact',
+    name: 'Diseñá el tuyo',
+    link: '/custom',
+}, {
+    name: 'Nosotros',
+    link: '/about',
 }, {
     name:'Neon Art',
     link:'/neonart'
@@ -221,7 +229,7 @@ const Navbar = ({ openMenu, setOpenMenu }) => {
     const [types, setTypes] = useState(undefined);
 
     const navigate = useNavigate()
-    const autoplay = useRef(Autoplay({ delay: 7000 }));
+    // const autoplay = useRef(Autoplay({ delay: 7000 }));
     const { classes, cx } = useStyles({ categoryListOpen, pointerEvents })
 
     const data = useSelector((state) => state.auth);
@@ -319,7 +327,6 @@ const Navbar = ({ openMenu, setOpenMenu }) => {
                 <Menu
                     trigger='hover'
                     offset={0}
-                    classNames={classes.category}
                     onOpen={() => setCategoryListOpen(true)}
                     onClose={() => {
                         setPointerEvents('none')
@@ -355,23 +362,11 @@ const Navbar = ({ openMenu, setOpenMenu }) => {
 
     return (
         <Container fluid className={classes.navbar}>
-            <Carousel
+            <Box
                 className={classes.offer}
-                loop
-                withControls={false}
-                withIndicators={false}
-                plugins={[autoplay.current]}
             >
-                <Carousel.Slide>
-                    <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
-                </Carousel.Slide>
-                <Carousel.Slide>
-                    <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
-                </Carousel.Slide>
-                <Carousel.Slide>
-                    <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
-                </Carousel.Slide>
-            </Carousel>
+                <Text align='center' className={classes.offerText}>¡15% de descuento llevando más de 5 productos!</Text>
+            </Box>
             <Box className={classes.main} >
                 <Group className={classes.tabContainer}>
                     <Anchor sx={{
