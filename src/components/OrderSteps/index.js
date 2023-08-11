@@ -1,20 +1,27 @@
 import { ChevronRight } from '@styled-icons/evaicons-solid'
+import { useNavigate } from 'react-router-dom'
+
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+}
 
 const steps = [
-    { name: 'Carrito' },
-    { name: 'Información de compra' },
+    { name: 'Carrito', path: '/cart' },
+    { name: 'Información de compra', path: '/checkout' },
     { name: 'Confirmación' },
 ]
 
-const OrderSteps = ({ pageStep }) => {
+const OrderSteps = ({ pageStep, className }) => {
+    const navigate = useNavigate()
+
     return (
-        <header className="relative bg-white text-sm font-medium text-gray-700">
-            <div className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
-                <div className="relative flex justify-end sm:justify-center">
-                    <nav aria-label="Progress" className="hidden sm:block">
+        <header className={classNames("relative text-xs font-medium sm:text-sm text-gray-700 z-10", className)}>
+            <div className="mx-auto max-w-7xl px-4 pt-8 px-6 lg:px-8">
+                <div className="relative flex justify-end justify-center">
+                    <nav aria-label="Progress" className="block">
                         <ol className="flex space-x-4">
                             {steps.map((step, stepIdx) => (
-                                <li key={step.name} className="flex items-center">
+                                <li key={step.name} className={classNames(step.path && 'cursor-pointer', "flex items-center")} onClick={() => step.path && navigate(step.path)}>
                                     {pageStep === stepIdx ? (
                                         <span className="text-indigo-600">
                                             {step.name}

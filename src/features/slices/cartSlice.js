@@ -5,6 +5,7 @@ const initialState = {
   cartItems: localStorage.getItem("cartItems") ? JSON.parse(localStorage.getItem("cartItems")) : [],
   cartTotalQuantity: 0,
   cartTotalAmount: 0,
+  discount: null,
   status: 'pending'
 };
 
@@ -33,41 +34,8 @@ const cartSlice = createSlice({
         });
       }
       state.cartTotalQuantity += 1;
-      console.log(action.payload)
       state.cartTotalAmount += action.payload.unit_price;
-      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-    },
-
-    decreaseCart(state, action) {
-
-      const itemIndex = state.cartItems.findIndex(
-        (item) => item.id === action.payload.id && item.color === action.payload.color && item.size === action.payload.size
-      );
-      if (state.cartItems[itemIndex].quantity > 1) {
-        state.cartItems[itemIndex].quantity -= 1;
-        toast.error("Producto eliminado del carrito", {
-          position: "bottom-left",
-        });
-      } else if (state.cartItems[itemIndex].quantity === 1) {
-        const nextCartItems = state.cartItems.filter(
-          (item) => {
-            return (item.id !== action.payload.id || item.color !== action.payload.color || item.size !== action.payload.size)
-          }
-        );
-        state.cartItems = nextCartItems;
-
-        if (state.cartItems.length > 0) {
-          toast.error("Producto eliminado del carrito", {
-            position: "bottom-left",
-          });
-        } else {
-          toast.error("Carrito vacío", {
-            position: "bottom-left",
-          });
-        }
-      }
-      state.cartTotalQuantity -= 1;
-      state.cartTotalAmount -= action.payload.unit_price;
+      state.discount = null
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
 
@@ -83,6 +51,7 @@ const cartSlice = createSlice({
       state.cartTotalQuantity = state.cartTotalQuantity - state.cartItems[itemIndex].quantity + value;
       state.cartTotalAmount = state.cartTotalAmount - (state.cartItems[itemIndex].unit_price * state.cartItems[itemIndex].quantity) + (state.cartItems[itemIndex].unit_price * value);
       state.cartItems[itemIndex].quantity = value;
+      state.discount = null
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
 
@@ -103,6 +72,7 @@ const cartSlice = createSlice({
       });
       
       state.cartItems = remaining;
+      state.discount = null
       localStorage.setItem("cartItems", JSON.stringify(remaining));
     },
 
@@ -110,7 +80,6 @@ const cartSlice = createSlice({
       let { total, quantity } = state.cartItems.reduce(
         (cartTotal, cartItem) => {
           const { unit_price, quantity } = cartItem;
-          console.log(unit_price, quantity)
           const itemTotal = unit_price * quantity;
 
           cartTotal.total += itemTotal;
@@ -127,10 +96,19 @@ const cartSlice = createSlice({
       state.cartTotalQuantity = quantity;
       state.cartTotalAmount = total;
       state.status = 'success';
+    },
+
+    applyDiscount(state, action) {
+      state.discount = action.payload
+    },
+  
+    resetDiscount(state) {
+      state.discount = null
     }
   }
+
 });
 
-export const { addToCart, updateFromCart, removeFromCart, getTotals } = cartSlice.actions;
+export const { addToCart, updateFromCart, removeFromCart, getTotals, applyDiscount, resetDiscount } = cartSlice.actions;
 
 export default cartSlice.reducer;

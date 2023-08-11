@@ -114,8 +114,8 @@ function Footer() {
     }, [data])
 
     return (
-        <footer style={{backgroundColor: 'black', [`@media (maxWidth: 600px)`]: {display:"flex", alignItems:"center", justifyContent:"center"}}}>
-            <Grid m={5} sx={{padding:"1rem 0 0 1rem", }}>
+        <footer style={{backgroundColor: 'black', [`@media (max-width: 600px)`]: {display:"flex", alignItems:"center", justifyContent:"center"}}}>
+            <Grid mr={1} sx={{padding:"1rem 0 0 1rem", }}>
                 <Grid.Col span={2} px={40} className={classes.column}>
                     <Image src={logo} style={{margin: 'auto 0', marginRight:"1rem"}}/>
                     <Divider orientation="vertical" ml={20}/>

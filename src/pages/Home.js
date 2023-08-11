@@ -15,6 +15,7 @@ import CustomDivider from "../components/CustomDivider"
 
 import { motion } from 'framer-motion'
 import { useState } from "react"
+import LogosBar from "../components/LogosBar"
 
 const mock1 = [
   {
@@ -68,15 +69,16 @@ const Home = ({openMenu, setOpenMenu}) => {
       exit={{opacity: 0}}
     >
       <Box style={{ backgroundColor: 'white', position:"relative"}}>
-          
           <TitleBox updateText={updateText} setUpdateText={setUpdateText}/>
           <CustomDivider />
           <SectionCards data={mock1} updateText={updateText} setUpdateText={setUpdateText}/>
           <CustomDivider />
-          
-          <IconsHome/>
+          <LogosBar />
           <CustomDivider />
+          
           <FeaturedProducts />
+          <CustomDivider />
+          <IconsHome/>
           <CustomDivider />
           {/* <SectionCards data={mock2}/>
           <CustomDivider /> */}

@@ -2,7 +2,7 @@ import { Carousel } from '@mantine/carousel';
 import { BackgroundImage, createStyles, Title, Box, Button, TextInput } from '@mantine/core'
 import { getPublics } from '../../features/actions/publicActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import { Edit2Outline } from "@styled-icons/evaicons-outline/Edit2Outline"
 import { Tick } from "@styled-icons/typicons/Tick"
 import { Cross } from "@styled-icons/entypo/Cross"
@@ -20,13 +20,12 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
         height: '70vh',
         width: '100%',
         position: 'relative',
-        cursor: 'grab',
         display: 'flex !important',
         justifyContent: 'center',
         alignItems: 'center',
         [`@media (max-width: 600px)`]: {
-            height:"15rem",
-          },
+            height: "15rem",
+        },
     },
 
     overlay: {
@@ -38,62 +37,60 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
     },
 
     title: {
-        zIndex: 2,
         color: theme.white,
         [`@media (max-width: 600px)`]: {
-            fontSize:"1.5rem"
-          },
+            fontSize: "1.5rem"
+        },
     },
+
     titleBox: {
-        display:"flex",
-        flexDirection:"row",
-        alignItems:"center",
-        color:"white",
-        position:"absolute",
-        top:"50%",
-        left:"50%", 
-        margin:"auto", 
-        zIndex:"1000",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        color: "white",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        margin: "auto",
         transform: "translate(-50%, -50%)",
+        zIndex: 5,
+
         [`@media (max-width: 600px)`]: {
-            textAlign:"center",
-            
-          },
+            textAlign: "center",
+
+        }
     },
+
     editButton: {
-        background:"none",
-        transition:"transform 0.2s",
-        padding:"0",
-        margin:"0 0.5rem",
+        background: "none",
+        transition: "transform 0.2s",
+        padding: "0",
+        margin: "0 0.5rem",
         [`&:hover`]: {
             transform: !hoverEffects && "scale(1.1)",
             background: !hoverEffects && "none"
         }
     },
-    titleInput:{
-        /* background:"none !important",
-        border:"none ",
-        borderBottom:"1px solid white", */
-    },
+
     form: {
-        display:"flex",
-        flexDirection:"row"
+        display: "flex",
+        flexDirection: "row"
     }
 }))
 
 const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
-    
-    
+
+
     const publics = useSelector(state => state.public.items)
-    const logedUser = useSelector(state=> state.auth.userInfo)
+    const logedUser = useSelector(state => state.auth.userInfo)
     const dispatch = useDispatch()
     const { classes } = useStyles({ hoverEffects });
     const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }))
     const firstPublic = publics.length ? publics.filter(title => title.name === "Home Title")[0].content : ""
     const form = useForm({
-        initialValues:{
-            content:"",
-            name:"Home Title"
+        initialValues: {
+            content: "",
+            name: "Home Title"
         },
         validate: {
             content: (value) => (value === "" ? 'Debes escribir algo para cambiar este texto' : null),
@@ -102,39 +99,38 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
 
     useEffect(() => {
         dispatch(getPublics())
-      }, [dispatch])
+    }, [dispatch])
 
-    const handleEdit = (e)=>{
+    const handleEdit = (e) => {
         console.log(e.currentTarget.name)
-        if(e.currentTarget.name==="edit"){
+        if (e.currentTarget.name === "edit") {
             setUpdateText("HomeTitle")
-        }else if(e.currentTarget.name==="ok"){
+        } else if (e.currentTarget.name === "ok") {
             dispatch(getPublics)
-        }else{
+        } else {
             dispatch(getPublics)
             setUpdateText("")
         }
     }
 
     return (
-        <Box sx={{position:"relative",}}>
+        <Box sx={{ position: "relative" }}>
             <Box className={classes.titleBox}>
+                {updateText !== "HomeTitle" ?
+                    <Title className={classes.title}>{firstPublic}</Title> :
+                    <form className={classes.form} onSubmit={form.onSubmit(values => dispatch(updatePublic(values)))}>
+                        <TextInput
+                            placeholder={firstPublic}
+                            className={classes.titleInput}
+                            {...form.getInputProps("content")}
+                        />
+                        <Button type="submit" name="ok" onClick={(e) => handleEdit(e)} className={classes.editButton}><Tick size={27} /></Button>
+                        <Button name="back" onClick={(e) => handleEdit(e)} className={classes.editButton}><Cross size={27} /></Button>
+                    </form>}
 
-                {updateText!=="HomeTitle"?
-                <Title className={classes.title}>{firstPublic}</Title>:
-                <form className={classes.form} onSubmit={form.onSubmit(values => dispatch(updatePublic(values)))}>
-                    <TextInput
-                    placeholder={firstPublic}
-                    className={classes.titleInput}
-                    {...form.getInputProps("content")}
-                    />
-                    <Button type="submit" name="ok" onClick={(e)=>handleEdit(e)} className={classes.editButton}><Tick size={27}/></Button>
-                    <Button name="back" onClick={(e)=>handleEdit(e)} className={classes.editButton}><Cross size={27}/></Button>
-                </form>}
-
-                {logedUser?.admin && updateText!=="HomeTitle"?
-                <Button name="edit" onClick={(e)=>handleEdit(e)} className={classes.editButton}><Edit2Outline size={27}/></Button>:
-                ""}
+                {logedUser?.admin && updateText !== "HomeTitle" ?
+                    <Button name="edit" onClick={(e) => handleEdit(e)} className={classes.editButton}><Edit2Outline size={27} /></Button> :
+                    ""}
 
                 {/* {updateText==="title"?
                 <Box>
@@ -144,45 +140,46 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
                 ""
                 } */}
             </Box>
-        <Carousel
-            slideSize='100%'
-            loop
-            withControls={false}
-            withIndicators={true}
-            styles={{
-                indicator: {
-                    borderRadius: '50%',
-                    width: 12,
-                    height: 12,
-                    margin: '0 5px',
-                    border: '3px solid white',
-                    opacity: 1,
-                    backgroundColor: 'white !important',
-                    
-                    '&[data-active]': {
-                        backgroundColor: 'black !important',
-                    }
-                },
-            }}
-            plugins={[autoplay.current]}
-        >
-            
-            <Carousel.Slide>
-                <BackgroundImage className={classes.root} src={background1}>
-                    <div className={classes.overlay} />
-                </BackgroundImage>
-            </Carousel.Slide>
-            <Carousel.Slide>
-                <BackgroundImage className={classes.root} src={background2}>
-                    <div className={classes.overlay} />
-                </BackgroundImage>
-            </Carousel.Slide>
-            <Carousel.Slide>
-                <BackgroundImage className={classes.root} src={background3}>
-                    <div className={classes.overlay} />
-                </BackgroundImage>
-            </Carousel.Slide>
-        </Carousel>
+            <Carousel
+                slideSize='100%'
+                loop
+                withControls={false}
+                withIndicators={true}
+                draggable={false}
+                styles={{
+                    indicator: {
+                        borderRadius: '50%',
+                        width: 12,
+                        height: 12,
+                        margin: '0 5px',
+                        border: '3px solid white',
+                        opacity: 1,
+                        backgroundColor: 'white !important',
+
+                        '&[data-active]': {
+                            backgroundColor: 'black !important',
+                        }
+                    },
+                }}
+                plugins={[autoplay.current]}
+            >
+
+                <Carousel.Slide>
+                    <BackgroundImage className={classes.root} src={background1}>
+                        <div className={classes.overlay} />
+                    </BackgroundImage>
+                </Carousel.Slide>
+                <Carousel.Slide>
+                    <BackgroundImage className={classes.root} src={background2}>
+                        <div className={classes.overlay} />
+                    </BackgroundImage>
+                </Carousel.Slide>
+                <Carousel.Slide>
+                    <BackgroundImage className={classes.root} src={background3}>
+                        <div className={classes.overlay} />
+                    </BackgroundImage>
+                </Carousel.Slide>
+            </Carousel>
         </Box>
     )
 }

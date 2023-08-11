@@ -15,7 +15,6 @@ const useStyles = createStyles((theme, { hoverEffects }, getStylesRef) => ({
         borderRadius: 7,
         transition: 'all .1s linear',
         boxShadow: '0 8px 42px rgb(0 0 0 / 20%)',
-        height: '100%',
 
         [`&:hover`]: {
             transform: hoverEffects && 'scale(1.02)',
