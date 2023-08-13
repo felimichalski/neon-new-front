@@ -15,6 +15,15 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        'lexend': ['Lexend'],
+        'proxima-nova': ['Proxima Nova'],
+        'default': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif']
+      },
+      fontSize: {
+        'presm': '0.8rem'
+      },
+      screens: {
+        'prelg': '850px'
       },
     },
   },

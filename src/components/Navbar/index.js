@@ -393,11 +393,10 @@ const Navbar = ({ openMenu, setOpenMenu }) => {
                     </Tabs>
                 </Group>
                 <Group style={{ gap: 0 }} className={classes.collapsableMD}>
-
-                    <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
+                    {/* <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     <UnstyledButton className={classes.iconContainer}>
                         <Search size={20} />
-                    </UnstyledButton>
+                    </UnstyledButton> */}
 
                     {logedUser?.admin ?
                         <Divider sx={{ marginRight: "-1.5rem" }} px={10} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' /> : ""
@@ -423,9 +422,9 @@ const Navbar = ({ openMenu, setOpenMenu }) => {
                 </Group>
                 <Group style={{ gap: 0 }} className={classes.collapsableSM}>
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
-                    <UnstyledButton className={classes.iconContainer}>
+                    {/* <UnstyledButton className={classes.iconContainer}>
                         <Search size={20} />
-                    </UnstyledButton>
+                    </UnstyledButton> */}
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                     {userButton}
                     <Divider px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />

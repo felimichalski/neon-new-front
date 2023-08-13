@@ -35,17 +35,15 @@ const CartItem = ({ product }) => {
                 </div>
                 <div className="mt-1 flex text-sm">
                   <p className="text-gray-500">{product.color}</p>
-                  {product.size ? (
-                    <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">{product.size}</p>
-                  ) : null}
+                  <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">{product.size}</p>
+                </div>
+                <div className="my-2 flex text-sm">
+                  <p className="text-gray-500">{product.control}</p>
                 </div>
                 <p className="mt-1 text-sm font-medium text-gray-900">${parsePrice(product.unit_price)}</p>
               </div>
 
               <div className="mt-4 sm:mt-0 sm:pr-9">
-                <label className="sr-only">
-                  Quantity, {product.name}
-                </label>
                 <select
                   className="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                   value={product.quantity}

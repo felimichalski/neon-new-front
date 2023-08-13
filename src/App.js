@@ -8,13 +8,13 @@ import "react-toastify/dist/ReactToastify.css";
 import CustomFonts from './fonts/CustomFonts';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
-import Checkout from './pages/CheckoutL';
+import Checkout from './pages/Checkout';
 import PaymentPage from './pages/PaymentPage';
 import Admin from "./pages/Admin";
 import ProtectedRoute from './components/middleware/ProtectedRoute';
 import SideBar from './components/SideBar';
 
-import Navbar from './components/Navbar';
+import Navbar from './components/NavbarT';
 import Footer from './components/Footer/Footer';
 import Category from './pages/Category';
 import Contact from './pages/Contact';
