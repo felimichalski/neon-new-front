@@ -15,7 +15,7 @@ const cartSlice = createSlice({
   reducers: {
     addToCart(state, action) {
       const existingIndex = state.cartItems.findIndex(
-        (item) => item.id === action.payload.id && item.size === action.payload.size && item.color === action.payload.color
+        (item) => item.id === action.payload.id && item.size === action.payload.size && item.color === action.payload.color && item.control === action.payload.control
       );
 
       if (existingIndex >= 0) {
@@ -45,7 +45,7 @@ const cartSlice = createSlice({
       value = parseInt(value)
 
       const itemIndex = state.cartItems.findIndex(
-        (item) => item.id === product.id && item.color === product.color && item.size === product.size
+        (item) => item.id === product.id && item.color === product.color && item.size === product.size && item.control === action.payload.control
       );
 
       state.cartTotalQuantity = state.cartTotalQuantity - state.cartItems[itemIndex].quantity + value;
@@ -57,11 +57,11 @@ const cartSlice = createSlice({
 
     removeFromCart(state, action) {
       const remaining = state.cartItems.filter((item) =>
-        !(item.id === action.payload.id && item.color === action.payload.color && item.size === action.payload.size)
+        !(item.id === action.payload.id && item.color === action.payload.color && item.size === action.payload.size && item.control === action.payload.control)
       )
 
       state.cartItems.forEach((cartItem) => {
-        if (cartItem.id === action.payload.id && cartItem.color === action.payload.color && cartItem.size === action.payload.size) {
+        if (cartItem.id === action.payload.id && cartItem.color === action.payload.color && cartItem.size === action.payload.size && cartItem.control === action.payload.control) {
           state.cartTotalQuantity -= cartItem.quantity;
           state.cartTotalAmount -= action.payload.unit_price * cartItem.quantity;
 

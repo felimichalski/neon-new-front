@@ -2,7 +2,7 @@ import { Carousel } from '@mantine/carousel';
 import { BackgroundImage, createStyles, Title, Box, Button, TextInput } from '@mantine/core'
 import { getPublics } from '../../features/actions/publicActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Edit2Outline } from "@styled-icons/evaicons-outline/Edit2Outline"
 import { Tick } from "@styled-icons/typicons/Tick"
 import { Cross } from "@styled-icons/entypo/Cross"
@@ -80,13 +80,12 @@ const useStyles = createStyles((theme, { hoverEffects }) => ({
 
 const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
 
-
+    const [firstPublic, setFirstPublic] = useState('');
     const publics = useSelector(state => state.public.items)
     const logedUser = useSelector(state => state.auth.userInfo)
     const dispatch = useDispatch()
     const { classes } = useStyles({ hoverEffects });
     const autoplay = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }))
-    const firstPublic = publics.length ? publics.filter(title => title.name === "Home Title")[0].content : ""
     const form = useForm({
         initialValues: {
             content: "",
@@ -98,11 +97,13 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
     })
 
     useEffect(() => {
-        dispatch(getPublics())
-    }, [dispatch])
+        if(publics.length > 0) {
+            const homeTitle = publics.find(title => title.name === "HomeTitle")
+            setFirstPublic(homeTitle.content)
+        }
+    }, [publics]);
 
     const handleEdit = (e) => {
-        console.log(e.currentTarget.name)
         if (e.currentTarget.name === "edit") {
             setUpdateText("HomeTitle")
         } else if (e.currentTarget.name === "ok") {

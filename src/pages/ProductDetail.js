@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Fragment } from 'react'
 import { RadioGroup, Tab } from '@headlessui/react'
 // import { Disclosure } from '@headlessui/react'
 // import { Heart } from '@styled-icons/evil'
@@ -6,8 +6,11 @@ import { RadioGroup, Tab } from '@headlessui/react'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../features/slices/cartSlice'
-import { Switch } from '@mantine/core'
+import { Switch } from '@headlessui/react'
 import SizesModal from '../components/SizesModal'
+
+import { QuestionCircleFill, CheckCircleFill } from '@styled-icons/bootstrap'
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -24,11 +27,18 @@ const colors = [
   { name: 'Negro', class: 'bg-black', selectedClass: 'ring-black' },
 ]
 
+const controls = [
+  { key: 'Slim', info: ['Regulador de intensidad de luz', '5 efectos de intermitencia', 'Regulador de velocidad de los efectos'], price: 5300 },
+  { key: 'Control remoto', info: ['Regulador de intensidad de luz', '8 efectos de intermitencia', 'Regulador de velocidad de los efectos', 'Encendido/Apagado'], price: 7900 },
+  { key: 'App', info: ['Control mediante tu celular', 'Regulador de intensidad', 'Programar horario de encendido y apagado', 'Función audioritmica', 'Compatible con Alexa y Google Home'], price: 14300 }
+]
+
 const ProductDetail = () => {
   const [product, setProduct] = useState(undefined)
+  const [withControl, setWithControl] = useState(false)
   const [selectedColor, setSelectedColor] = useState(colors[0])
   const [selectedImage, setSelectedImage] = useState(0)
-  const [withControl, setWithControl] = useState(false)
+  const [selectedControl, setSelectedControl] = useState(controls[0])
   const [sizesModalOpen, setSizesModalOpen] = useState(false)
   const { id } = useParams()
   const [size, setSize] = useState('small')
@@ -56,11 +66,24 @@ const ProductDetail = () => {
       id,
       title,
       description,
-      unit_price: (withControl) ? price + 500 : price,
+      unit_price: (withControl) ? price + selectedControl.price : price,
       size: sizeName,
-      control: withControl,
+      control: (withControl) ? resolveControl(selectedControl.key) : 'Sin control',
       color: selectedColor.name,
       image: images[0].key
+    }
+  }
+
+  const resolveControl = (name) => {
+    switch(name) {
+      case 'Slim':
+        return 'Control Slim'
+      case 'Control remoto':
+       return 'Control remoto'        
+      case 'App':
+        return 'Control por app'
+      default:
+        return
     }
   }
 
@@ -152,7 +175,7 @@ const ProductDetail = () => {
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
               <div className="flex justify-between">
                 <h1 className="text-2xl font-medium text-gray-900">{product.title}</h1>
-                <p className="text-2xl font-medium text-gray-900">${parsePrice((withControl) ? price + 500 : price)}</p>
+                <p className="text-2xl font-medium text-gray-900">${parsePrice((withControl) ? price + selectedControl.price : price)}</p>
               </div>
 
               <div className="mt-6">
@@ -191,7 +214,7 @@ const ProductDetail = () => {
                           <RadioGroup.Label as="span">S</RadioGroup.Label>
                           <span
                             className={classNames(
-                              checked || size === 'small' ? 'border-indigo-500 border-2' : 'border-transparent',
+                              checked || size === 'small' ? 'border-green-500 border-2' : 'border-transparent',
                               'pointer-events-none absolute -inset-px rounded-md'
                             )}
                             aria-hidden="true"
@@ -214,7 +237,7 @@ const ProductDetail = () => {
                           <RadioGroup.Label as="span">M</RadioGroup.Label>
                           <span
                             className={classNames(
-                              checked || size === 'medium' ? 'border-indigo-500 border-2' : 'border-transparent',
+                              checked || size === 'medium' ? 'border-green-500 border-2' : 'border-transparent',
                               'pointer-events-none absolute -inset-px rounded-md'
                             )}
                             aria-hidden="true"
@@ -237,7 +260,7 @@ const ProductDetail = () => {
                           <RadioGroup.Label as="span">L</RadioGroup.Label>
                           <span
                             className={classNames(
-                              checked || size === 'large' ? 'border-indigo-500 border-2' : 'border-transparent',
+                              checked || size === 'large' ? 'border-green-500 border-2' : 'border-transparent',
                               'pointer-events-none absolute -inset-px rounded-md'
                             )}
                             aria-hidden="true"
@@ -250,8 +273,114 @@ const ProductDetail = () => {
               </div>
 
               <div className="mt-10">
-                <h3 className="text-sm font-medium text-gray-900 mb-5">Control ($500 extra)</h3>
-                <Switch checked={withControl} onLabel="Si" offLabel="No" size='lg' onChange={(e) => setWithControl(e.currentTarget.checked)} />
+                <dt className="flex text-sm text-gray-600">
+                  <h3 className="text-sm font-medium text-gray-900 mb-5">Control</h3>
+                  <span className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500 cursor-pointer" onClick={() => setSizesModalOpen(true)}>
+                    <QuestionCircleFill className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                </dt>
+                <Switch
+                  checked={withControl}
+                  onChange={setWithControl}
+                  className={classNames(
+                    withControl ? 'bg-green-600' : 'bg-gray-200',
+                    'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out'
+                  )}
+                >
+                  <span className="sr-only">Use setting</span>
+                  <span
+                    className={classNames(
+                      withControl ? 'translate-x-5' : 'translate-x-0',
+                      'pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                    )}
+                  >
+                    <span
+                      className={classNames(
+                        withControl ? 'opacity-0 duration-100 ease-out' : 'opacity-100 duration-200 ease-in',
+                        'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
+                      )}
+                      aria-hidden="true"
+                    >
+                      <svg className="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 12 12">
+                        <path
+                          d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                    <span
+                      className={classNames(
+                        withControl ? 'opacity-100 duration-200 ease-in' : 'opacity-0 duration-100 ease-out',
+                        'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
+                      )}
+                      aria-hidden="true"
+                    >
+                      <svg className="h-3 w-3 text-green-600" fill="currentColor" viewBox="0 0 12 12">
+                        <path d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z" />
+                      </svg>
+                    </span>
+                  </span>
+                </Switch>
+                {withControl &&
+                  <ul className="grid grid-cols-1 gap-x-3 gap-y-8 lg:grid-cols-3 mt-6">
+                    {controls.map((control, index) => (
+                      <li key={index} className="cursor-pointer overflow-hidden rounded-xl border border-gray-200" onClick={() => setSelectedControl(control)}>
+                        <div className="flex items-center justify-between gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
+                          <div className="text-sm font-medium leading-6 text-gray-900">{control.key}</div>
+                          {control === selectedControl ? <CheckCircleFill className="h-5 w-5 text-green-600" aria-hidden="true" /> : null}
+                        </div>
+                        <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6 flex flex-col justify-between">
+                          {control.info.map((info, index) => (
+                            <div className="flex justify-between gap-x-4 py-3" key={index}>
+                              <dt className="text-gray-700 text-xs">{info}</dt>
+                            </div>
+                          ))}
+                          <div className="flex justify-between gap-x-4 py-3">
+                            <dt className="text-gray-500">Precio</dt>
+                            <dd className="flex items-start gap-x-2">
+                              <div className="font-medium text-gray-900">
+                                ${parsePrice(control.price)}
+                              </div>
+                            </dd>
+                          </div>
+                        </dl>
+                      </li>
+                    ))}
+                  </ul>
+                  // <RadioGroup value={control} onChange={setControl} className="mt-4">
+                  //   <RadioGroup.Label className="sr-only">Choose a control</RadioGroup.Label>
+                  //   <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
+                  //     {controls.map((control, index) => (
+                  //       <RadioGroup.Option
+                  //         key={control.key}
+                  //         value={control.key}
+                  //         className={() =>
+                  //           classNames(
+                  //             'cursor-pointer bg-white text-gray-900 shadow-sm',
+                  //             'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6'
+                  //           )
+                  //         }
+                  //       >
+                  //         {({ checked }) => (
+                  //           <>
+                  //             <RadioGroup.Label as="span" className="text-center">{control.key}</RadioGroup.Label>
+                  //             <span
+                  //               className={classNames(
+                  //                 checked || size === 'small' ? 'border-indigo-500 border-2' : 'border-transparent',
+                  //                 'pointer-events-none absolute -inset-px rounded-md'
+                  //               )}
+                  //               aria-hidden="true"
+                  //             />
+                  //           </>
+                  //         )}
+                  //       </RadioGroup.Option>
+                  //     ))}
+                  //   </div>
+                  // </RadioGroup>
+                }
               </div>
 
 
