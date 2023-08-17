@@ -15,6 +15,7 @@ export const getPublics = createAsyncThunk(
         }
     }
 )
+
 export const updatePublic = createAsyncThunk(
     "public/updatePublic",
     async (info, thunkAPI) => {

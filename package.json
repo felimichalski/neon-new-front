@@ -7,6 +7,7 @@
     "@emailjs/browser": "^3.11.0",
     "@emotion/react": "^11.10.6",
     "@headlessui/react": "^1.7.16",
+    "@headlessui/tailwindcss": "^0.2.0",
     "@mantine/carousel": "^5.10.5",
     "@mantine/core": "^5.10.5",
     "@mantine/dropzone": "^5.10.5",
