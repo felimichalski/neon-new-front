@@ -10,12 +10,7 @@ const initialState = {
 const publicSlice = createSlice({
     name: 'public',
     initialState,
-    reducers: {
-        /* gettingPublics(state, action) {
-            const existingIndex = state.cartItems.findIndex(
-              (item) => item.id === action.payload.id
-            ); */
-    },
+    reducers: {},
     extraReducers: {
         [getPublics.pending]: (state, action) => {
             state.status = 'pending'

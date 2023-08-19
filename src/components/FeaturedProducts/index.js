@@ -82,6 +82,9 @@ const FeaturedProducts = ({ customText }) => {
                     styles={{
                         viewport: {
                             padding: '0 8px'
+                        },
+                        control: {
+                            backgroundColor: 'white !important'
                         }
                     }}
                     breakpoints={[

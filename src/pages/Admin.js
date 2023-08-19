@@ -13,12 +13,12 @@ const Admin = () => {
         animate={{opacity: 1}}
         exit={{opacity: 0}}
         >
-            <Grid mx={1}>
-                <Grid.Col p={0} span={3} style={{position: 'relative'}}>
+            <Grid mx={1} columns={24}>
+                <Grid.Col p={0} span={5} style={{position: 'relative'}}>
                     <Sidebar />
                 </Grid.Col>
 
-                <Grid.Col p={32} span={9}>
+                <Grid.Col p={32} span={19}>
                     <Outlet />
                 </Grid.Col>
             </Grid>

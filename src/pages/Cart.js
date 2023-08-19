@@ -1,211 +1,141 @@
-import { Box, Button, Container, createStyles, Divider, Grid, List, Text, Title } from '@mantine/core'
-import { useEffect, useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+// import { QuestionMarkCircle } from '@styled-icons/evaicons-solid'
+import OrderSteps from '../components/OrderSteps'
 import { useNavigate } from 'react-router-dom'
-
-import CartItem from '../components/CartItem';
-
-import { motion } from 'framer-motion';
-import { useDocumentTitle } from '@mantine/hooks';
-
-const useStyles = createStyles((theme, { top }) => ({
-    root: {
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    grid: {
-        minHeight: '80vh',
-        width: '90%',
-        borderRadius: 7,
-        [`@media (max-width: 600px)`]: {
-            display:"none",
-          },
-    },
-    flex:{
-        height:"100vh",
-        width:"100%",
-        display:"flex",
-        flexDirection:"column",
-        alignItems:"center",
-        justifyContent:"space-around",
-        [`@media (min-width: 600px)`]: {
-            display:"none",
-          },
-    },
-    flexCart:{
-        width:"90%",
-        height:"27rem",
-        /* border:"1px solid grey" */
-        [`@media (max-width: 600px)`]: {
-            width:"100%",
-          },
-    },
-    flexButtons:{
-        marginTop:"2rem",
-        display:"flex",
-        flexDirection:"column",
-        alignItems:"center",
-        justifyContent:"center",
-        background:"#EEEEEE",
-        width:"80%",
-        padding:"1rem",
-        borderRadius:"1rem"
-    },
-    flexList:{
-        height:"100%",
-        overflowY:"scroll",
-        overflowX:"hidden",
-        padding:"0 1rem",
-        backgroundColor:"#F9F9F9",
-        /* border:"1px solid " */
-        [`@media (max-width: 600px)`]: {
-            width:"100%",
-          },
-    },
-    column: {
-        padding: '1rem',
-    },
-
-    titleBar: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20
-    },
-
-    title: {
-        fontFamily: 'Proxima Nova',
-        fontWeight: 600
-    },
-
-    quantity: {
-        fontFamily: 'ITC Avant Garde Gothic Cn',
-        fontWeight: 500,
-        color: theme.colors.gray[5]
-    },
-
-    productsList: {
-        borderRadius: 7,
-        boxShadow: '0px 5px 15px 0px rgba(0, 0, 0, 0.5)',
-    },
-
-    payContainer: {
-        backgroundColor: theme.colors.gray[2],
-        borderRadius: 7,
-        position: 'sticky',
-        top,
-        height: 'fit-content',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '0 10px',
-    },
-
-    payButton: {
-        width: '100%'
-    }
-}));
+import { useDispatch, useSelector } from 'react-redux'
+import CartItem from '../components/CartItem'
+import { applyDiscount } from '../features/slices/cartSlice'
+import { motion } from 'framer-motion'
 
 const Cart = () => {
-
-    useDocumentTitle('Neon infinito - Carrito')
-
-    const payContainerRef = useRef();
-    const [top, setTop] = useState(0)
-
-    const { classes } = useStyles({ top });
-    const [items, setItems] = useState([]);
     const navigate = useNavigate();
 
-    const data = useSelector((state) => state.cart);
+    const products = useSelector((state) => state.cart.cartItems);
+    const totalAmount = useSelector((state) => state.cart.cartTotalAmount);
+    const discount = useSelector((state) => state.cart.discount);
 
-    useEffect(() => {
-        if (data.status === 'success') {
-            setItems(data.cartItems)
-        }
-    }, [data]);
+    const dispatch = useDispatch()
 
-    useEffect(() => {
-        if (payContainerRef.current.offsetTop) setTop(payContainerRef.current.offsetTop)
-    }, [payContainerRef])
+    const parsePrice = (price, discount) => {
+        let discountValue = discount?.value ?? 0
+        const numStr = (price - discountValue).toString();
+        const parsedPrice = numStr.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return parsedPrice;
+    }
 
     return (
         <motion.div
-        initial={{opacity: 0}}
-        animate={{opacity: 1}}
-        exit={{opacity: 0}}
-        >
-            <Container fluid className={classes.root}>
-                {/* RESPONSIVE */}
-                <Box className={classes.flex}>
-                    <Box className={classes.flexCart}>
-                    <Box className={classes.titleBar}>
-                            <Title className={classes.title}>Mi Carrito</Title>
-                            <Text className={classes.quantity}>{data.cartTotalQuantity} productos</Text>
-                        </Box>
-                        <List className={classes.flexList} listStyleType='none' styles={{
-                            itemWrapper: {
-                                width: '100%',
-                            }
-                        }}>
-                            {items && items.map((item, key) => (
-                                <span key={key}>
-                                    <Divider my='xs' />
-                                    <List.Item style={{
-                                        display: 'flex',
-                                        alignItems: 'center'
-                                    }}>
-                                        <CartItem data={item} />
-                                    </List.Item>
-                                </span>
+        initial={{ filter: 'blur(10px)', opacity: 0 }}
+        animate={{ filter: 'blur(0)', opacity: 1 }}
+        exit={{ filter: 'blur(10px)', opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        style={{
+          width: '100%',
+          height: '100%',
+          background: 'url(your-image.jpg) center/cover no-repeat',
+        }} className="bg-white">
+            <OrderSteps pageStep={0} />
+            <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
+                <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Carrito</h1>
+                <form className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16" onSubmit={(e) => e.preventDefault()}>
+                    <section aria-labelledby="cart-heading" className="lg:col-span-7 py-5">
+                        <h2 id="cart-heading" className="sr-only">
+                            Items in your shopping cart
+                        </h2>
+
+                        <ul className="divide-y divide-gray-200 border-b border-t border-gray-200">
+                            {products.map((product, index) => (
+                                <li key={index} className="flex py-6 sm:py-10">
+                                    <CartItem product={product} />
+                                </li>
                             ))}
-                            <Divider my='xs' />
-                        </List>
-                    </Box>
-                    <Box className={classes.flexButtons}>
-                    <Title mb={40}>TOTAL: ${data.cartTotalAmount}</Title>
-                        <Button onClick={() => navigate('/categories')} className={classes.payButton} color='gray' mb={10}>Seguir comprando</Button>
-                        <Button onClick={() => navigate('/checkout')} className={classes.payButton}>Finalizar compra</Button>
-                    </Box>
-                </Box>
-                {/* NO RESPONSIVE */}
-                <Grid m={30} className={classes.grid} ref={payContainerRef}>
-                    <Grid.Col span={7} className={[classes.productsList, classes.column]}>
-                        <Box className={classes.titleBar}>
-                            <Title className={classes.title}>Mi Carrito</Title>
-                            <Text className={classes.quantity}>{data.cartTotalQuantity} productos</Text>
-                        </Box>
-                        <List listStyleType='none' styles={{
-                            itemWrapper: {
-                                width: '100%',
+                        </ul>
+                    </section>
+
+                    {/* Order summary */}
+                    <section
+                        aria-labelledby="summary-heading"
+                        className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
+                    >
+                        <dl className="mt-6 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <dt className="text-sm text-gray-600">Subtotal</dt>
+                                <dd className="text-sm font-medium text-gray-900">${parsePrice(totalAmount)}</dd>
+                            </div>
+
+                            {discount &&
+                                <div className="flex items-center justify-between">
+                                    <dt className="text-sm text-gray-600 whitespace-nowrap truncate">Descuento
+                                        <span className="ml-2 rounded-full bg-gray-200 px-2 py-0.5 text-xs tracking-wide text-gray-600">
+                                            {discount.code}
+                                        </span>
+                                    </dt>
+                                    <dd className="text-sm font-medium text-gray-900 whitespace-nowrap">- ${parsePrice(discount.value)}</dd>
+                                </div>
                             }
-                        }}>
-                            {items && items.map((item, key) => (
-                                <span key={key}>
-                                    <Divider my='xs' />
-                                    <List.Item style={{
-                                        display: 'flex',
-                                        alignItems: 'center'
-                                    }}>
-                                        <CartItem data={item} />
-                                    </List.Item>
-                                </span>
-                            ))}
-                            <Divider my='xs' />
-                        </List>
-                    </Grid.Col>
-                    <Grid.Col span={4} offset={1} className={[classes.payContainer, classes.column]}>
-                        <Title mb={40}>TOTAL: ${data.cartTotalAmount}</Title>
-                        <Button onClick={() => navigate('/categories')} className={classes.payButton} color='gray' mb={10}>Seguir comprando</Button>
-                        <Button onClick={() => navigate('/checkout')} className={classes.payButton}>Finalizar compra</Button>
-                    </Grid.Col>
-                </Grid>
-            </Container>
+                            {/* <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+                                <dt className="flex items-center text-sm text-gray-600">
+                                    <span>Shipping estimate</span>
+                                    <a href="#" className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
+                                        <span className="sr-only">Learn more about how shipping is calculated</span>
+                                        <QuestionMarkCircle className="h-5 w-5" aria-hidden="true" />
+                                    </a>
+                                </dt>
+                                <dd className="text-sm font-medium text-gray-900">$5.00</dd>
+                            </div>
+                            <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+                                <dt className="flex text-sm text-gray-600">
+                                    <span>Tax estimate</span>
+                                    <a href="#" className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
+                                        <span className="sr-only">Learn more about how tax is calculated</span>
+                                        <QuestionMarkCircle className="h-5 w-5" aria-hidden="true" />
+                                    </a>
+                                </dt>
+                                <dd className="text-sm font-medium text-gray-900">$8.32</dd>
+                            </div> */}
+                            <form className="pt-5" onClick={(e) => e.preventDefault()}>
+                                <label htmlFor="discount-code-mobile" className="block text-sm font-medium text-gray-700">
+                                    Código de descuento
+                                </label>
+                                <div className="mt-1 flex space-x-4">
+                                    <input
+                                        type="text"
+                                        id="discount-code-mobile"
+                                        name="discount-code-mobile"
+                                        className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                    />
+                                    <button
+                                        type="submit"
+                                        className="rounded-md bg-gray-200 px-4 text-sm font-medium text-gray-600 hover:bg-gray-300 focus:outline-none"
+                                        onClick={() => {
+                                            const code = document.querySelector('#discount-code-mobile').value
+                                            dispatch(applyDiscount({ value: 100, code }))
+                                            document.querySelector('#discount-code-mobile').value = ""
+                                        }}
+                                    >
+                                        Aplicar
+                                    </button>
+                                </div>
+                            </form>
+                            <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+                                <dt className="text-base font-medium text-gray-900">Total</dt>
+                                <dd className="text-base font-medium text-gray-900">${parsePrice(totalAmount, discount)}</dd>
+                            </div>
+                        </dl>
+
+                        <div className="mt-6">
+                            <button
+                                type="submit"
+                                className="w-full rounded-md border border-transparent bg-blue-500 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none"
+                                onClick={() => navigate('/checkout')}
+                            >
+                                Confirmar Compra
+                            </button>
+                        </div>
+                    </section>
+                </form>
+            </div>
         </motion.div>
     )
 }
 
-export default Cart
+export default Cart;
