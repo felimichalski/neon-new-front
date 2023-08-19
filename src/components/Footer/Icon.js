@@ -13,7 +13,7 @@ const useStyles = createStyles((theme, {name}) => ({
     background: (name.toLowerCase() === 'instagram') ? 'radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%)' : ((name.toLowerCase() === 'whatsapp')) ? '#25d366' : theme.black,
     margin: '0 1rem',
     padding: '.5rem',
-    boxShadow: '0 4px 12px 3px rgba(255, 255, 255, 0.25)',
+    boxShadow: '0 1px 10px 1px rgba(255, 255, 255, 0.25)',
     transition: '.2s ease-out',
 
     '&:hover': {
