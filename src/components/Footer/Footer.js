@@ -97,7 +97,7 @@ const navigation = {
     ],
   }
   
-  export default function Example() {
+  export default function Footer() {
     const [icons, setIcons] = useState([])
     const data = useSelector(state => state.social);
 
