@@ -40,8 +40,10 @@ const App = () => {
     firstName: '',
     lastName: '',
     email: '',
-    address: '',
     phone: '',
+    address: '',
+    province: '',
+    postCode: '',
   })
   const [viewFull, setViewFull] = useState(true)
   const dispatch = useDispatch()

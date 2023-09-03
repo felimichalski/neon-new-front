@@ -1,4 +1,5 @@
 import { BackgroundImage, Box, Card, createStyles, Text, Title, UnstyledButton } from "@mantine/core"
+import { useNavigate } from "react-router-dom";
 /* import { useSelector, useDispatch } from "react-redux";
 import { Edit2Outline } from "@styled-icons/evaicons-outline/Edit2Outline"
 import { getPublics, updatePublic } from "../../features/actions/publicActions";
@@ -92,7 +93,7 @@ const useStyles = createStyles((theme, {hoverEffects}, { bgText, textColor }) =>
     backgroundColor: 'white !important',
 
     '&:hover': {
-      backgroundColor: '#FF8033',
+      backgroundColor: '#FF8033 !important',
       color: 'white'
     }
   },
@@ -122,9 +123,10 @@ form: {
 },
 }))
 
-const SectionCard = ({ id, updateText, setUpdateText, background, title, text, bgText, textColor, buttonText, hoverEffects }) => {
+const SectionCard = ({ id, updateText, setUpdateText, background, title, text, bgText, textColor, buttonText, hoverEffects, link }) => {
 
   const { classes } = useStyles({ bgText, textColor, hoverEffects });
+  const navigate = useNavigate();
 /*   const logedUser = useSelector(state=> state.auth.userInfo)
   const dispatch = useDispatch()
   const publics = useSelector(state=>state.public.items)
@@ -167,7 +169,7 @@ const SectionCard = ({ id, updateText, setUpdateText, background, title, text, b
                   <Text className={classes.text}>{text}</Text>
                 </div>
                 <div>
-                  <UnstyledButton className={classes.button}>{buttonText}</UnstyledButton>
+                  <UnstyledButton className={classes.button} onClick={() => navigate(link)}>{buttonText}</UnstyledButton>
                 </div>
               </Box>
             </>
@@ -202,7 +204,7 @@ const SectionCard = ({ id, updateText, setUpdateText, background, title, text, b
                   <Text className={classes.text}>{text}</Text>
                 </div>
                 <div>
-                  <UnstyledButton className={classes.button}>{buttonText}</UnstyledButton>
+                  <UnstyledButton className={classes.button} onClick={() => navigate(link)}>{buttonText}</UnstyledButton>
                 </div>
               </Box>
             </>
@@ -213,7 +215,7 @@ const SectionCard = ({ id, updateText, setUpdateText, background, title, text, b
                   <Text className={classes.text} style={{color: "black"}}>{text}</Text>
                 </div>
                 <div>
-                  <UnstyledButton className={classes.button} style={{color: "white", backgroundColor: "black"}}>{buttonText}</UnstyledButton>
+                  <UnstyledButton className={classes.button} style={{color: "white", backgroundColor: "black"}} onClick={() => navigate(link)}>{buttonText}</UnstyledButton>
                 </div>
               </Box>
           }

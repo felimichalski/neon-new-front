@@ -1,5 +1,6 @@
 import { Container, createStyles, Grid, Box } from '@mantine/core'
 import SectionCard from './SectionCard'
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -42,16 +43,16 @@ const SectionCards = ({ data, updateText, setUpdateText }) => {
   return (
     <Container fluid className={classes.root}>
       <Box className={classes.flexContainer}>
-      {data.map(({background, title, text, bgText, textColor, buttonText, type}, key) => (
+      {data.map(({background, title, text, bgText, textColor, buttonText, type, link}, key) => (
           <Box className={classes.flexItem} key={key}>
-            <SectionCard id={key} updateText={updateText} setUpdateText={setUpdateText} background={background} title={title} text={text} bgText={bgText} textColor={textColor} buttonText={buttonText} type={type} />
+            <SectionCard id={key} updateText={updateText} setUpdateText={setUpdateText} background={background} title={title} text={text} bgText={bgText} textColor={textColor} buttonText={buttonText} type={type} link={link}/>
           </Box>
         ))}
       </Box>
       <Grid mx={1} gutter='md' className={classes.gridContainer}>
-        {data.map(({background, title, text, bgText, textColor, buttonText, type}, key) => (
+        {data.map(({background, title, text, bgText, textColor, buttonText, type, link}, key) => (
           <Grid.Col span={6} key={key} className={classes.gridItem}>
-            <SectionCard id={key} updateText={updateText} setUpdateText={setUpdateText} background={background} title={title} text={text} bgText={bgText} textColor={textColor} buttonText={buttonText} type={type} />
+            <SectionCard id={key} updateText={updateText} setUpdateText={setUpdateText} background={background} title={title} text={text} bgText={bgText} textColor={textColor} buttonText={buttonText} type={type} link={link}/>
           </Grid.Col>
         ))}
       </Grid>

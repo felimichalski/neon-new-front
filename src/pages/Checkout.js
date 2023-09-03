@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Popover, RadioGroup, Transition } from '@headlessui/react'
 import { ChevronUp } from '@styled-icons/boxicons-regular'
 import { motion } from 'framer-motion';
@@ -8,82 +8,167 @@ import { CheckCircleFill } from '@styled-icons/bootstrap'
 import { useForm } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';
 import { Wallet, initMercadoPago } from '@mercadopago/sdk-react';
+import CustomMPButton from '../components/CustomMPButton';
+import { Loader } from '@mantine/core';
+import generateAccessToken from '../utils/generateAccessToken';
+import { toast } from "react-toastify";
 
 const deliveryMethods = [
-    { id: 1, title: 'Retiro por sucursal', turnaround: '2–4 días hábiles', price: 'GRATIS' },
-    { id: 2, title: 'Entrega', turnaround: '5-10 días hábiles', price: 'CALCULAR' },
+    { id: 1, title: 'Retiro por sucursal', turnaround: '2-4 días hábiles', price: 'GRATIS' },
+    { id: 2, title: 'Entrega', turnaround: '5-10 días hábiles', price: 'A CALCULAR' },
+]
+
+const provinces = [
+    { value: 'AR-B', label: "Buenos Aires" },
+    { value: 'AR-C', label: "CABA" },
+    { value: 'AR-K', label: "Catamarca" },
+    { value: 'AR-H', label: "Chaco" },
+    { value: 'AR-U', label: "Chubut" },
+    { value: 'AR-X', label: "Córdoba" },
+    { value: 'AR-W', label: "Corrientes" },
+    { value: 'AR-E', label: "Entre Ríos" },
+    { value: 'AR-P', label: "Formosa" },
+    { value: 'AR-Y', label: "Jujuy" },
+    { value: 'AR-L', label: "La Pampa" },
+    { value: 'AR-F', label: "La Rioja" },
+    { value: 'AR-M', label: "Mendoza" },
+    { value: 'AR-N', label: "Misiones" },
+    { value: 'AR-Q', label: "Neuquén" },
+    { value: 'AR-R', label: "Río Negro" },
+    { value: 'AR-A', label: "Salta" },
+    { value: 'AR-J', label: "San Juan" },
+    { value: 'AR-D', label: "San Luis" },
+    { value: 'AR-Z', label: "Santa Cruz" },
+    { value: 'AR-S', label: "Santa Fe" },
+    { value: 'AR-G', label: "Santiago del Estero" },
+    { value: 'AR-V', label: "Tierra del Fuego" },
+    { value: 'AR-T', label: "Tucumán" },
 ]
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const parsePrice = (price, discount) => {
-    let discountValue = discount?.value ?? 0
-    const numStr = (price - discountValue).toString();
-    const parsedPrice = numStr.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const parsePrice = (price) => {
+    let final = price.toFixed(2);
+    const parsedPrice = final.toString().replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     return parsedPrice;
 }
 
 const Checkout = ({ paymentInfo, setPaymentInfo }) => {
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0])
     const [initialization, setInitialization] = useState(undefined)
+    const [shippingCost, setShippingCost] = useState(undefined)
+    const [calculating, setCalculating] = useState(false)
+    const [loading, setLoading] = useState(false)
     const products = useSelector((state) => state.cart.cartItems);
     const totalAmount = useSelector((state) => state.cart.cartTotalAmount);
     const discount = useSelector((state) => state.cart.discount);
 
     const navigate = useNavigate()
 
-    const { firstName, lastName, email, address, phone } = paymentInfo;
+    const { firstName, lastName, email, phone, address, province, postCode } = paymentInfo;
 
     const form = useForm({
         initialValues: {
             firstName,
             lastName,
             email,
-            address,
             phone,
-            deliveryMethod: deliveryMethods[0].title
+            deliveryMethod: deliveryMethods[0].title,
+            address,
+            province,
+            postCode
+
         },
         validate: {
             firstName: (val) => val.length > 0 ? null : 'Campo requerido',
             lastName: (val) => val.length > 0 ? null : 'Campo requerido',
             email: (val) => (val.length > 0 ? /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(val) ? null : 'Mail inválido' : 'Campo requerido'),
-            address: (val) => val.length > 0 ? null : 'Campo requerido',
             phone: (val) => val.length > 0 ? null : 'Campo requerido',
-        },
+            address: (val) => form.values.deliveryMethod !== deliveryMethods[1].title ? null : val.length > 0 ? null : 'Campo requerido',
+            province: (val) => form.values.deliveryMethod !== deliveryMethods[1].title ? null : val.length > 0 ? null : 'Campo requerido',
+            postCode: (val) => form.values.deliveryMethod !== deliveryMethods[1].title ? null : val.length > 0 ? null : 'Campo requerido',
+        }
     });
 
-    const handleSubmit = (values) => {
-        setPaymentInfo(values)
+    const calculateSendCost = async () => {
+        const err1 = form.validateField("address").hasError;
+        const err2 = form.validateField("province").hasError;
+        const err3 = form.validateField("postCode").hasError;
+        if (!err1 && !err2 && !err3) {
+            setCalculating(true);
+            const accessToken = await generateAccessToken()
+            try {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/shipping/quote`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    body: JSON.stringify({
+                        province: form.values.province,
+                        postCode: form.values.postCode,
+                        accessToken
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const data = await response.json();
+                setShippingCost(parseFloat(data[0].valor));
+            } catch (error) {
+                console.error(error)
+                toast.error("Ha ocurrido un error al calcular el envío. Verifique los datos e intente nuevamente.", {
+                    position: "bottom-right",
+                });
+            }
+            setCalculating(false)
+        }
     }
 
-    useEffect(() => {
-        const fetchPaymentInfo = async () => {
-            await initMercadoPago(process.env.REACT_APP_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/payments`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    items: products
-                })
+    const fetchPaymentInfo = async () => {
+        setInitialization(undefined)
+        await initMercadoPago(process.env.REACT_APP_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/payments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                items: [...products, { title: 'Envío', quantity: 1, unit_price: shippingCost ? shippingCost : 0 }]
             })
+        })
 
-            if (response.status !== 201) {
-                return navigate('/cart')
-            }
-
-            const { id } = await response.json()
-
-            setInitialization({
-                preferenceId: id,
-                redirectMode: 'modal'
-            })
+        if (response.status !== 201) {
+            return navigate('/cart')
         }
-        fetchPaymentInfo()
-    }, [navigate, products])
+
+        const { id } = await response.json()
+
+        setInitialization({
+            preferenceId: id,
+            redirectMode: 'modal'
+        })
+    }
+
+    const handleSubmit = async () => {
+        if(!shippingCost && selectedDeliveryMethod === deliveryMethods[1]) return toast.error("Por favor actualice el costo de envío", {
+            position: "bottom-right",
+        });
+        setLoading(true)
+        await fetchPaymentInfo()
+        try {
+            document.querySelector("#mp-container button").click();
+        } catch (error) {
+            try {
+                setTimeout(() => {
+                    document.querySelector("#mp-container button").click();
+                }, [2000]);
+            } catch (error) {
+                toast.error("Ha ocurrido un error al procesar su pedido. Intente de nuevo más tarde", {
+                    position: "bottom-right",
+                });
+            }
+        }
+    }
 
     return (
         <motion.div
@@ -149,14 +234,16 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                     </div>
                                 }
 
-                                <div className="flex items-center justify-between">
-                                    <dt className="text-gray-600">Envío</dt>
-                                    <dd>$100</dd>
-                                </div>
+                                {shippingCost &&
+                                    <div className="flex items-center justify-between">
+                                        <dt className="text-gray-600">Envío</dt>
+                                        <dd>${parsePrice(shippingCost)}</dd>
+                                    </div>
+                                }
 
                                 <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                                     <dt className="text-base">Total</dt>
-                                    <dd className="text-base">$361.80</dd>
+                                    <dd className="text-base">${parsePrice(shippingCost ? totalAmount + shippingCost : totalAmount)}</dd>
                                 </div>
                             </dl>
 
@@ -244,7 +331,6 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                                     form.errors.firstName ? "border-red-500" : "border-gray-300",
                                                     "block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                                 )}
-                                                onChange={(e) => form.setFieldValue("firstName", e.currentTarget.value)}
                                                 {...form.getInputProps("firstName")}
                                             />
                                         </div>
@@ -280,7 +366,6 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                                     form.errors.lastName ? "border-red-500" : "border-gray-300",
                                                     "block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                                 )}
-                                                onChange={(e) => form.setFieldValue("lastName", e.currentTarget.value)}
                                                 {...form.getInputProps("lastName")}
                                             />
                                         </div>
@@ -316,7 +401,6 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                                     form.errors.email ? "border-red-500" : "border-gray-300",
                                                     "block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                                 )}
-                                                onChange={(e) => form.setFieldValue("email", e.currentTarget.value)}
                                                 {...form.getInputProps("email")}
                                             />
                                         </div>
@@ -350,7 +434,6 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                                     form.errors.phone ? "border-red-500" : "border-gray-300",
                                                     "block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                                 )}
-                                                onChange={(e) => form.setFieldValue("phone", e.currentTarget.value)}
                                                 {...form.getInputProps("phone")}
                                             />
                                         </div>
@@ -372,47 +455,10 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                         }
                                     </div>
                                     <div className="sm:col-span-4">
-                                        <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                                            Dirección
-                                        </label>
-                                        <div className="mt-1">
-                                            <input
-                                                type="text"
-                                                id="address"
-                                                name="address"
-                                                autoComplete="street-address"
-                                                className={classNames(
-                                                    form.errors.address ? "border-red-500" : "border-gray-300",
-                                                    "block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                                )}
-                                                onChange={(e) => {
-                                                    if (e.currentTarget.value === '') setSelectedDeliveryMethod(deliveryMethods[0])
-                                                    form.setFieldValue("address", e.currentTarget.value)
-                                                }}
-                                                {...form.getInputProps("address")}
-                                            />
-                                        </div>
-                                        {form.errors.address &&
-                                            <span
-                                                style={{
-                                                    fontFamily: '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji',
-                                                    webkitTapHighlightColor: 'transparent',
-                                                    fontSize: '14px',
-                                                    lineHeight: '1.55',
-                                                    textDecoration: 'none',
-                                                    marginTop: '5px',
-                                                    wordBreak: 'break-word',
-                                                    color: '#fa5252'
-                                                }}
-                                            >
-                                                {form.errors.address}
-                                            </span>
-                                        }
-                                    </div>
-                                    <div className="sm:col-span-4">
                                         <RadioGroup value={selectedDeliveryMethod} onChange={(method) => {
                                             setSelectedDeliveryMethod(method)
                                             form.setFieldValue("deliveryMethod", method.title)
+                                            if(method === deliveryMethods[0]) setShippingCost(undefined);
                                         }}
                                         >
                                             <RadioGroup.Label className="text-lg font-medium text-gray-900">Envío</RadioGroup.Label>
@@ -425,11 +471,9 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                                         className={({ checked }) =>
                                                             classNames(
                                                                 checked ? 'ring-2 ring-indigo-500' : 'border-gray-300',
-                                                                deliveryMethod.title === 'Entrega' && form.values.address === '' ? 'opacity-40' : 'cursor-pointer',
-                                                                'relative flex rounded-lg border bg-white p-4 shadow-sm focus:outline-none'
+                                                                'relative flex rounded-lg border bg-white p-4 shadow-sm focus:outline-none cursor-pointer'
                                                             )
                                                         }
-                                                        disabled={deliveryMethod.title === 'Entrega' && form.values.address === '' && true}
                                                     >
                                                         {({ checked }) => (
 
@@ -464,25 +508,157 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                             </div>
                                         </RadioGroup>
                                     </div>
+                                    {selectedDeliveryMethod === deliveryMethods[1] &&
+                                        <>
+                                            <div className="sm:col-span-4">
+                                                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                                                    Dirección
+                                                </label>
+                                                <div className="mt-1">
+                                                    <input
+                                                        type="text"
+                                                        id="address"
+                                                        name="address"
+                                                        autoComplete="street-address"
+                                                        className={classNames(
+                                                            form.errors.address ? "border-red-500" : "border-gray-300",
+                                                            "block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                        )}
+                                                        onChangeCapture={(e) => {
+                                                            setShippingCost(undefined)
+                                                        }}
+                                                        {...form.getInputProps("address")}
+                                                    />
+                                                </div>
+                                                {form.errors.address &&
+                                                    <span
+                                                        style={{
+                                                            fontFamily: '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji',
+                                                            webkitTapHighlightColor: 'transparent',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.55',
+                                                            textDecoration: 'none',
+                                                            marginTop: '5px',
+                                                            wordBreak: 'break-word',
+                                                            color: '#fa5252'
+                                                        }}
+                                                    >
+                                                        {form.errors.address}
+                                                    </span>
+                                                }
+                                            </div>
+                                            <div className="sm:col-span-4">
+                                                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                                                    Provincia
+                                                </label>
+                                                <div className="mt-1">
+                                                    <select
+                                                        id="province"
+                                                        name="province"
+                                                        className={classNames(
+                                                            form.errors.province ? "border-red-500" : "border-gray-300",
+                                                            "block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                        )}
+                                                        onChangeCapture={(e) => {
+                                                            setShippingCost(undefined)
+                                                        }}
+                                                        {...form.getInputProps("province")}
+                                                    >
+                                                        <option disabled selected value="" hidden></option>
+                                                        {provinces.map((province) => (
+                                                            <option value={province.value}>{province.label}</option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                                {form.errors.province &&
+                                                    <span
+                                                        style={{
+                                                            fontFamily: '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji',
+                                                            webkitTapHighlightColor: 'transparent',
+                                                            fontSize: '14px',
+                                                            lineHeight: '1.55',
+                                                            textDecoration: 'none',
+                                                            marginTop: '5px',
+                                                            wordBreak: 'break-word',
+                                                            color: '#fa5252'
+                                                        }}
+                                                    >
+                                                        {form.errors.province}
+                                                    </span>
+                                                }
+                                            </div>
+                                            <div className={classNames(
+                                                "sm:col-span-4 grid grid-cols-4 gap-x-4",
+                                                form.errors.postCode ? 'items-center' : 'items-end'
+                                            )}>
+                                                <div className="col-span-3">
+                                                    <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                                                        Código Postal
+                                                    </label>
+                                                    <div className="mt-1">
+                                                        <input
+                                                            type="text"
+                                                            id="postCode"
+                                                            name="postCode"
+                                                            className={classNames(
+                                                                form.errors.postCode ? "border-red-500" : "border-gray-300",
+                                                                "block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                            )}
+                                                            onChangeCapture={(e) => {
+                                                                setShippingCost(undefined)
+                                                            }}
+                                                            {...form.getInputProps("postCode")}
+                                                        />
+                                                    </div>
+                                                    {form.errors.postCode &&
+                                                        <span
+                                                            style={{
+                                                                fontFamily: '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji',
+                                                                webkitTapHighlightColor: 'transparent',
+                                                                fontSize: '14px',
+                                                                lineHeight: '1.55',
+                                                                textDecoration: 'none',
+                                                                marginTop: '5px',
+                                                                wordBreak: 'break-word',
+                                                                color: '#fa5252'
+                                                            }}
+                                                        >
+                                                            {form.errors.postCode}
+                                                        </span>
+                                                    }
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    className="col-span-1 rounded-md bg-blue-400 px-3.5 text-sm font-semibold flex justify-center items-center text-white shadow-sm hover:bg-blue-500 h-[38px]"
+                                                    onClick={calculateSendCost}
+                                                >
+                                                    {(calculating) ? <Loader size='xs' /> : 'Calcular'}
+                                                </button>
+                                            </div>
+                                        </>
+                                    }
                                 </div>
                             </section>
 
                             <div className="mt-10 sm:flex sm:items-center sm:justify-center">
-                                {initialization ?
-                                    <Wallet
-                                        initialization={initialization}
-                                    />
-                                    :
-                                    <button
-                                        type="button"
-                                        className="rounded-md bg-sky-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm w-1/2 h-10 animate-pulse"
-                                    >
-                                    </button>
-                                }
+                                <CustomMPButton loading={loading} />
                             </div>
                         </div>
                     </form>
                 </main>
+            </div>
+            <div id="mp-container" className='hidden'>
+                {initialization &&
+                    <Wallet
+                        initialization={initialization}
+                        customization={{
+                            visual: {
+                                hideValueProp: true
+                            }
+                        }}
+                        onSubmit={() => setLoading(false)}
+                    />
+                }
             </div>
         </motion.div>
 

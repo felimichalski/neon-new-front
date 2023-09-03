@@ -3,8 +3,8 @@ import { Box, Container, createStyles, Text, Title } from "@mantine/core"
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import { featuredFetch } from "../../features/actions/featuredActions";
-import Product from "../Product";
 import { Link } from "react-router-dom";
+import Product from "../Product/new";
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -60,6 +60,7 @@ const FeaturedProducts = ({ customText }) => {
             setProducts(data.items);
         }
     }, [data])
+    
     return (
         <Container fluid className={classes.root}>
             <Box className={classes.titleBar}>
@@ -94,7 +95,7 @@ const FeaturedProducts = ({ customText }) => {
                 >
                     {products && products.map((product, key) => (
                         <Carousel.Slide key={key} className={classes.cardSlide}>
-                            <Product className={classes.productTest} data={product} hoverEffects={true}/>
+                            <Product product={product}/>
                         </Carousel.Slide>
                     ))}
                 </Carousel>
