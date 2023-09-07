@@ -15,7 +15,7 @@ const Product = ({ product }) => {
 
     return (
         <div
-            className="cursor-pointer group relative flex flex-col overflow-hidden rounded-lg bg-white shadow-xl hover:scale-105 transition"
+            className="cursor-pointer group relative flex flex-col overflow-hidden rounded-lg bg-white shadow-xl hover:scale-105 transition min-h-[400px]"
             onClick={() => navigate(`/product/${product.id}`)}
         >
             <div className="w-full aspect-square bg-gray-200">

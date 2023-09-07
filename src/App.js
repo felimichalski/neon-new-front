@@ -41,6 +41,7 @@ const App = () => {
     lastName: '',
     email: '',
     phone: '',
+    dni: '',
     address: '',
     province: '',
     postCode: '',

@@ -62,15 +62,6 @@ const Home = () => {
   const [updateText, setUpdateText] = useState("")
   useDocumentTitle('Neon infinito - Inicio')
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = await generateAccessToken()
-      console.log(token)
-    }
-
-    fetchData()
-  }, [])
-  
   return (
     <motion.div
       initial={{opacity: 0}}

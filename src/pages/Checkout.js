@@ -67,7 +67,7 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
 
     const navigate = useNavigate()
 
-    const { firstName, lastName, email, phone, address, province, postCode } = paymentInfo;
+    const { firstName, lastName, email, phone, dni, address, province, postCode } = paymentInfo;
 
     const form = useForm({
         initialValues: {
@@ -75,17 +75,18 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
             lastName,
             email,
             phone,
+            dni,
             deliveryMethod: deliveryMethods[0].title,
             address,
             province,
             postCode
-
         },
         validate: {
             firstName: (val) => val.length > 0 ? null : 'Campo requerido',
             lastName: (val) => val.length > 0 ? null : 'Campo requerido',
             email: (val) => (val.length > 0 ? /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(val) ? null : 'Mail inválido' : 'Campo requerido'),
             phone: (val) => val.length > 0 ? null : 'Campo requerido',
+            dni: (val) => val.length > 0 ? null : 'Campo requerido',
             address: (val) => form.values.deliveryMethod !== deliveryMethods[1].title ? null : val.length > 0 ? null : 'Campo requerido',
             province: (val) => form.values.deliveryMethod !== deliveryMethods[1].title ? null : val.length > 0 ? null : 'Campo requerido',
             postCode: (val) => form.values.deliveryMethod !== deliveryMethods[1].title ? null : val.length > 0 ? null : 'Campo requerido',
@@ -93,10 +94,9 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
     });
 
     const calculateSendCost = async () => {
-        const err1 = form.validateField("address").hasError;
-        const err2 = form.validateField("province").hasError;
-        const err3 = form.validateField("postCode").hasError;
-        if (!err1 && !err2 && !err3) {
+        const err1 = form.validateField("province").hasError;
+        const err2 = form.validateField("postCode").hasError;
+        if (!err1 && !err2) {
             setCalculating(true);
             const accessToken = await generateAccessToken()
             try {
@@ -126,46 +126,59 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
 
     const fetchPaymentInfo = async () => {
         setInitialization(undefined)
-        await initMercadoPago(process.env.REACT_APP_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/payments`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                items: [...products, { title: 'Envío', quantity: 1, unit_price: shippingCost ? shippingCost : 0 }]
+        try {
+            await initMercadoPago(process.env.REACT_APP_MERCADOPAGO_PUBLIC_KEY, { locale: 'es-AR' });
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/payments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    products: [...products, { title: 'Envío', quantity: 1, unit_price: shippingCost ? shippingCost : 0 }],
+                    client: form.values,
+                    shipping: deliveryMethods[1] === selectedDeliveryMethod
+                })
             })
-        })
 
-        if (response.status !== 201) {
-            return navigate('/cart')
+            if (response.status !== 201) {
+                return navigate('/cart')
+            }
+
+            const { id } = await response.json()
+            setInitialization({
+                preferenceId: id,
+                redirectMode: 'self'
+                // redirectMode: 'modal'
+            })
+        } catch (error) {
+            throw new Error("err_pago");
         }
-
-        const { id } = await response.json()
-
-        setInitialization({
-            preferenceId: id,
-            redirectMode: 'modal'
-        })
     }
 
     const handleSubmit = async () => {
-        if(!shippingCost && selectedDeliveryMethod === deliveryMethods[1]) return toast.error("Por favor actualice el costo de envío", {
+        if (!shippingCost && selectedDeliveryMethod === deliveryMethods[1]) return toast.error("Por favor actualice el costo de envío", {
             position: "bottom-right",
         });
         setLoading(true)
-        await fetchPaymentInfo()
         try {
+            await fetchPaymentInfo()
             document.querySelector("#mp-container button").click();
         } catch (error) {
-            try {
-                setTimeout(() => {
-                    document.querySelector("#mp-container button").click();
-                }, [2000]);
-            } catch (error) {
+            if (error.message && error.message === "err_pago") {
                 toast.error("Ha ocurrido un error al procesar su pedido. Intente de nuevo más tarde", {
                     position: "bottom-right",
                 });
+            } else {
+                setTimeout(() => {
+                    try {
+                        document.querySelector("#mp-container button").click();
+                    } catch (error) {
+                        toast.error("Ha ocurrido un error al procesar su pedido. Intente de nuevo más tarde", {
+                            position: "bottom-right",
+                        });
+                        setLoading(false)
+                    }
+                }, [2000]);
             }
         }
     }
@@ -324,8 +337,8 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                         <div className="mt-1">
                                             <input
                                                 type="text"
-                                                name="first-name"
-                                                id="first-name"
+                                                name="firstName"
+                                                id="firstName"
                                                 autoComplete="given-name"
                                                 className={classNames(
                                                     form.errors.firstName ? "border-red-500" : "border-gray-300",
@@ -455,10 +468,43 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                         }
                                     </div>
                                     <div className="sm:col-span-4">
+                                        <label htmlFor="dni" className="block text-sm font-medium text-gray-700">
+                                            DNI
+                                        </label>
+                                        <div className="mt-1">
+                                            <input
+                                                type="text"
+                                                id="dni"
+                                                name="dni"
+                                                className={classNames(
+                                                    form.errors.dni ? "border-red-500" : "border-gray-300",
+                                                    "block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                                )}
+                                                {...form.getInputProps("dni")}
+                                            />
+                                        </div>
+                                        {form.errors.dni &&
+                                            <span
+                                                style={{
+                                                    fontFamily: '-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji',
+                                                    webkitTapHighlightColor: 'transparent',
+                                                    fontSize: '14px',
+                                                    lineHeight: '1.55',
+                                                    textDecoration: 'none',
+                                                    marginTop: '5px',
+                                                    wordBreak: 'break-word',
+                                                    color: '#fa5252'
+                                                }}
+                                            >
+                                                {form.errors.dni}
+                                            </span>
+                                        }
+                                    </div>
+                                    <div className="sm:col-span-4">
                                         <RadioGroup value={selectedDeliveryMethod} onChange={(method) => {
                                             setSelectedDeliveryMethod(method)
                                             form.setFieldValue("deliveryMethod", method.title)
-                                            if(method === deliveryMethods[0]) setShippingCost(undefined);
+                                            if (method === deliveryMethods[0]) setShippingCost(undefined);
                                         }}
                                         >
                                             <RadioGroup.Label className="text-lg font-medium text-gray-900">Envío</RadioGroup.Label>
@@ -524,9 +570,6 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                                             form.errors.address ? "border-red-500" : "border-gray-300",
                                                             "block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                                         )}
-                                                        onChangeCapture={(e) => {
-                                                            setShippingCost(undefined)
-                                                        }}
                                                         {...form.getInputProps("address")}
                                                     />
                                                 </div>
@@ -548,7 +591,7 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                                 }
                                             </div>
                                             <div className="sm:col-span-4">
-                                                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                                                <label htmlFor="province" className="block text-sm font-medium text-gray-700">
                                                     Provincia
                                                 </label>
                                                 <div className="mt-1">
@@ -592,7 +635,7 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                                 form.errors.postCode ? 'items-center' : 'items-end'
                                             )}>
                                                 <div className="col-span-3">
-                                                    <label htmlFor="address" className="block text-sm font-medium text-gray-700">
+                                                    <label htmlFor="postCode" className="block text-sm font-medium text-gray-700">
                                                         Código Postal
                                                     </label>
                                                     <div className="mt-1">
@@ -656,7 +699,6 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
                                 hideValueProp: true
                             }
                         }}
-                        onSubmit={() => setLoading(false)}
                     />
                 }
             </div>
@@ -666,3 +708,5 @@ const Checkout = ({ paymentInfo, setPaymentInfo }) => {
 }
 
 export default Checkout;
+
+// http://localhost:3000/checkout/failure?collection_id=null&collection_status=null&payment_id=null&status=null&external_reference=null&payment_type=null&merchant_order_id=null&preference_id=1345726002-c2719071-3596-4a62-aa63-d48ec8456ff4&site_id=MLA&processing_mode=aggregator&merchant_account_id=null
