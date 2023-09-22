@@ -1,10 +1,9 @@
-import { Box, createStyles } from "@mantine/core"
+import { Box } from "@mantine/core"
 import { useDocumentTitle } from "@mantine/hooks"
-import FeaturedProducts from "../components/FeaturedProducts"
 import SectionCards from "../components/SectionCards"
 import TitleBox from "../components/TitleBox"
 import IconsHome from "../components/IconsHome"
-
+import { useEffect } from 'react'
 
 
 // import bg1 from '../assets/section-cards/bg1.jpg'
@@ -16,16 +15,19 @@ import CustomDivider from "../components/CustomDivider"
 import { motion } from 'framer-motion'
 import { useState } from "react"
 import LogosBar from "../components/LogosBar"
+import FeaturedProducts from "../components/FeaturedProducts/new"
+import generateAccessToken from "../utils/generateAccessToken"
 
 const mock1 = [
   {
     background: bg4,
-    title: 'Alquilá tu cartel',
+    title: 'Conseguí tu neón',
     text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque commodi sapiente provident cum tempora eius harum ad omnis est? Minima.',
-    bgText: 'white',
-    textColor: 'black',
-    buttonText: 'Boton texto 2',
-    type: 'card'
+    bgText: 'black',
+    textColor: 'white',
+    buttonText: 'Texto 1',
+    type: 'card',
+    link: '/categories'
   },
   {
     background: bg2,
@@ -34,12 +36,10 @@ const mock1 = [
     bgText: 'black',
     textColor: 'white',
     buttonText: 'Texto 1',
-    type: 'card'
-  },
-  
+    type: 'card',
+    link: '/custom'
+  } 
 ]
-
-
 
 // const mock2 = [
 //   {
@@ -58,10 +58,10 @@ const mock1 = [
 
 /* <script async src="//www.instagram.com/embed.js"></script> */
 
-const Home = ({openMenu, setOpenMenu}) => {
+const Home = () => {
   const [updateText, setUpdateText] = useState("")
   useDocumentTitle('Neon infinito - Inicio')
-  
+
   return (
     <motion.div
       initial={{opacity: 0}}
@@ -75,12 +75,11 @@ const Home = ({openMenu, setOpenMenu}) => {
           <CustomDivider />
           <LogosBar />
           <CustomDivider />
-          
           <FeaturedProducts />
           <CustomDivider />
           <IconsHome/>
-          <CustomDivider />
-          {/* <SectionCards data={mock2}/>
+          {/* <CustomDivider />
+          <SectionCards data={mock2}/>
           <CustomDivider /> */}
       </Box>
     </motion.div>

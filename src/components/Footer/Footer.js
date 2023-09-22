@@ -1,109 +1,103 @@
-import { Box, createStyles, Divider, Grid, Image, List, Text, ThemeIcon } from "@mantine/core"
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from 'react-router-dom'
-import { Phone, GeoAlt, Envelope } from '@styled-icons/bootstrap'
-
 import logo from '../../assets/logo.png'
-
+import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import Icon from './Icon'
 
-const useStyles = createStyles((theme) => ({
-    column: {
-        display: 'flex',
-        justifyContent: 'flex-start',
-        [`@media (maxWidth: 600px)`]: {
-            display:"none",
-          },
-    },
-    column2:{
-        display: 'flex',
-    },
-
-    footerTitle: {
-        color: theme.white,
-        textTransform: 'uppercase',
-        fontFamily: 'Lexend',
-        marginBottom: '1rem',
-        textAlign: 'center'
-    },
-
-    tabLink: {
-        textDecoration: 'none',
-        textTransform: 'uppercase',
-        fontFamily: 'Proxima Nova',
-        fontWeight: 400,
-        color: theme.colors.gray[7],
-
-        '&:hover': {
-            color: theme.colors.gray[6]
-        }
-    },
-    /* list:{
-        display:"none"
-    }, */
-    newsletterInput: {
-        fontSize: '16px'
-    },
-
-    newsletterButton: {
-        padding: 0,
-        borderTopRightRadius: '3px',
-        borderBottomRightRadius: '3px',
-        height: '100%',
-        backgroundColor: theme.white,
-        color: theme.black,
-
-        '&:hover': {
-            backgroundColor: theme.colors.gray[4],
-        }
-    },
-
-    newsletterText: {
-        color: theme.colors.gray[7],
-        fontFamily: 'Proxima Nova'
-    },
-
-    infoItem: {
-        fontFamily: 'Proxima Nova',
-        color: theme.colors.gray[7],
-        [`@media (maxWidth: 600px)`]: {fontSize:"0.7rem", margin:"0.5rem"}
-    },
-
-    copyright: {
-        textAlign: 'center',
-        width: '100%',
-    },
-
-    copyrightText: {
-        color: theme.white,
-        fontFamily: 'Gotham',
-        fontWeight: 700,
-        fontSize: 14,
-    }, 
-    responsiveItem:{
-        transform:"scale(0.5)"
-    }
-}))
-
-function Footer() {
-
-    const tabs = [{
-        name: 'Galería',
-        link: '/galery'
-      },{
-        name: 'Categorías',
-        link: '/categories'
-      }, {
-        name: 'Personalizados',
-        link: '/custom',
-      }, {
-        name: 'Contactanos',
-        link: '/contact',
-      }];
-
-    const { classes } = useStyles();
-
+const navigation = {
+    social: [
+      /* {
+        name: 'Facebook',
+        href: '#',
+        icon: (props) => (
+          <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+            <path
+              fillRule="evenodd"
+              d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ),
+      }, */
+      {
+        name: 'Instagram',
+        href: '#',
+        icon: (props) => (
+          <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+            <path
+              fillRule="evenodd"
+              d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ),
+      },
+      /* {
+        name: 'Twitter',
+        href: '#',
+        icon: (props) => (
+          <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+          </svg>
+        ),
+      }, */
+      /* {
+        name: 'GitHub',
+        href: '#',
+        icon: (props) => (
+          <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+            <path
+              fillRule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ),
+      }, */
+      {
+        name: 'TikTok',
+        href: '#',
+        icon: (props) => (
+          <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+            <path
+              fillRule="evenodd"
+              d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z"
+              clipRule="evenodd"
+            />
+            {/* <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tiktok" viewBox="0 0 16 16"> <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z"/> </svg> */}
+          </svg>
+        ),
+      },
+      {
+        name: 'WhatsApp',
+        href: '#',
+        icon: (props) => (
+          <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+            <path
+             width="15px" height="15px"
+              fillRule="evenodd"
+              d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ),
+      },
+      /* {
+        name: 'YouTube',
+        href: '#',
+        icon: (props) => (
+          <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
+            <path
+              fillRule="evenodd"
+              d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.746 22 12 22 12s0 3.255-.418 4.814a2.504 2.504 0 0 1-1.768 1.768c-1.56.419-7.814.419-7.814.419s-6.255 0-7.814-.419a2.505 2.505 0 0 1-1.768-1.768C2 15.255 2 12 2 12s0-3.255.417-4.814a2.507 2.507 0 0 1 1.768-1.768C5.744 5 11.998 5 11.998 5s6.255 0 7.814.418ZM15.194 12 10 15V9l5.194 3Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ),
+      }, */
+    ],
+  }
+  
+  export default function Footer() {
     const [icons, setIcons] = useState([])
     const data = useSelector(state => state.social);
 
@@ -112,114 +106,87 @@ function Footer() {
             setIcons(data.items)
         }
     }, [data])
-
+    const tabs = [{
+        name: 'GALERÍA',
+        link: '/galery'
+      },{
+        name: 'CATEGORÍAS',
+        link: '/categories'
+      }, {
+        name: 'PERSONALIZADOS',
+        link: '/custom',
+      }, {
+        name: 'CONTACTANOS',
+        link: '/contact',
+      }];
     return (
-        <footer style={{backgroundColor: 'black', [`@media (max-width: 600px)`]: {display:"flex", alignItems:"center", justifyContent:"center"}}}>
-            <Grid mr={1} sx={{padding:"1rem 0 0 1rem", }}>
-                <Grid.Col span={2} px={40} className={classes.column}>
-                    <Image src={logo} style={{margin: 'auto 0', marginRight:"1rem"}}/>
-                    <Divider orientation="vertical" ml={20}/>
-                </Grid.Col>
-                {/* <Grid.Col span={3} className={classes.column} style={{flexDirection: 'column'}}>
-                    <Title className={classes.footerTitle}>
-                        Newsletter
-                    </Title>
-                    <TextInput
-                    placeholder="Tu mail"
-                    rightSection={<Button className={classes.newsletterButton} radius="none"><ChevronRight color="black" size={16}/></Button>}
-                    className={classes.newsletterInput}
-                    radius='3px'
-                    rightSectionWidth='auto'
-                    size="xs"
+        <footer className="bg-black" aria-labelledby="footer-heading">
+        <h2 id="footer-heading" className="sr-only">
+          Footer
+        </h2>
+        <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
+          <div className="xl:grid xl:grid-cols-3 xl:gap-8">
+            <div className="space-y-8">
+              <img
+                className="h-16"
+                src={logo}
+                alt="Company name"
+              />
+              <p className="text-sm leading-6 text-gray-300">
+                Haciendo realidad tus sueños de una forma creativa y elegante.
+              </p>
+              <div className="flex ">
+                  {/* <a href="/" className=" text-gray-500 hover:text-gray-400 bg-white">
+                    <span className="sr-only">Instagram</span>
+                    <svg fill="currentColor" viewBox="0 0 24 24" >
+                    <path
+                        fillRule="evenodd"
+                        d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
+                        clipRule="evenodd"
                     />
-                    <Text className={classes.newsletterText}>Suscribite a nuestro newsletter para no perderte ninguna oferta</Text>
-                </Grid.Col> */}
-                <Grid.Col span={6} className={classes.column} style={{flexDirection: 'column', display:"flex", justifyContent:"center",alignItems:"center", [`@media (maxWidth: 600px)`]: {display:"none"}}}>
-                    {/* <Title className={classes.footerTitle}>
-                        Links
-                    </Title> */}
-                    <List listStyleType='none' mx='auto' className={classes.list} sx={{display:"flex",flexDirection:"row", alignItems:"center", justifyContent:"space-between",[`@media (maxWidth: 600px)`]: {display:"none"}}}>
-                        {tabs.map((tab, key) => (
-                            <List.Item key={key} sx={{margin:"0 1rem", fontSize:"1.1rem"}}>
-                                <Link className={classes.tabLink} to={tab.link} >{tab.name}</Link>
-                            </List.Item>
-                        ))}
-                    </List>
-                </Grid.Col>
-                <Divider orientation="vertical" ml={20} sx={{[`@media (maxWidth: 600px)`]: {display:"none",},}}/>
-                <Grid.Col span={3} className={classes.column} style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                    
-                    <List listStyleType='none' center spacing='sm'>
-                        <List.Item icon={
-                        <ThemeIcon color="green" size={24} radius="xl">
-                            <Phone size={16} />
-                        </ThemeIcon>
-                        } className={classes.infoItem}>
-                            +54 11 2345-6789
-                        </List.Item>
-                        <List.Item icon={
-                        <ThemeIcon color="blue" size={24} radius="xl">
-                            <GeoAlt size={16} />
-                        </ThemeIcon>
-                        } className={classes.infoItem}>
-                            Buenos Aires, Argentina
-                        </List.Item>
-                        <List.Item icon={
-                        <ThemeIcon color="red" size={24} radius="xl">
-                            <Envelope size={16} />
-                        </ThemeIcon>
-                        } className={classes.infoItem}>
-                            text@text.com
-                        </List.Item>
-                    </List>
-                </Grid.Col>
-            </Grid>
-
-            {/* RESPONSIVE */}
-            <Box sx={{display:"none",[`@media (maxWidth: 600px)`]: {display:"flex", flexDirection:"row",alignItems: 'center',justifyContent:"center", width:"100%", padding:"0 1rem"} }}>
-                    <List listStyleType='none' center spacing='sm' sx={{display:"flex", flexDirection:"row",alignItems:"center"}}>
-                        <List.Item icon={
-                        <ThemeIcon color="green" size={18} radius="xl">
-                            <Phone size={10} />
-                        </ThemeIcon>
-                        } className={classes.infoItem}>
-                            +54 11 2345-6789
-                        </List.Item>
-                        <List.Item icon={
-                        <ThemeIcon color="blue" size={18} radius="xl">
-                            <GeoAlt size={10} />
-                        </ThemeIcon>
-                        } className={classes.infoItem}>
-                            Buenos Aires, Argentina
-                        </List.Item>
-                        <List.Item icon={
-                        <ThemeIcon color="red" size={18} radius="xl">
-                            <Envelope size={10} />
-                        </ThemeIcon>
-                        } className={classes.infoItem}>
-                            text@text.com
-                        </List.Item>
-                    </List>
-            </Box>
-            <Divider
-            mx={20}
-            my={30}
-            labelPosition='center'
-            label={
-                <>
-                    {icons?.length > 0 &&
+                    </svg>
+                  </a>
+                  <a href="/" className=" text-gray-500 hover:text-gray-400 bg-white">
+                    <span className="sr-only">TikTok</span>
+                    <svg fill="currentColor" viewBox="0 0 24 24" >
+                    <path
+                        fillRule="evenodd"
+                        d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3V0Z"
+                        clipRule="evenodd"
+                    />
+                    </svg>
+                  </a>
+                  <a href="/" className=" text-gray-500 hover:text-gray-400 bg-white">
+                    <span className="sr-only">Whatsapp</span>
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                        fillRule="evenodd"
+                        d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"
+                        clipRule="evenodd"
+                    />
+                    </svg>
+                  </a> */}
+                  {icons?.length > 0 &&
                         icons.map((icon, key) => (
                             <Icon data={icon} key={key}/>
                         ))
                     }
-                </>
-            }
-            />
-            <Box className={classes.copyright}>
-                <Text pb={20} className={classes.copyrightText}>&copy; 2022 Copyright - Neon Infinito</Text>
-            </Box>
-        </footer>
+              </div>
+            </div>
+            <div className="mt-16 grid grid-cols-4 gap-8 xl:col-span-2 xl:mt-0 items-center">
+                  {tabs.map((item) => (
+                    <div>
+                      <a key={item.name} href={item.link} className="text-xl leading-6 text-gray-300 hover:text-white">
+                          {item.name}
+                      </a>
+                    </div>
+                    ))}
+            </div>
+          </div>
+          <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
+            <p className="text-xs leading-5 text-gray-400">&copy; 2020 2022 Copyright - Neon Infinito.</p>
+          </div>
+        </div>
+      </footer>
     )
-}
-
-export default Footer
+  }

@@ -6,6 +6,8 @@ import { Divider, Indicator, Menu, UnstyledButton } from '@mantine/core'
 
 import { Bars, Xmark } from '@styled-icons/fa-solid'
 import { Person, Cart, ArrowEnter, SignOut, Pen, Star } from '@styled-icons/fluentui-system-regular'
+import { Admin } from "@styled-icons/remix-line/Admin"
+
 import { useDispatch, useSelector } from 'react-redux'
 import { ChevronDown } from '@styled-icons/entypo'
 import { AuthModal } from '../AuthModal'
@@ -45,9 +47,10 @@ const Navbar = () => {
 
     const auth = useSelector((state) => state.auth);
     const types = useSelector((state) => state.category.types)
+    const logedUser = useSelector(state => state.auth.userInfo)
 
     useEffect(() => {
-        if(types.length > 0) {
+        if (types.length > 0) {
             const type = types.find((type) => type.name === 'Neones de diseño')
             setCategories(type.categories)
         }
@@ -168,6 +171,23 @@ const Navbar = () => {
                                 </div>
                             </div>
                             <div className="absolute inset-y-0 right-0 flex items-center pr-2 prelg:static prelg:inset-auto prelg:ml-6 prelg:pr-0">
+                                {
+                                    logedUser?.admin ?
+                                        <>
+                                            <Divider className="hidden prelg:block" px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
+                                            <button
+                                                type="button"
+                                                className="relative bg-transparent h-full hover:bg-gray-100 hover:-mx-1 hover:px-5 px-4"
+                                                onClick={() => navigate('/admin')}
+                                            >
+                                                <span className="absolute -inset-1.5" />
+                                                <span className="sr-only">Admin</span>
+                                                <Admin className="h-6 w-6" aria-hidden="true" />
+                                            </button>
+                                        </>
+                                        :
+                                        ""
+                                }
                                 <Divider className="hidden prelg:block" px={0} my={10} color='rgb(229 229 229 / 1)' orientation='vertical' />
                                 {/* Profile dropdown */}
                                 {userButton}
@@ -208,11 +228,11 @@ const Navbar = () => {
                                                     className="flex gap-x-4 py-2 text-sm font-semibold leading-6 text-gray-900"
                                                 >
                                                     <span
-                                                    className="font-semibold text-gray-900 bg-gray-100 cursor-pointer hover:bg-gray-200 py-2 pl-2 w-full rounded"
-                                                    onClick={() => {
-                                                        navigate(`/categories/${category.type}/${category.id}`)
-                                                        close()
-                                                    }}>
+                                                        className="font-semibold text-gray-900 bg-gray-100 cursor-pointer hover:bg-gray-200 py-2 pl-2 w-full rounded"
+                                                        onClick={() => {
+                                                            navigate(`/categories/${category.type}/${category.id}`)
+                                                            close()
+                                                        }}>
                                                         {category.name}
                                                     </span>
                                                 </div>

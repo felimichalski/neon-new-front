@@ -125,8 +125,9 @@ const Cart = () => {
                         <div className="mt-6">
                             <button
                                 type="submit"
-                                className="w-full rounded-md border border-transparent bg-blue-500 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none"
+                                className="w-full rounded-md border border-transparent bg-blue-500 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-blue-600 focus:outline-none disabled:opacity-50 disabled:hover:bg-blue-500"
                                 onClick={() => navigate('/checkout')}
+                                disabled={!(products.length > 0)}
                             >
                                 Confirmar Compra
                             </button>

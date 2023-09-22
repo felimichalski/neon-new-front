@@ -40,8 +40,11 @@ const App = () => {
     firstName: '',
     lastName: '',
     email: '',
-    address: '',
     phone: '',
+    dni: '',
+    address: '',
+    province: '',
+    postCode: '',
   })
   const [viewFull, setViewFull] = useState(true)
   const dispatch = useDispatch()
@@ -120,9 +123,9 @@ const App = () => {
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>
-      {/* {viewFull &&
+      {viewFull &&
           <Footer />
-        } */}
+        }
     </MantineProvider>
   );
 }

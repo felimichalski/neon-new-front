@@ -21,7 +21,7 @@ const OrderSteps = ({ pageStep, className }) => {
                     <nav aria-label="Progress" className="block">
                         <ol className="flex space-x-4">
                             {steps.map((step, stepIdx) => (
-                                <li key={step.name} className={classNames(step.path && 'cursor-pointer', "flex items-center")} onClick={() => step.path && navigate(step.path)}>
+                                <li key={step.name} className={classNames(step.path ? 'cursor-pointer' : 'cursor-default', 'flex items-center')} onClick={() => step.path && navigate(step.path)}>
                                     {pageStep === stepIdx ? (
                                         <span className="text-indigo-600">
                                             {step.name}

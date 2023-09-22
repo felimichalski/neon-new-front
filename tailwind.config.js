@@ -11,6 +11,8 @@ module.exports = {
         '[auto,auto,1fr]': 'auto auto 1fr',
       },
       zIndex: {
+        '1': '1',
+        '2': '2',
         '100': '100',
       },
       fontFamily: {
@@ -25,6 +27,10 @@ module.exports = {
       screens: {
         'prelg': '850px'
       },
+      maxHeight: {
+        '16': '4rem',
+        '20': '5rem',
+      }
     },
   },
   plugins: [

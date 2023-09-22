@@ -69,7 +69,7 @@ const ProductDetail = () => {
       unit_price: (withControl) ? price + selectedControl.price : price,
       size: sizeName,
       control: (withControl) ? resolveControl(selectedControl.key) : 'Sin control',
-      color: selectedColor.name,
+      color: product.color ? selectedColor.name : "Color único",
       image: images[0].key
     }
   }
@@ -385,39 +385,41 @@ const ProductDetail = () => {
 
 
               <form className="mt-6" onSubmit={(e) => e.preventDefault()}>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900">Color</h3>
+                {product.color && 
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
-                  <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-4">
-                    <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
-                    <div className="flex items-center space-x-3">
-                      {colors.map((color) => (
-                        <RadioGroup.Option
-                          key={color.name}
-                          value={color}
-                          className={({ checked }) =>
-                            classNames(
-                              color.selectedClass,
-                              checked ? 'ring-2' : '',
-                              'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
-                            )
-                          }
-                        >
-                          <RadioGroup.Label as="span" className="sr-only">
-                            {color.name}
-                          </RadioGroup.Label>
-                          <span
-                            aria-hidden="true"
-                            className={classNames(
-                              color.class,
-                              'h-8 w-8 rounded-full border border-black border-opacity-10'
-                            )}
-                          />
-                        </RadioGroup.Option>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </div>
+                    <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-4">
+                      <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
+                      <div className="flex items-center space-x-3">
+                        {colors.map((color) => (
+                          <RadioGroup.Option
+                            key={color.name}
+                            value={color}
+                            className={({ checked }) =>
+                              classNames(
+                                color.selectedClass,
+                                checked ? 'ring-2' : '',
+                                'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
+                              )
+                            }
+                          >
+                            <RadioGroup.Label as="span" className="sr-only">
+                              {color.name}
+                            </RadioGroup.Label>
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                color.class,
+                                'h-8 w-8 rounded-full border border-black border-opacity-10'
+                              )}
+                            />
+                          </RadioGroup.Option>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </div>
+                }
 
 
                 <div className="mt-10 flex">

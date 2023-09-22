@@ -274,7 +274,7 @@ const About = () => {
                     <div className="mx-auto max-w-2xl lg:mx-0">
                         <h2 className="text-md font-bold tracking-tight text-gray-900 sm:text-lg">
                             ¿Tenés un diseño propio?
-                            <span className="font-semibold leading-6 text-indigo-400 ml-2 cursor-pointer" onClick={() => navigate('/contact')}>
+                            <span className="font-semibold leading-6 text-indigo-400 ml-2 cursor-pointer" onClick={() => navigate('/custom')}>
                                 Neonizalo
                             </span>
                         </h2>

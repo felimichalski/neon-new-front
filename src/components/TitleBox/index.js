@@ -9,9 +9,9 @@ import { Cross } from "@styled-icons/entypo/Cross"
 import { useForm } from '@mantine/form';
 import { updatePublic } from '../../features/actions/publicActions';
 
-import background1 from '../../assets/1.webp'
-import background2 from '../../assets/bgHome.webp'
-import background3 from '../../assets/bgHome2.jpeg'
+import background3 from '../../assets/1.webp'
+import background1 from '../../assets/bgHome.webp'
+import background2 from '../../assets/bgHome2.jpeg'
 import { useRef } from 'react';
 import Autoplay from 'embla-carousel-autoplay';
 
@@ -115,7 +115,7 @@ const TitleBox = ({ hoverEffects, updateText, setUpdateText }) => {
     }
 
     return (
-        <Box sx={{ position: "relative" }}>
+        <Box sx={{ position: "relative", zIndex: 2 }}>
             <Box className={classes.titleBox}>
                 {updateText !== "HomeTitle" ?
                     <Title className={classes.title}>{firstPublic}</Title> :
