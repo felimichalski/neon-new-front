@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom'
 
 const CategoriesSection = () => {
 
-    const [categories, setCategories] = useState(undefined)
+    const [types, setTypes] = useState(undefined)
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/types`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/types/all`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -16,61 +16,41 @@ const CategoriesSection = () => {
             })
 
             const data = await response.json()
-            setCategories(data);
+            setTypes(data)
         }
         fetchCategories()
     }, [])
 
-    if(!categories) return;
+    if (!types) return;
 
     return (
-        <Box>
+        <Box sx={{
+            [`@media (max-width: 600px)`]: {
+                display: "none",
+            },
+        }}>
             <Title mb={20}>Categorías</Title>
             <List
                 listStyleType='none'
             >
-                <List.Item>
-                    <Link style={{textDecoration: 'none', color: 'gray'}} to='/categories/type/1'>Neones de diseño</Link>
-                </List.Item>
-                <List
-                withPadding
-                listStyleType='none'
-                mb={20}
-                >
-                    {categories.firstType.map((category) => (
-                        <List.Item my={5}>
-                            <Link style={{textDecoration: 'none', color: 'gray'}} to={`/categories/${category.id}`}>{category.name}</Link>
+                {types.map((type, key) => (
+                    <>
+                        <List.Item key={key}>
+                            <Link style={{ textDecoration: 'none', color: 'gray' }} to={`/categories/${type.id}`}>{type.name}</Link>
                         </List.Item>
-                    ))}
-                </List>
-                <List.Item>
-                    <Link style={{textDecoration: 'none', color: 'gray'}} to='/categories/type/2'>Artístico</Link>
-                </List.Item>
-                <List
-                withPadding
-                listStyleType='none'
-                mb={20}
-                >
-                    {categories.secondType.map((category) => (
-                        <List.Item my={5}>
-                            <Link style={{textDecoration: 'none', color: 'gray'}} to={`/categories/${category.id}`}>{category.name}</Link>
-                        </List.Item>
-                    ))}
-                </List>
-                <List.Item>
-                    <Link style={{textDecoration: 'none', color: 'gray'}} to='/categories/type/3'>Algo distinto</Link>
-                </List.Item>
-                <List
-                withPadding
-                listStyleType='none'
-                mb={20}
-                >
-                    {categories.thirdType.map((category) => (
-                        <List.Item my={5}>
-                            <Link style={{textDecoration: 'none', color: 'gray'}} to={`/categories/${category.id}`}>{category.name}</Link>
-                        </List.Item>
-                    ))}
-                </List>
+                        <List
+                            withPadding
+                            listStyleType='none'
+                            mb={20}
+                        >
+                            {type.categories.length > 0 && type.categories.map((category) => (
+                                <List.Item key={category.id} my={5}>
+                                    <Link key={category.id} style={{ textDecoration: 'none', color: 'gray' }} to={`/categories/${type.id}/${category.id}`}>{category.name}</Link>
+                                </List.Item>
+                            ))}
+                        </List>
+                    </>
+                ))}
             </List>
         </Box>
     )

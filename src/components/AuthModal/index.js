@@ -50,10 +50,17 @@ export function AuthModal({ opened, setOpened }) {
                 firstName: form.values.firstName,
                 lastName: form.values.lastName
             }));
+            console.log(response)
             if (response.meta.requestStatus === 'fulfilled') {
                 toast.success("Usuario registrado con éxito", {
                     position: "bottom-left",
                   });
+                setOpened(false);
+                form.setValues(initialValues)
+            } else if (response.meta.requestStatus === 'rejected') {
+                toast.error("No se ha podido crear el usuario", {
+                    position: "bottom-left",
+                });
                 setOpened(false);
                 form.setValues(initialValues)
             }

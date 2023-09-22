@@ -1,8 +1,8 @@
-import { Box, createStyles, Divider, Grid, Image, List, Text, Title, ThemeIcon, TextInput, Button } from "@mantine/core"
+import { Box, createStyles, Divider, Grid, Image, List, Text, ThemeIcon } from "@mantine/core"
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom'
-import { Phone, GeoAlt, Envelope, ChevronRight } from '@styled-icons/bootstrap'
+import { Phone, GeoAlt, Envelope } from '@styled-icons/bootstrap'
 
 import logo from '../../assets/logo.png'
 
@@ -12,6 +12,12 @@ const useStyles = createStyles((theme) => ({
     column: {
         display: 'flex',
         justifyContent: 'flex-start',
+        [`@media (maxWidth: 600px)`]: {
+            display:"none",
+          },
+    },
+    column2:{
+        display: 'flex',
     },
 
     footerTitle: {
@@ -33,7 +39,9 @@ const useStyles = createStyles((theme) => ({
             color: theme.colors.gray[6]
         }
     },
-
+    /* list:{
+        display:"none"
+    }, */
     newsletterInput: {
         fontSize: '16px'
     },
@@ -58,7 +66,8 @@ const useStyles = createStyles((theme) => ({
 
     infoItem: {
         fontFamily: 'Proxima Nova',
-        color: theme.colors.gray[7]
+        color: theme.colors.gray[7],
+        [`@media (maxWidth: 600px)`]: {fontSize:"0.7rem", margin:"0.5rem"}
     },
 
     copyright: {
@@ -71,6 +80,9 @@ const useStyles = createStyles((theme) => ({
         fontFamily: 'Gotham',
         fontWeight: 700,
         fontSize: 14,
+    }, 
+    responsiveItem:{
+        transform:"scale(0.5)"
     }
 }))
 
@@ -102,13 +114,13 @@ function Footer() {
     }, [data])
 
     return (
-        <footer style={{backgroundColor: 'black'}}>
-            <Grid m={5}>
-                <Grid.Col span={3} px={40} className={classes.column}>
-                    <Image src={logo} style={{margin: 'auto 0'}}/>
+        <footer style={{backgroundColor: 'black', [`@media (max-width: 600px)`]: {display:"flex", alignItems:"center", justifyContent:"center"}}}>
+            <Grid mr={1} sx={{padding:"1rem 0 0 1rem", }}>
+                <Grid.Col span={2} px={40} className={classes.column}>
+                    <Image src={logo} style={{margin: 'auto 0', marginRight:"1rem"}}/>
                     <Divider orientation="vertical" ml={20}/>
                 </Grid.Col>
-                <Grid.Col span={3} className={classes.column} style={{flexDirection: 'column'}}>
+                {/* <Grid.Col span={3} className={classes.column} style={{flexDirection: 'column'}}>
                     <Title className={classes.footerTitle}>
                         Newsletter
                     </Title>
@@ -121,20 +133,22 @@ function Footer() {
                     size="xs"
                     />
                     <Text className={classes.newsletterText}>Suscribite a nuestro newsletter para no perderte ninguna oferta</Text>
-                </Grid.Col>
-                <Grid.Col span={3} className={classes.column} style={{flexDirection: 'column'}}>
-                    <Title className={classes.footerTitle}>
+                </Grid.Col> */}
+                <Grid.Col span={6} className={classes.column} style={{flexDirection: 'column', display:"flex", justifyContent:"center",alignItems:"center", [`@media (maxWidth: 600px)`]: {display:"none"}}}>
+                    {/* <Title className={classes.footerTitle}>
                         Links
-                    </Title>
-                    <List listStyleType='none' mx='auto'>
+                    </Title> */}
+                    <List listStyleType='none' mx='auto' className={classes.list} sx={{display:"flex",flexDirection:"row", alignItems:"center", justifyContent:"space-between",[`@media (maxWidth: 600px)`]: {display:"none"}}}>
                         {tabs.map((tab, key) => (
-                            <List.Item key={key}>
-                                <Link className={classes.tabLink} to={tab.link}>{tab.name}</Link>
+                            <List.Item key={key} sx={{margin:"0 1rem", fontSize:"1.1rem"}}>
+                                <Link className={classes.tabLink} to={tab.link} >{tab.name}</Link>
                             </List.Item>
                         ))}
                     </List>
                 </Grid.Col>
+                <Divider orientation="vertical" ml={20} sx={{[`@media (maxWidth: 600px)`]: {display:"none",},}}/>
                 <Grid.Col span={3} className={classes.column} style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                    
                     <List listStyleType='none' center spacing='sm'>
                         <List.Item icon={
                         <ThemeIcon color="green" size={24} radius="xl">
@@ -160,6 +174,33 @@ function Footer() {
                     </List>
                 </Grid.Col>
             </Grid>
+
+            {/* RESPONSIVE */}
+            <Box sx={{display:"none",[`@media (maxWidth: 600px)`]: {display:"flex", flexDirection:"row",alignItems: 'center',justifyContent:"center", width:"100%", padding:"0 1rem"} }}>
+                    <List listStyleType='none' center spacing='sm' sx={{display:"flex", flexDirection:"row",alignItems:"center"}}>
+                        <List.Item icon={
+                        <ThemeIcon color="green" size={18} radius="xl">
+                            <Phone size={10} />
+                        </ThemeIcon>
+                        } className={classes.infoItem}>
+                            +54 11 2345-6789
+                        </List.Item>
+                        <List.Item icon={
+                        <ThemeIcon color="blue" size={18} radius="xl">
+                            <GeoAlt size={10} />
+                        </ThemeIcon>
+                        } className={classes.infoItem}>
+                            Buenos Aires, Argentina
+                        </List.Item>
+                        <List.Item icon={
+                        <ThemeIcon color="red" size={18} radius="xl">
+                            <Envelope size={10} />
+                        </ThemeIcon>
+                        } className={classes.infoItem}>
+                            text@text.com
+                        </List.Item>
+                    </List>
+            </Box>
             <Divider
             mx={20}
             my={30}
